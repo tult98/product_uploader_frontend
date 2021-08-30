@@ -6,18 +6,18 @@ import { TEMPLATE_ROUTES } from 'routes'
 
 function App() {
   return (
-    <Router>
-      <Link to={TEMPLATE_ROUTES.LIST_TEMPLATE}>List all templates</Link>
-      <Link to={TEMPLATE_ROUTES.CREATE_TEMPLATE}>Create a template</Link>
-      <Switch>
-        <Route path={TEMPLATE_ROUTES.LIST_TEMPLATE} exact>
-          <ListTemplatePage />
-        </Route>
-        <Route path={TEMPLATE_ROUTES.CREATE_TEMPLATE}>
-          <CreateTemplatePage />
-        </Route>
-      </Switch>
-    </Router>
+    <div className="flex flex-col">
+      <Router>
+        <Switch>
+          <Route path={TEMPLATE_ROUTES.LIST_TEMPLATE} exact>
+            <ListTemplatePage />
+          </Route>
+          <Route path={TEMPLATE_ROUTES.CREATE_TEMPLATE}>
+            <CreateTemplatePage />
+          </Route>
+        </Switch>
+      </Router>
+    </div>
   )
 }
 
