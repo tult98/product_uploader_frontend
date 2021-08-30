@@ -2,7 +2,7 @@ import React from 'react'
 
 const ListTemplatePage = () => {
   return (
-    <div>
+    <div className="bg-gray-200">
       <p>List all templates</p>
     </div>
   )
