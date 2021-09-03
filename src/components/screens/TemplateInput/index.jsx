@@ -58,8 +58,8 @@ const TemplateInput = () => {
 
   return (
     <div className="w-3/5 mb-44">
-      <form className="flex flex-col items-center">
-        <div className="my-10">Hoodie-Tshirt-Zip-Long Sleeve-Mask Hoodie</div>
+      <form className="flex flex-col justify-start">
+        <div className="self-center my-10">Hoodie-Tshirt-Zip-Long Sleeve-Mask Hoodie</div>
         <TextInput
           label="SKU"
           type="text"
@@ -86,29 +86,33 @@ const TemplateInput = () => {
           actionType={TEMPLATE_ACTIONS.SET_DESCRIPTION}
         />
         <CategoriesInput dispatch={dispatch} />
+        {renderAttributes(numberOfAttributes)}
+        <button
+          type="button"
+          className="self-start mt-10 text-blue-600 hover:text-blue-700 hover:underline"
+          onClick={onCreateAttribute}
+        >
+          Add new attribute
+        </button>
+        {renderVariations(numberOfAttributes)}
+        <div className="mt-10">
+          <button
+            type="button"
+            className="text-blue-600 hover:text-blue-700 hover:underline"
+            onClick={onCreateVariation}
+          >
+            Add new variation
+          </button>
+        </div>
+        <div className="flex justify-center mt-20">
+          <button type="button" className="px-12 py-4 bg-gray-400 rounded-full hover:bg-gray-500">
+            Back
+          </button>
+          <button type="submit" className="px-12 py-4 ml-8 bg-yellow-400 rounded-full hover:bg-yellow-500">
+            Create Template
+          </button>
+        </div>
       </form>
-      {renderAttributes(numberOfAttributes)}
-      <button
-        type="button"
-        className="mt-10 text-blue-600 hover:text-blue-700 hover:underline"
-        onClick={onCreateAttribute}
-      >
-        Add new attribute
-      </button>
-      {renderVariations(numberOfAttributes)}
-      <div className="mt-10">
-        <button type="button" className="text-blue-600 hover:text-blue-700 hover:underline" onClick={onCreateVariation}>
-          Add new variation
-        </button>
-      </div>
-      <div className="flex justify-center mt-20">
-        <button type="button" className="px-12 py-4 bg-gray-400 rounded-full hover:bg-gray-500">
-          Back
-        </button>
-        <button type="submit" className="px-12 py-4 ml-8 bg-yellow-400 rounded-full hover:bg-yellow-500">
-          Create Template
-        </button>
-      </div>
     </div>
   )
 }

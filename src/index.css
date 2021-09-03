@@ -17,6 +17,6 @@ html {
     @apply flex flex-row self-center justify-center w-4/5;
   }
   .input-error {
-    @apply mt-4 text-2xl italic text-red-500;
+    @apply mt-2 mb-4 text-2xl italic text-red-500;
   }
 }

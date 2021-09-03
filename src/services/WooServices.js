@@ -7,6 +7,6 @@ const authorizeValue = `consumer_key=${CONSUMER_KEY}&consumer_secret=${CONSUMER_
 
 export default class WooServices {
   static async queryCategories() {
-    return await BaseService.get(`/products/categories?${authorizeValue}`, {}, { baseURL: WOO_BASE_URL })
+    return await BaseService.get(`/products/categories?${authorizeValue}`, { baseURL: WOO_BASE_URL }, {})
   }
 }

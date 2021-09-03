@@ -1,5 +1,8 @@
 import React from 'react'
+import { useMutation } from 'react-query'
+import Select from 'react-select'
 import CreatableSelect from 'react-select/creatable'
+import TemplateAttributeServices from 'services/TemplateAttributeServices'
 
 const attributeNameOptions = [
   { value: '1', label: 'Type' },
@@ -24,7 +27,13 @@ const Attribute = ({
   isVariationAttribute = false,
   variationIndex,
 }) => {
+  const mutation = useMutation((newAttribute) => TemplateAttributeServices.createTemplateAttribute(newAttribute))
+
   const onSelectAttributeName = (selectedName) => {
+    if (selectedName.__isNew__) {
+      // TODO: call api to create new attribute
+      mutation.mutate({ name: selectedName.label })
+    }
     attribute = { ...attribute, name: selectedName }
     dispatch({
       type: actionType,
@@ -45,7 +54,7 @@ const Attribute = ({
   }
 
   return (
-    <div className="my-10">
+    <div className="w-full my-10">
       {isVariationAttribute ? (
         <>
           <label className="font-semibold uppercase">{attribute?.name?.label || `Attribute name ${index + 1}`}</label>
@@ -53,21 +62,27 @@ const Attribute = ({
         </>
       ) : (
         <>
-          <label className="font-semibold uppercase">{`Attribute name ${index + 1}`}</label>
-          <CreatableSelect
-            className="mb-10"
-            value={attribute.name}
-            options={attributeNameOptions}
-            onChange={onSelectAttributeName}
-          />
-          <label className="font-semibold uppercase">{`Attribute value(s) ${index + 1}`}</label>
-          <CreatableSelect
-            isMulti={isMulti}
-            closeMenuOnSelect={false}
-            value={attribute.options}
-            onChange={onSelectedAttributeOptions}
-            options={attributeValueOptions}
-          />
+          <div>
+            <label className="font-semibold uppercase">{`Attribute name ${index + 1}`}</label>
+            <CreatableSelect
+              placeholder={mutation.isLoading && 'Loading...'}
+              value={attribute.name}
+              options={attributeNameOptions}
+              onChange={onSelectAttributeName}
+              isLoading={mutation.isLoading}
+            />
+            {mutation.isError && <p className="input-error">{mutation.error.errors.message}</p>}
+          </div>
+          <div className="mt-10">
+            <label className="font-semibold uppercase">{`Attribute value(s) ${index + 1}`}</label>
+            <CreatableSelect
+              isMulti={isMulti}
+              closeMenuOnSelect={false}
+              value={attribute.options}
+              onChange={onSelectedAttributeOptions}
+              options={attributeValueOptions}
+            />
+          </div>
         </>
       )}
     </div>
