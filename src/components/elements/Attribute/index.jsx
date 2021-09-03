@@ -1,5 +1,5 @@
 import React from 'react'
-import Select from 'react-select'
+import CreatableSelect from 'react-select/creatable'
 
 const attributeNameOptions = [
   { value: '1', label: 'Type' },
@@ -54,14 +54,14 @@ const Attribute = ({
       ) : (
         <>
           <label className="font-semibold uppercase">{`Attribute name ${index + 1}`}</label>
-          <Select
+          <CreatableSelect
             className="mb-10"
             value={attribute.name}
             options={attributeNameOptions}
             onChange={onSelectAttributeName}
           />
           <label className="font-semibold uppercase">{`Attribute value(s) ${index + 1}`}</label>
-          <Select
+          <CreatableSelect
             isMulti={isMulti}
             closeMenuOnSelect={false}
             value={attribute.options}
