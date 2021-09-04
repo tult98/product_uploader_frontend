@@ -1,9 +1,9 @@
 import { useReducer } from 'react'
-import { TEMPLATE_ACTIONS } from 'utils/templateUtils'
+import { TEMPLATE_ACTIONS, DEFAULT_PRODUCT_TITLE } from 'utils/templateUtils'
 
 const initialState = {
-  sku: '',
   name: '',
+  productTitle: DEFAULT_PRODUCT_TITLE,
   description: '',
   categories: [],
   attributes: [],
@@ -12,15 +12,15 @@ const initialState = {
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case TEMPLATE_ACTIONS.SET_SKU:
-      return {
-        ...state,
-        sku: action.payload,
-      }
     case TEMPLATE_ACTIONS.SET_NAME:
       return {
         ...state,
         name: action.payload,
+      }
+    case TEMPLATE_ACTIONS.SET_PRODUCT_TITLE:
+      return {
+        ...state,
+        productTitle: action.payload,
       }
     case TEMPLATE_ACTIONS.SET_DESCRIPTION:
       return {

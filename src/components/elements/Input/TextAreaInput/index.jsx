@@ -10,7 +10,6 @@ const TextAreaInput = ({ label, style, options = {}, value, dispatch, actionType
       <label className="font-semibold uppercase">{label}</label>
       <textarea
         rows={options.rows}
-        required
         value={value}
         onChange={onChangeValue}
         className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"

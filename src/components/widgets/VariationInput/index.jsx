@@ -2,13 +2,20 @@ import React, { useCallback, useEffect } from 'react'
 import Attribute from 'components/elements/Attribute'
 import { TEMPLATE_ACTIONS } from 'utils/templateUtils'
 
-const VariationInput = ({ name, index, variation, dispatch, baseSKU }) => {
+const VariationInput = ({ name, index, variation, dispatch }) => {
   useEffect(() => {
-    let sku = baseSKU
-    variation.attributes.map((attribute) => (sku += attribute?.value?.label ? `-${attribute.value.label}` : ''))
+    let sku = ''
+    variation.attributes.map(
+      (attribute, index) =>
+        (sku += attribute?.value?.code
+          ? index === 0
+            ? `${attribute?.value?.code}`
+            : `-${attribute?.value?.code}`
+          : ''),
+    )
     variation.sku = sku
     dispatch({ type: TEMPLATE_ACTIONS.SET_VARIATION, payload: { index: index, data: variation } })
-  }, [variation.attributes, baseSKU])
+  }, [variation.attributes])
 
   const onToggleDefault = () => {
     variation.isDefault = !variation.isDefault
