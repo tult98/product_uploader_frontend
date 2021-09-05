@@ -69,7 +69,7 @@ const VariationInput = ({ name, index, variation, dispatch }) => {
 
         <div className="flex flex-row items-center mb-10">
           <label className="font-semibold uppercase">SKU</label>
-          <span className="px-8 py-2 ml-8 uppercase bg-gray-200 border border-gray-400 rounded-lg">
+          <span className="px-8 py-2 ml-8 text-center uppercase bg-gray-200 border border-gray-400 rounded-lg min-h-30px min-w-80px">
             {variation.sku}
           </span>
         </div>

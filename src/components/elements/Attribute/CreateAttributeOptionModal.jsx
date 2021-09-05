@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react'
 import Icon from 'components/elements/Icon'
 import ModalContext from 'context/ModalContext'
-import { attribute } from 'dom-helpers'
 
 const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
   const { modalState, setModalState } = useContext(ModalContext)
@@ -9,16 +8,6 @@ const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
   const [optionCode, setOptionCode] = useState('')
   const [isDefault, setIsDefault] = useState(false)
   const [errors, setErrors] = useState({})
-
-  // useEffect(() => {
-  //   if (!attributes[modalState.attributeIndex].options || attributes[modalState.attributeIndex].options.length === 0) {
-  //     setIsDefaultAvailable(true)
-  //   } else {
-  //     attributes[modalState.attributeIndex].options.map((option) => {
-  //       option.isDefault === true && setIsDefaultAvailable(false)
-  //     })
-  //   }
-  // }, [modalState.attributeIndex, attributes])
 
   const onChangeOptionName = (event) => {
     setOptionName(event.target.value)
@@ -28,13 +17,24 @@ const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
     setOptionCode(event.target.value)
   }
 
-  const onChangeDefault = () => {
-    if (!attributes[modalState.attributeIndex].options || attributes[modalState.attributeIndex].options.length === 0) {
-      setIsDefault(!isDefault)
+  const onToggleDefault = () => {
+    if (isDefault) {
+      setIsDefault(false)
+      setErrors({})
     } else {
-      attributes[modalState.attributeIndex].options.map((option) => {
-        option.isDefault === true && setErrors({ isDefault: { message: 'You already set default option' } })
-      })
+      if (
+        !attributes[modalState.attributeIndex].options ||
+        attributes[modalState.attributeIndex].options.length === 0
+      ) {
+        setIsDefault(true)
+      } else {
+        attributes[modalState.attributeIndex].options.map((option) => {
+          option.isDefault === true && setErrors({ isDefault: { message: 'You already set default option' } })
+        })
+      }
+      if (!errors || !errors.isDefault) {
+        setIsDefault(true)
+      }
     }
   }
 
@@ -60,6 +60,10 @@ const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
         },
       },
     })
+    modalState.setAvailableOptions([
+      ...modalState.availableOptions,
+      { code: optionCode, name: optionName, isDefault: isDefault },
+    ])
     onCloseModal()
   }
 
@@ -93,7 +97,7 @@ const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
           />
         </div>
         <div className="flex flex-row items-center self-start mt-4">
-          <input type="checkbox" onClick={onChangeDefault} />
+          <input type="checkbox" onClick={onToggleDefault} />
           <label className="ml-2">Select as default option</label>
         </div>
         {errors && errors.isDefault && <p className="input-error">{errors.isDefault.message}</p>}
@@ -106,6 +110,7 @@ const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
           Cancel
         </button>
         <button
+          disabled={errors && errors.isDefault}
           className="px-12 py-2 text-white bg-blue-600 rounded-full hover:bg-blue-300 hover:text-gray-800"
           onClick={onSubmit}
         >

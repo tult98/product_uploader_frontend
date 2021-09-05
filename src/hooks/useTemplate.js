@@ -5,7 +5,6 @@ const initialState = {
   name: '',
   productTitle: DEFAULT_PRODUCT_TITLE,
   description: '',
-  categories: [],
   attributes: [],
   variations: [],
 }
@@ -77,6 +76,17 @@ const reducer = (state, action) => {
       return {
         ...state,
         variations: state.variations,
+      }
+    case TEMPLATE_ACTIONS.DELETE_ATTRIBUTE:
+      const remainAttributes = state.attributes.filter((_, index) => {
+        return index !== action.payload.index
+      })
+      return {
+        ...state,
+        attributes: remainAttributes,
+        variations: state.variations.map((variation) => {
+          return { ...variation, attributes: remainAttributes }
+        }),
       }
     default:
       return state

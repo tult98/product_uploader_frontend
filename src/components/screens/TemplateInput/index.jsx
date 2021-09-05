@@ -1,21 +1,21 @@
-import React, { useCallback, useState, useContext } from 'react'
+import React, { useCallback, useState, useContext, useEffect } from 'react'
 import TextAreaInput from 'components/elements/Input/TextAreaInput'
 import TextInput from 'components/elements/Input/TextInput'
 import Attribute from 'components/elements/Attribute'
 import VariationInput from 'components/widgets/VariationInput'
 import CreateAttributeModal from 'components/elements/Attribute/CreateAttributeModal'
 import CreateAttributeOptionModal from 'components/elements/Attribute/CreateAttributeOptionModal'
-import { useTemplate } from 'hooks/useTemplate'
 import ModalContext from 'context/ModalContext'
 import { TEMPLATE_ACTIONS } from 'utils/templateUtils'
 
-const TemplateInput = () => {
-  const [numberOfVariations, setNumberOfVariations] = useState(0)
-  const [numberOfAttributes, setNumberOfAttributes] = useState(0)
-  const { state, dispatch } = useTemplate()
+const TemplateInput = ({ state, dispatch }) => {
+  const [numberOfVariations, setNumberOfVariations] = useState(state.attributes.length)
+  const [numberOfAttributes, setNumberOfAttributes] = useState(state.variations.length)
   const { modalState } = useContext(ModalContext)
 
-  console.log('=================', state)
+  useEffect(() => {
+    setNumberOfAttributes(state.attributes.length)
+  }, [state?.attributes])
 
   const onCreateVariation = () => {
     setNumberOfVariations(numberOfVariations + 1)

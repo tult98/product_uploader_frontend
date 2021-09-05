@@ -4,19 +4,31 @@ import ModalContext from 'context/ModalContext'
 
 const CreateAttributeModal = ({ attributes, actionType, dispatch }) => {
   const { modalState, setModalState } = useContext(ModalContext)
-  // const [isPrimaryAvailable, setIsPrimaryAvailable] = useState(true)
+  const [isPrimaryAvailable, setIsPrimaryAvailable] = useState(true)
 
-  // useEffect(() => {
-  //   attributes.map((attribute) => {
-  //     attribute.isPrimary === true && setIsPrimaryAvailable(false)
-  //   })
-  // }, [])
+  useEffect(() => {
+    attributes.map((attribute) => {
+      attribute.isPrimary === true && setIsPrimaryAvailable(false)
+    })
+  }, [])
 
   const onCloseModal = () => {
     setModalState({ ...modalState, openCreateAttributeModal: false, isModalOpen: false, attributeIndex: null })
   }
 
   const onSetPrimaryAttribute = () => {
+    if (!isPrimaryAvailable) {
+      let primaryAttributeIndex
+      attributes.forEach((attribute, index) => {
+        if (attribute?.isPrimary === true) {
+          primaryAttributeIndex = index
+        }
+      })
+      dispatch({
+        type: actionType,
+        payload: { index: primaryAttributeIndex, data: { ...attributes[primaryAttributeIndex], isPrimary: false } },
+      })
+    }
     const attribute = attributes[modalState.attributeIndex]
     dispatch({
       type: actionType,
@@ -34,10 +46,16 @@ const CreateAttributeModal = ({ attributes, actionType, dispatch }) => {
         </div>
       </div>
       <div className="flex flex-col items-center justify-center px-4 mt-10 mb-4">
-        <p>Do you want to set this attribute as primary attribute?</p>
-        <p className="text-xl italic text-gray-500">Don't worry, you can change it later!</p>
+        {isPrimaryAvailable ? (
+          <>
+            <p>Do you want to set this attribute as primary attribute?</p>
+            <p className="text-xl italic text-gray-500">Don't worry, you can change it later!</p>
+          </>
+        ) : (
+          <p className="input-error">You already set primary attribute, do you want to change?</p>
+        )}
       </div>
-      <div className="flex items-center py-4 justify-evenly">
+      <div className="flex items-center justify-center py-4">
         <button
           className="px-12 py-2 text-white bg-gray-600 rounded-full hover:bg-gray-300 hover:text-gray-800"
           onClick={onCloseModal}
@@ -45,7 +63,7 @@ const CreateAttributeModal = ({ attributes, actionType, dispatch }) => {
           No
         </button>
         <button
-          className="px-12 py-2 text-white bg-blue-600 rounded-full hover:bg-blue-300 hover:text-gray-800"
+          className="px-12 py-2 ml-8 text-white bg-blue-600 rounded-full hover:bg-blue-300 hover:text-gray-800"
           onClick={onSetPrimaryAttribute}
         >
           OK
