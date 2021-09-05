@@ -4,12 +4,13 @@
     "browser": true,
     "node": true
   },
-  "extends": ["plugin:prettier/recommended"],
+  "extends": ["plugin:prettier/recommended", "eslint:recommended", "plugin:react/recommended"],
   "parser": "babel-eslint",
   "parserOptions": {
     "sourceType": "module"
   },
   "rules": {
+    "react/prop-types": "off",
     "semi": ["error", "never"],
     "@typescript-eslint/no-var-requires": 0,
     "no-multiple-empty-lines": [
