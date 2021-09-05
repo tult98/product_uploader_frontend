@@ -1,10 +1,11 @@
 import React, { useContext, useState } from 'react'
-import { useMutation } from 'react-query'
+// import { useMutation } from 'react-query'
 import Select from 'react-select'
 import CreatableSelect from 'react-select/creatable'
 import ModalContext from 'context/ModalContext'
-import TemplateAttributeServices from 'services/TemplateAttributeServices'
-import { TEMPLATE_ACTIONS, convertToAttributeFormat, convertToOptionFormat } from 'utils/templateUtils'
+// import TemplateAttributeServices from 'services/TemplateAttributeServices'
+import { convertToAttributeFormat, convertToOptionFormat } from 'utils/templateUtils'
+import { debounce } from 'utils/commonUtils'
 
 const Attribute = ({
   index = 0,
@@ -17,13 +18,18 @@ const Attribute = ({
 }) => {
   const { modalState, setModalState } = useContext(ModalContext)
   const [availableOptions, setAvailableOptions] = useState([])
+  const [attributeName, setAttributeName] = useState(attribute.name)
 
   const onChangeAttributeName = (event) => {
-    dispatch({ type: actionType, payload: { index: index, data: { ...attribute, name: event.target.value } } })
+    setAttributeName(event.target.value)
+    debounce(
+      () => dispatch({ type: actionType, payload: { index: index, data: { ...attribute, name: attributeName } } }),
+      500,
+    )()
   }
 
   const onDeleteAttribute = () => {
-    dispatch({ type: TEMPLATE_ACTIONS.DELETE_ATTRIBUTE, payload: { index: index } })
+    setModalState({ ...modalState, openDeleteAttributeModal: true, attributeIndex: index, isModalOpen: true })
   }
 
   const onSelectedAttributeOptions = (selectedOptions) => {
@@ -86,7 +92,7 @@ const Attribute = ({
             <input
               type="text"
               placeholder="Attribute name..."
-              value={attribute?.name || ''}
+              value={attributeName || ''}
               className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
               onChange={onChangeAttributeName}
             />

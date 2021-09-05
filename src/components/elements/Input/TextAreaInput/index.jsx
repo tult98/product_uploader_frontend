@@ -1,8 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { debounce } from 'utils/commonUtils'
 
 const TextAreaInput = ({ label, style, options = {}, value, dispatch, actionType }) => {
+  const [textValue, setTextValue] = useState(value)
+
   const onChangeValue = (event) => {
-    dispatch({ type: actionType, payload: event.target.value })
+    setTextValue(event.target.value)
+    debounce(() => dispatch({ type: actionType, payload: textValue }), 500)()
   }
 
   return (
@@ -10,7 +14,7 @@ const TextAreaInput = ({ label, style, options = {}, value, dispatch, actionType
       <label className="font-semibold uppercase">{label}</label>
       <textarea
         rows={options.rows}
-        value={value}
+        value={textValue}
         onChange={onChangeValue}
         className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
       />

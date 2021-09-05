@@ -5,6 +5,7 @@ import Attribute from 'components/elements/Attribute'
 import VariationInput from 'components/widgets/VariationInput'
 import CreateAttributeModal from 'components/elements/Attribute/CreateAttributeModal'
 import CreateAttributeOptionModal from 'components/elements/Attribute/CreateAttributeOptionModal'
+import DeleteAttributeModal from 'components/elements/Attribute/DeleteAttributeModal'
 import ModalContext from 'context/ModalContext'
 import { TEMPLATE_ACTIONS } from 'utils/templateUtils'
 
@@ -131,6 +132,13 @@ const TemplateInput = ({ state, dispatch }) => {
         <CreateAttributeOptionModal
           attributes={state.attributes}
           actionType={TEMPLATE_ACTIONS.SET_ATTRIBUTE}
+          dispatch={dispatch}
+        />
+      )}
+      {modalState.openDeleteAttributeModal && (
+        <DeleteAttributeModal
+          attributes={state.attributes}
+          actionType={TEMPLATE_ACTIONS.DELETE_ATTRIBUTE}
           dispatch={dispatch}
         />
       )}

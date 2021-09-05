@@ -49,7 +49,7 @@ const CreateAttributeModal = ({ attributes, actionType, dispatch }) => {
         {isPrimaryAvailable ? (
           <>
             <p>Do you want to set this attribute as primary attribute?</p>
-            <p className="text-xl italic text-gray-500">Don't worry, you can change it later!</p>
+            <p className="text-xl italic text-gray-500">Do not worry, you can change it later!</p>
           </>
         ) : (
           <p className="input-error">You already set primary attribute, do you want to change?</p>
