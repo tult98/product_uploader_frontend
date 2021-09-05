@@ -5,7 +5,7 @@ import CreatableSelect from 'react-select/creatable'
 import ModalContext from 'context/ModalContext'
 // import TemplateAttributeServices from 'services/TemplateAttributeServices'
 import { convertToAttributeFormat, convertToOptionFormat } from 'utils/templateUtils'
-import { debounce } from 'utils/commonUtils'
+import { debounce, DEFAULT_DELAY } from 'utils/commonUtils'
 
 const Attribute = ({
   index = 0,
@@ -24,7 +24,7 @@ const Attribute = ({
     setAttributeName(event.target.value)
     debounce(
       () => dispatch({ type: actionType, payload: { index: index, data: { ...attribute, name: attributeName } } }),
-      500,
+      DEFAULT_DELAY,
     )()
   }
 

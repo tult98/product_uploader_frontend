@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { debounce } from 'utils/commonUtils'
+import { debounce, DEFAULT_DELAY } from 'utils/commonUtils'
 
 const TextInput = ({ label, type = 'text', style, value, dispatch, actionType }) => {
   const [textValue, setTextValue] = useState(value)
 
   const onChangeValue = (event) => {
     setTextValue(event.target.value)
-    debounce(() => dispatch({ type: actionType, payload: textValue }), 500)()
+    debounce(() => dispatch({ type: actionType, payload: textValue }), DEFAULT_DELAY)()
   }
 
   return (
