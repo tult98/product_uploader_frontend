@@ -1,8 +1,14 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Attribute from 'components/elements/Attribute'
 import { TEMPLATE_ACTIONS } from 'utils/templateUtils'
+import { validateVariationPrice } from 'utils/errorsUtils'
+import { debounce, DEFAULT_DELAY } from 'utils/commonUtils'
 
 const VariationInput = ({ name, index, variation, dispatch }) => {
+  const [errors, setErrors] = useState({})
+  const [salePrice, setSalePrice] = useState(variation?.salePrice)
+  const [regularPrice, setRegularPrice] = useState(variation?.regularPrice)
+
   useEffect(() => {
     let sku = ''
     variation.attributes.map(
@@ -23,13 +29,21 @@ const VariationInput = ({ name, index, variation, dispatch }) => {
   }
 
   const onChangeSalePrice = (event) => {
+    setSalePrice(event.target.value)
     variation.salePrice = event.target.value
-    dispatch({ type: TEMPLATE_ACTIONS.SET_VARIATION, payload: { index: index, data: variation } })
+    debounce(() => {
+      validateVariationPrice(variation, errors, setErrors)
+      dispatch({ type: TEMPLATE_ACTIONS.SET_VARIATION, payload: { index: index, data: variation } })
+    }, DEFAULT_DELAY)()
   }
 
   const onChangeRegularPrice = (event) => {
+    setRegularPrice(event.target.value)
     variation.regularPrice = event.target.value
-    dispatch({ type: TEMPLATE_ACTIONS.SET_VARIATION, payload: { index: index, data: variation } })
+    debounce(() => {
+      validateVariationPrice(variation, errors, setErrors)
+      dispatch({ type: TEMPLATE_ACTIONS.SET_VARIATION, payload: { index: index, data: variation } })
+    }, DEFAULT_DELAY)()
   }
 
   const renderAttributes = useCallback(() => {
@@ -74,13 +88,13 @@ const VariationInput = ({ name, index, variation, dispatch }) => {
           </span>
         </div>
 
-        <div className="flex flex-row justify-between mb-10">
+        <div className="flex flex-row justify-between">
           <div className="flex flex-col w-5/12">
             <label className="font-semibold uppercase">Sale price</label>
             <input
               type="text"
               className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
-              value={variation.salePrice || ''}
+              value={salePrice || ''}
               onChange={onChangeSalePrice}
             />
           </div>
@@ -90,11 +104,12 @@ const VariationInput = ({ name, index, variation, dispatch }) => {
             <input
               type="text"
               className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
-              value={variation.regularPrice || ''}
+              value={regularPrice || ''}
               onChange={onChangeRegularPrice}
             />
           </div>
         </div>
+        {errors && errors.price && <p className="input-error">{errors.price.message}</p>}
 
         {renderAttributes(variation.attributes.length)}
       </div>

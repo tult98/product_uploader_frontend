@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { debounce, DEFAULT_DELAY } from 'utils/commonUtils'
 
-const TextInput = ({ label, type = 'text', style, value, dispatch, actionType, isRequired = false }) => {
+const TextInput = ({ label, type = 'text', style, value, dispatch, actionType, isRequired = false, error }) => {
   const [textValue, setTextValue] = useState(value)
 
   const onChangeValue = (event) => {
@@ -19,6 +19,7 @@ const TextInput = ({ label, type = 'text', style, value, dispatch, actionType, i
         className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
         onChange={onChangeValue}
       />
+      <p className="input-error">{error?.message}</p>
     </div>
   )
 }

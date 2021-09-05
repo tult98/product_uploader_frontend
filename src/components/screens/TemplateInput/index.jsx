@@ -8,25 +8,17 @@ import CreateAttributeOptionModal from 'components/elements/Attribute/CreateAttr
 import DeleteAttributeModal from 'components/elements/Attribute/DeleteAttributeModal'
 import ModalContext from 'context/ModalContext'
 import { TEMPLATE_ACTIONS } from 'utils/templateUtils'
+import { validateTemplateInput } from 'utils/errorsUtils'
 
 const TemplateInput = ({ state, dispatch }) => {
   const [numberOfVariations, setNumberOfVariations] = useState(state.attributes.length)
   const [numberOfAttributes, setNumberOfAttributes] = useState(state.variations.length)
+  const [errors, setErrors] = useState({})
   const { modalState } = useContext(ModalContext)
 
   useEffect(() => {
     setNumberOfAttributes(state.attributes.length)
   }, [state?.attributes])
-
-  const onCreateVariation = () => {
-    setNumberOfVariations(numberOfVariations + 1)
-    dispatch({ type: TEMPLATE_ACTIONS.ADD_VARIATION })
-  }
-
-  const onCreateAttribute = () => {
-    setNumberOfAttributes(numberOfAttributes + 1)
-    dispatch({ type: TEMPLATE_ACTIONS.ADD_ATTRIBUTE })
-  }
 
   const renderVariations = useCallback(() => {
     const variations = []
@@ -61,6 +53,20 @@ const TemplateInput = ({ state, dispatch }) => {
     return attributes
   }, [numberOfAttributes])
 
+  const onCreateVariation = () => {
+    setNumberOfVariations(numberOfVariations + 1)
+    dispatch({ type: TEMPLATE_ACTIONS.ADD_VARIATION })
+  }
+
+  const onCreateAttribute = () => {
+    setNumberOfAttributes(numberOfAttributes + 1)
+    dispatch({ type: TEMPLATE_ACTIONS.ADD_ATTRIBUTE })
+  }
+
+  const onCreateTemplate = () => {
+    validateTemplateInput(state, errors, setErrors, ['name', 'product title', 'description'])
+  }
+
   return (
     <>
       <div className={`w-2/5 mb-44 ${modalState.isModalOpen ? 'opacity-20' : ''}`}>
@@ -73,16 +79,18 @@ const TemplateInput = ({ state, dispatch }) => {
             style="mb-10"
             value={state.name}
             dispatch={dispatch}
+            error={errors['name']}
             actionType={TEMPLATE_ACTIONS.SET_NAME}
           />
 
           <TextInput
-            label="Product title"
+            label="product title"
             isRequired={true}
             type="text"
             style="mb-10"
             value={state.productTitle}
             dispatch={dispatch}
+            error={errors['product title']}
             actionType={TEMPLATE_ACTIONS.SET_PRODUCT_TITLE}
           />
           <TextAreaInput
@@ -93,6 +101,7 @@ const TemplateInput = ({ state, dispatch }) => {
             style="mb-10"
             value={state.description}
             dispatch={dispatch}
+            error={errors['description']}
             actionType={TEMPLATE_ACTIONS.SET_DESCRIPTION}
           />
 
@@ -118,7 +127,11 @@ const TemplateInput = ({ state, dispatch }) => {
             <button type="button" className="px-12 py-4 bg-gray-400 rounded-full hover:bg-gray-500">
               Back
             </button>
-            <button type="submit" className="px-12 py-4 ml-8 bg-yellow-400 rounded-full hover:bg-yellow-500">
+            <button
+              type="button"
+              className="px-12 py-4 ml-8 bg-yellow-400 rounded-full hover:bg-yellow-500"
+              onClick={onCreateTemplate}
+            >
               Create Template
             </button>
           </div>

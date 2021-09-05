@@ -6,6 +6,7 @@ import ModalContext from 'context/ModalContext'
 // import TemplateAttributeServices from 'services/TemplateAttributeServices'
 import { convertToAttributeFormat, convertToOptionFormat } from 'utils/templateUtils'
 import { debounce, DEFAULT_DELAY } from 'utils/commonUtils'
+import { validateAttributeName, validateAttributeOptions } from 'utils/errorsUtils'
 
 const Attribute = ({
   index = 0,
@@ -19,13 +20,14 @@ const Attribute = ({
   const { modalState, setModalState } = useContext(ModalContext)
   const [availableOptions, setAvailableOptions] = useState([])
   const [attributeName, setAttributeName] = useState(attribute.name)
+  const [errors, setErrors] = useState({})
 
   const onChangeAttributeName = (event) => {
     setAttributeName(event.target.value)
-    debounce(
-      () => dispatch({ type: actionType, payload: { index: index, data: { ...attribute, name: event.target.value } } }),
-      DEFAULT_DELAY,
-    )()
+    debounce(() => {
+      dispatch({ type: actionType, payload: { index: index, data: { ...attribute, name: event.target.value } } })
+      validateAttributeName(event.target.value, errors, setErrors)
+    }, DEFAULT_DELAY)()
   }
 
   const onDeleteAttribute = () => {
@@ -45,6 +47,7 @@ const Attribute = ({
         ? { index: index, variationIndex: variationIndex, data: attribute }
         : { index: index, data: attribute },
     })
+    validateAttributeOptions(selectedOptions, errors, setErrors)
   }
 
   const onCreateAttributeOption = (inputValue) => {
@@ -97,6 +100,7 @@ const Attribute = ({
               className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
               onChange={onChangeAttributeName}
             />
+            {errors && errors.name && <p className="input-error">{errors?.name?.message}</p>}
           </div>
           <div className="mt-10">
             <option className="font-semibold uppercase">{`Attribute value(s) ${index + 1}`}</option>
@@ -107,6 +111,7 @@ const Attribute = ({
               onCreateOption={onCreateAttributeOption}
               onChange={onSelectedAttributeOptions}
             />
+            {errors && errors.options && <p className="input-error">{errors.options.message}</p>}
           </div>
           <div className="flex justify-end mt-8">
             {!attribute?.isPrimary && (
