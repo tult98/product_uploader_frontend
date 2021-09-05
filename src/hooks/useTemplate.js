@@ -1,26 +1,25 @@
 import { useReducer } from 'react'
-import { TEMPLATE_ACTIONS } from 'utils/templateUtils'
+import { TEMPLATE_ACTIONS, DEFAULT_PRODUCT_TITLE } from 'utils/templateUtils'
 
 const initialState = {
-  sku: '',
   name: '',
+  productTitle: DEFAULT_PRODUCT_TITLE,
   description: '',
-  categories: [],
   attributes: [],
   variations: [],
 }
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case TEMPLATE_ACTIONS.SET_SKU:
-      return {
-        ...state,
-        sku: action.payload,
-      }
     case TEMPLATE_ACTIONS.SET_NAME:
       return {
         ...state,
         name: action.payload,
+      }
+    case TEMPLATE_ACTIONS.SET_PRODUCT_TITLE:
+      return {
+        ...state,
+        productTitle: action.payload,
       }
     case TEMPLATE_ACTIONS.SET_DESCRIPTION:
       return {
@@ -77,6 +76,17 @@ const reducer = (state, action) => {
       return {
         ...state,
         variations: state.variations,
+      }
+    case TEMPLATE_ACTIONS.DELETE_ATTRIBUTE:
+      const remainAttributes = state.attributes.filter((_, index) => {
+        return index !== action.payload.index
+      })
+      return {
+        ...state,
+        attributes: remainAttributes,
+        variations: state.variations.map((variation) => {
+          return { ...variation, attributes: remainAttributes }
+        }),
       }
     default:
       return state

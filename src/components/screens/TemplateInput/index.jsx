@@ -1,16 +1,22 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useContext, useEffect } from 'react'
 import TextAreaInput from 'components/elements/Input/TextAreaInput'
 import TextInput from 'components/elements/Input/TextInput'
-import CategoriesInput from 'components/elements/Input/CategoriesInput'
 import Attribute from 'components/elements/Attribute'
 import VariationInput from 'components/widgets/VariationInput'
-import { useTemplate } from 'hooks/useTemplate'
+import CreateAttributeModal from 'components/elements/Attribute/CreateAttributeModal'
+import CreateAttributeOptionModal from 'components/elements/Attribute/CreateAttributeOptionModal'
+import DeleteAttributeModal from 'components/elements/Attribute/DeleteAttributeModal'
+import ModalContext from 'context/ModalContext'
 import { TEMPLATE_ACTIONS } from 'utils/templateUtils'
 
-const TemplateInput = () => {
-  const [numberOfVariations, setNumberOfVariations] = useState(0)
-  const [numberOfAttributes, setNumberOfAttributes] = useState(0)
-  const { state, dispatch } = useTemplate()
+const TemplateInput = ({ state, dispatch }) => {
+  const [numberOfVariations, setNumberOfVariations] = useState(state.attributes.length)
+  const [numberOfAttributes, setNumberOfAttributes] = useState(state.variations.length)
+  const { modalState } = useContext(ModalContext)
+
+  useEffect(() => {
+    setNumberOfAttributes(state.attributes.length)
+  }, [state?.attributes])
 
   const onCreateVariation = () => {
     setNumberOfVariations(numberOfVariations + 1)
@@ -30,7 +36,6 @@ const TemplateInput = () => {
           key={i}
           index={i}
           name={`Variation ${i + 1}`}
-          baseSKU={state.sku}
           variation={state.variations[i]}
           dispatch={dispatch}
         />,
@@ -57,59 +62,87 @@ const TemplateInput = () => {
   }, [numberOfAttributes])
 
   return (
-    <div className="w-3/5 mb-44">
-      <form className="flex flex-col items-center">
-        <div className="my-10">Hoodie-Tshirt-Zip-Long Sleeve-Mask Hoodie</div>
-        <TextInput
-          label="SKU"
-          type="text"
-          style="mb-10"
-          value={state.sku}
-          dispatch={dispatch}
-          actionType={TEMPLATE_ACTIONS.SET_SKU}
-        />
-        <TextInput
-          label="name"
-          type="text"
-          style="mb-10"
-          value={state.name}
-          dispatch={dispatch}
-          actionType={TEMPLATE_ACTIONS.SET_NAME}
-        />
-        <TextAreaInput
-          label="description"
-          type="text"
-          options={{ rows: 6 }}
-          style="mb-10"
-          value={state.description}
-          dispatch={dispatch}
-          actionType={TEMPLATE_ACTIONS.SET_DESCRIPTION}
-        />
-        <CategoriesInput dispatch={dispatch} />
-      </form>
-      {renderAttributes(numberOfAttributes)}
-      <button
-        type="button"
-        className="mt-10 text-blue-600 hover:text-blue-700 hover:underline"
-        onClick={onCreateAttribute}
-      >
-        Add new attribute
-      </button>
-      {renderVariations(numberOfAttributes)}
-      <div className="mt-10">
-        <button type="button" className="text-blue-600 hover:text-blue-700 hover:underline" onClick={onCreateVariation}>
-          Add new variation
-        </button>
+    <>
+      <div className={`w-2/5 mb-44 ${modalState.isModalOpen ? 'opacity-20' : ''}`}>
+        <form className="flex flex-col justify-start">
+          <div className="self-center my-20 text-5xl font-bold uppercase">Create a new template</div>
+          <TextInput
+            label="name"
+            type="text"
+            style="mb-10"
+            value={state.name}
+            dispatch={dispatch}
+            actionType={TEMPLATE_ACTIONS.SET_NAME}
+          />
+
+          <TextInput
+            label="Product title"
+            type="text"
+            style="mb-10"
+            value={state.productTitle}
+            dispatch={dispatch}
+            actionType={TEMPLATE_ACTIONS.SET_PRODUCT_TITLE}
+          />
+          <TextAreaInput
+            label="description"
+            type="text"
+            options={{ rows: 6 }}
+            style="mb-10"
+            value={state.description}
+            dispatch={dispatch}
+            actionType={TEMPLATE_ACTIONS.SET_DESCRIPTION}
+          />
+
+          {renderAttributes(numberOfAttributes)}
+          <button
+            type="button"
+            className="self-start mt-10 text-blue-600 hover:text-blue-700 hover:underline"
+            onClick={onCreateAttribute}
+          >
+            Add new attribute
+          </button>
+          {renderVariations(numberOfAttributes)}
+          <div className="mt-10">
+            <button
+              type="button"
+              className="text-blue-600 hover:text-blue-700 hover:underline"
+              onClick={onCreateVariation}
+            >
+              Add new variation
+            </button>
+          </div>
+          <div className="flex justify-center mt-20">
+            <button type="button" className="px-12 py-4 bg-gray-400 rounded-full hover:bg-gray-500">
+              Back
+            </button>
+            <button type="submit" className="px-12 py-4 ml-8 bg-yellow-400 rounded-full hover:bg-yellow-500">
+              Create Template
+            </button>
+          </div>
+        </form>
       </div>
-      <div className="flex justify-center mt-20">
-        <button type="button" className="px-12 py-4 bg-gray-400 rounded-full hover:bg-gray-500">
-          Back
-        </button>
-        <button type="submit" className="px-12 py-4 ml-8 bg-yellow-400 rounded-full hover:bg-yellow-500">
-          Create Template
-        </button>
-      </div>
-    </div>
+      {modalState.openCreateAttributeModal && (
+        <CreateAttributeModal
+          attributes={state.attributes}
+          actionType={TEMPLATE_ACTIONS.SET_ATTRIBUTE}
+          dispatch={dispatch}
+        />
+      )}
+      {modalState.openCreateOptionModal && (
+        <CreateAttributeOptionModal
+          attributes={state.attributes}
+          actionType={TEMPLATE_ACTIONS.SET_ATTRIBUTE}
+          dispatch={dispatch}
+        />
+      )}
+      {modalState.openDeleteAttributeModal && (
+        <DeleteAttributeModal
+          attributes={state.attributes}
+          actionType={TEMPLATE_ACTIONS.DELETE_ATTRIBUTE}
+          dispatch={dispatch}
+        />
+      )}
+    </>
   )
 }
 

@@ -14,9 +14,12 @@ html {
 
 @layer components {
   .main-content {
-    @apply flex flex-row self-center justify-center w-4/5;
+    @apply flex flex-row self-center justify-center w-full;
   }
   .input-error {
-    @apply mt-4 text-2xl italic text-red-500;
+    @apply mt-2 mb-4 text-2xl italic text-red-500;
+  }
+  .center-modal {
+    @apply fixed transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2;
   }
 }

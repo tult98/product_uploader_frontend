@@ -1,19 +1,11 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
+// import { useMutation } from 'react-query'
+import Select from 'react-select'
 import CreatableSelect from 'react-select/creatable'
-
-const attributeNameOptions = [
-  { value: '1', label: 'Type' },
-  { value: '2', label: 'Size' },
-  { value: '3', label: 'Color' },
-]
-
-const attributeValueOptions = [
-  { value: '1', label: 'S' },
-  { value: '2', label: 'M' },
-  { value: '3', label: 'L' },
-  { value: '4', label: 'XL' },
-  { value: '5', label: 'XXL' },
-]
+import ModalContext from 'context/ModalContext'
+// import TemplateAttributeServices from 'services/TemplateAttributeServices'
+import { convertToAttributeFormat, convertToOptionFormat } from 'utils/templateUtils'
+import { debounce } from 'utils/commonUtils'
 
 const Attribute = ({
   index = 0,
@@ -24,18 +16,29 @@ const Attribute = ({
   isVariationAttribute = false,
   variationIndex,
 }) => {
-  const onSelectAttributeName = (selectedName) => {
-    attribute = { ...attribute, name: selectedName }
-    dispatch({
-      type: actionType,
-      payload: { index: index, data: attribute },
-    })
+  const { modalState, setModalState } = useContext(ModalContext)
+  const [availableOptions, setAvailableOptions] = useState([])
+  const [attributeName, setAttributeName] = useState(attribute.name)
+
+  const onChangeAttributeName = (event) => {
+    setAttributeName(event.target.value)
+    debounce(
+      () => dispatch({ type: actionType, payload: { index: index, data: { ...attribute, name: attributeName } } }),
+      500,
+    )()
+  }
+
+  const onDeleteAttribute = () => {
+    setModalState({ ...modalState, openDeleteAttributeModal: true, attributeIndex: index, isModalOpen: true })
   }
 
   const onSelectedAttributeOptions = (selectedOptions) => {
     attribute = isVariationAttribute
-      ? { ...attribute, value: selectedOptions }
-      : { ...attribute, options: selectedOptions }
+      ? { ...attribute, value: { code: selectedOptions.value, name: selectedOptions.label } }
+      : {
+          ...attribute,
+          options: convertToAttributeFormat(selectedOptions),
+        }
     dispatch({
       type: actionType,
       payload: isVariationAttribute
@@ -44,30 +47,84 @@ const Attribute = ({
     })
   }
 
+  const onCreateAttributeOption = (inputValue) => {
+    setModalState({
+      ...modalState,
+      openCreateOptionModal: true,
+      isModalOpen: true,
+      initialValue: inputValue,
+      attributeIndex: index,
+      availableOptions: availableOptions,
+      setAvailableOptions: setAvailableOptions,
+    })
+  }
+
+  const onSetPrimaryAttribute = () => {
+    setModalState({
+      ...modalState,
+      openCreateAttributeModal: true,
+      isModalOpen: true,
+      attributeIndex: index,
+    })
+  }
+
   return (
-    <div className="my-10">
+    <div className="w-full my-10">
       {isVariationAttribute ? (
         <>
-          <label className="font-semibold uppercase">{attribute?.name?.label || `Attribute name ${index + 1}`}</label>
-          <Select value={attribute?.value || ''} onChange={onSelectedAttributeOptions} options={attribute.options} />
+          <label className="font-semibold uppercase">
+            {attribute?.name || `Attribute name ${index + 1}`}
+            {attribute.isPrimary && <span className="text-red-500">{`  (*)`} </span>}
+          </label>
+          <Select
+            value={{ value: attribute?.value?.code, label: attribute?.value?.name }}
+            onChange={onSelectedAttributeOptions}
+            options={convertToOptionFormat(attribute?.options || [])}
+          />
         </>
       ) : (
         <>
-          <label className="font-semibold uppercase">{`Attribute name ${index + 1}`}</label>
-          <CreatableSelect
-            className="mb-10"
-            value={attribute.name}
-            options={attributeNameOptions}
-            onChange={onSelectAttributeName}
-          />
-          <label className="font-semibold uppercase">{`Attribute value(s) ${index + 1}`}</label>
-          <CreatableSelect
-            isMulti={isMulti}
-            closeMenuOnSelect={false}
-            value={attribute.options}
-            onChange={onSelectedAttributeOptions}
-            options={attributeValueOptions}
-          />
+          <div className="flex flex-col justify-start w-full">
+            <label className="font-semibold uppercase">
+              {`Attribute name ${index + 1}  `}
+              {attribute?.isPrimary && <span className="text-red-500">(*)</span>}
+            </label>
+            <input
+              type="text"
+              placeholder="Attribute name..."
+              value={attributeName || ''}
+              className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
+              onChange={onChangeAttributeName}
+            />
+          </div>
+          <div className="mt-10">
+            <option className="font-semibold uppercase">{`Attribute value(s) ${index + 1}`}</option>
+            <CreatableSelect
+              isMulti={isMulti}
+              value={convertToOptionFormat(attribute?.options || [])}
+              options={convertToOptionFormat(availableOptions)}
+              onCreateOption={onCreateAttributeOption}
+              onChange={onSelectedAttributeOptions}
+            />
+          </div>
+          <div className="flex justify-end mt-8">
+            {!attribute?.isPrimary && (
+              <button
+                type="button"
+                className="px-8 py-4 mr-4 text-gray-200 bg-blue-700 rounded-full hover:bg-blue-500"
+                onClick={onSetPrimaryAttribute}
+              >
+                Set as primary
+              </button>
+            )}
+            <button
+              type="button"
+              className="px-12 py-4 text-gray-200 bg-red-500 rounded-full hover:bg-red-400"
+              onClick={onDeleteAttribute}
+            >
+              Delete
+            </button>
+          </div>
         </>
       )}
     </div>
