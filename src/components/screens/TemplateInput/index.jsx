@@ -68,6 +68,7 @@ const TemplateInput = ({ state, dispatch }) => {
           <div className="self-center my-20 text-5xl font-bold uppercase">Create a new template</div>
           <TextInput
             label="name"
+            isRequired={true}
             type="text"
             style="mb-10"
             value={state.name}
@@ -77,6 +78,7 @@ const TemplateInput = ({ state, dispatch }) => {
 
           <TextInput
             label="Product title"
+            isRequired={true}
             type="text"
             style="mb-10"
             value={state.productTitle}
@@ -85,6 +87,7 @@ const TemplateInput = ({ state, dispatch }) => {
           />
           <TextAreaInput
             label="description"
+            isRequired={true}
             type="text"
             options={{ rows: 6 }}
             style="mb-10"

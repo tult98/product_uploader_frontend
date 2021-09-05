@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { debounce, DEFAULT_DELAY } from 'utils/commonUtils'
 
-const TextInput = ({ label, type = 'text', style, value, dispatch, actionType }) => {
+const TextInput = ({ label, type = 'text', style, value, dispatch, actionType, isRequired = false }) => {
   const [textValue, setTextValue] = useState(value)
 
   const onChangeValue = (event) => {
     setTextValue(event.target.value)
-    debounce(() => dispatch({ type: actionType, payload: textValue }), DEFAULT_DELAY)()
+    debounce(() => dispatch({ type: actionType, payload: event.target.value }), DEFAULT_DELAY)()
   }
 
   return (
@@ -14,6 +14,7 @@ const TextInput = ({ label, type = 'text', style, value, dispatch, actionType })
       <label className="font-semibold uppercase">{label}</label>
       <input
         type={type}
+        required={isRequired}
         value={textValue}
         className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
         onChange={onChangeValue}

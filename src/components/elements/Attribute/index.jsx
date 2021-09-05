@@ -23,7 +23,7 @@ const Attribute = ({
   const onChangeAttributeName = (event) => {
     setAttributeName(event.target.value)
     debounce(
-      () => dispatch({ type: actionType, payload: { index: index, data: { ...attribute, name: attributeName } } }),
+      () => dispatch({ type: actionType, payload: { index: index, data: { ...attribute, name: event.target.value } } }),
       DEFAULT_DELAY,
     )()
   }
@@ -92,6 +92,7 @@ const Attribute = ({
             <input
               type="text"
               placeholder="Attribute name..."
+              required
               value={attributeName || ''}
               className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
               onChange={onChangeAttributeName}
