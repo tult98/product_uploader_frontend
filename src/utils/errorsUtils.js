@@ -1,26 +1,31 @@
 export const REQUIRED_FIELD_ERROR = 'This field is required.'
 
 export const validateTemplateInput = (data, errors, setErrors) => {
+  let isValidInput = true
   let newErrors = { ...errors }
   if (!data.name || data.name === '') {
+    isValidInput = false
     newErrors = { ...newErrors, name: { message: REQUIRED_FIELD_ERROR } }
   } else {
     newErrors = { ...newErrors, name: null }
   }
 
   if (!data.productTitle || data.productTitle === '') {
+    isValidInput = false
     newErrors = { ...newErrors, 'product title': { message: REQUIRED_FIELD_ERROR } }
   } else {
-    newErrors = { ...errors, 'product title': null }
+    newErrors = { ...newErrors, 'product title': null }
   }
 
   if (!data.description || data.description === '') {
+    isValidInput = false
     newErrors = { ...newErrors, description: { message: REQUIRED_FIELD_ERROR } }
   } else {
-    newErrors = { ...errors, description: null }
+    newErrors = { ...newErrors, description: null }
   }
 
   setErrors(newErrors)
+  return isValidInput
 }
 
 export const validateAttributeName = (inputText, errors, setErrors) => {

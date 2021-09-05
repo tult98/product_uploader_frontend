@@ -30,3 +30,34 @@ export const convertToAttributeFormat = (options) => {
     }
   })
 }
+
+export const formatTemplateData = (data) => {
+  // TODO: convert to valid data to send to API
+  const validTemplateData = {
+    name: data.name,
+    product_title: data.productTitle,
+    attributes: data.attributes.map((attribute) => {
+      return {
+        name: attribute.name,
+        is_primary: attribute.isPrimary,
+        options: attribute.options,
+      }
+    }),
+    variations: data.variations.map((variation) => {
+      return {
+        sku: variation.sku,
+        is_default: variation.isDefault,
+        sale_price: variation.salePrice,
+        regular_price: variation.regularPrice,
+        attributes: variation.attributes.map((attribute) => {
+          return {
+            name: attribute.name,
+            value: attribute.value,
+          }
+        }),
+      }
+    }),
+  }
+
+  return validTemplateData
+}

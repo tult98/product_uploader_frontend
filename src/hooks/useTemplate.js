@@ -68,7 +68,7 @@ const reducer = (state, action) => {
         ...state,
         variations: state.variations,
       }
-    case TEMPLATE_ACTIONS.SET_VARIATION_ATTRIBUTE:
+    case TEMPLATE_ACTIONS.SET_VARIATION_ATTRIBUTE: {
       const newAttributes = state.variations[action.payload.variationIndex].attributes.map((attribute) => {
         return attribute.name === action.payload.data.name ? action.payload.data : attribute
       })
@@ -77,7 +77,8 @@ const reducer = (state, action) => {
         ...state,
         variations: state.variations,
       }
-    case TEMPLATE_ACTIONS.DELETE_ATTRIBUTE:
+    }
+    case TEMPLATE_ACTIONS.DELETE_ATTRIBUTE: {
       const remainAttributes = state.attributes.filter((_, index) => {
         return index !== action.payload.index
       })
@@ -88,6 +89,7 @@ const reducer = (state, action) => {
           return { ...variation, attributes: remainAttributes }
         }),
       }
+    }
     default:
       return state
   }

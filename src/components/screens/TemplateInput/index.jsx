@@ -1,4 +1,5 @@
 import React, { useCallback, useState, useContext, useEffect } from 'react'
+import { useMutation } from 'react-query'
 import TextAreaInput from 'components/elements/Input/TextAreaInput'
 import TextInput from 'components/elements/Input/TextInput'
 import Attribute from 'components/elements/Attribute'
@@ -6,8 +7,9 @@ import VariationInput from 'components/widgets/VariationInput'
 import CreateAttributeModal from 'components/elements/Attribute/CreateAttributeModal'
 import CreateAttributeOptionModal from 'components/elements/Attribute/CreateAttributeOptionModal'
 import DeleteAttributeModal from 'components/elements/Attribute/DeleteAttributeModal'
+import TemplateServices from 'services/TemplateServices'
 import ModalContext from 'context/ModalContext'
-import { TEMPLATE_ACTIONS } from 'utils/templateUtils'
+import { formatTemplateData, TEMPLATE_ACTIONS } from 'utils/templateUtils'
 import { validateTemplateInput } from 'utils/errorsUtils'
 
 const TemplateInput = ({ state, dispatch }) => {
@@ -15,6 +17,8 @@ const TemplateInput = ({ state, dispatch }) => {
   const [numberOfAttributes, setNumberOfAttributes] = useState(state.variations.length)
   const [errors, setErrors] = useState({})
   const { modalState } = useContext(ModalContext)
+
+  const mutation = useMutation(TemplateServices.createTemplate)
 
   useEffect(() => {
     setNumberOfAttributes(state.attributes.length)
@@ -64,7 +68,14 @@ const TemplateInput = ({ state, dispatch }) => {
   }
 
   const onCreateTemplate = () => {
-    validateTemplateInput(state, errors, setErrors, ['name', 'product title', 'description'])
+    const isValidInput = validateTemplateInput(state, errors, setErrors)
+    if (isValidInput) {
+      // TODO: handle data before sending to backend
+      const data = formatTemplateData(state)
+      console.log('==========data:', data)
+      // TODO: calling api
+      // mutation.mutate(state)
+    }
   }
 
   return (
