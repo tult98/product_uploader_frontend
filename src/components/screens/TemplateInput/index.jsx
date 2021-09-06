@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useContext, useEffect } from 'react'
-import { useMutation } from 'react-query'
+// import { useMutation } from 'react-query'
 import TextAreaInput from 'components/elements/Input/TextAreaInput'
 import TextInput from 'components/elements/Input/TextInput'
 import Attribute from 'components/elements/Attribute'
@@ -7,7 +7,7 @@ import VariationInput from 'components/widgets/VariationInput'
 import CreateAttributeModal from 'components/elements/Attribute/CreateAttributeModal'
 import CreateAttributeOptionModal from 'components/elements/Attribute/CreateAttributeOptionModal'
 import DeleteAttributeModal from 'components/elements/Attribute/DeleteAttributeModal'
-import TemplateServices from 'services/TemplateServices'
+// import TemplateServices from 'services/TemplateServices'
 import ModalContext from 'context/ModalContext'
 import { formatTemplateData, TEMPLATE_ACTIONS } from 'utils/templateUtils'
 import { validateTemplateInput } from 'utils/errorsUtils'
@@ -18,7 +18,7 @@ const TemplateInput = ({ state, dispatch }) => {
   const [errors, setErrors] = useState({})
   const { modalState } = useContext(ModalContext)
 
-  const mutation = useMutation(TemplateServices.createTemplate)
+  // const mutation = useMutation(TemplateServices.createTemplate)
 
   useEffect(() => {
     setNumberOfAttributes(state.attributes.length)
@@ -45,7 +45,7 @@ const TemplateInput = ({ state, dispatch }) => {
     for (let i = 0; i < numberOfAttributes; i++) {
       attributes.push(
         <Attribute
-          key={i}
+          key={state.attributes[i].id}
           index={i}
           isMulti={true}
           attribute={state.attributes[i]}

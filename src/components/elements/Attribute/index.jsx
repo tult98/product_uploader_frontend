@@ -22,6 +22,8 @@ const Attribute = ({
   const [attributeName, setAttributeName] = useState(attribute.name)
   const [errors, setErrors] = useState({})
 
+  console.log('==============', availableOptions)
+
   const onChangeAttributeName = (event) => {
     setAttributeName(event.target.value)
     debounce(() => {
