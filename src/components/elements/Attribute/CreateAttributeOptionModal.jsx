@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react'
 import Icon from 'components/elements/Icon'
 import ModalContext from 'context/ModalContext'
+import { REQUIRED_FIELD_ERROR } from 'utils/errorsUtils'
 
 const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
   const { modalState, setModalState } = useContext(ModalContext)
@@ -67,6 +68,22 @@ const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
     onCloseModal()
   }
 
+  const onValidateOptionName = () => {
+    if (!optionName || optionName === '') {
+      setErrors({ ...errors, optionName: { message: REQUIRED_FIELD_ERROR } })
+    } else {
+      setErrors({ ...errors, optionName: null })
+    }
+  }
+
+  const onValidateOptionCode = () => {
+    if (!optionCode || optionCode === '') {
+      setErrors({ ...errors, optionCode: { message: REQUIRED_FIELD_ERROR } })
+    } else {
+      setErrors({ ...errors, optionCode: null })
+    }
+  }
+
   return (
     <div className="bg-white border border-gray-400 center-modal">
       <div className="flex flex-row justify-between px-4 py-8 bg-gradient-to-r from-gray-500 to-gray-600">
@@ -84,7 +101,9 @@ const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
             value={optionName}
             className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
             onChange={onChangeOptionName}
+            onBlur={onValidateOptionName}
           />
+          {errors && errors.optionName && <p className="input-error">{errors.optionName.message}</p>}
         </div>
         <div className="flex flex-col justify-start w-full mt-10">
           <label className="font-semibold uppercase">Option code</label>
@@ -94,7 +113,9 @@ const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
             value={optionCode}
             className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
             onChange={onChangeOptionCode}
+            onBlur={onValidateOptionCode}
           />
+          {errors && errors.optionCode && <p className="input-error">{errors.optionCode.message}</p>}
         </div>
         <div className="flex flex-row items-center self-start mt-4">
           <input type="checkbox" onClick={onToggleDefault} />
@@ -110,7 +131,8 @@ const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
           Cancel
         </button>
         <button
-          disabled={errors && errors.isDefault}
+          type="button"
+          disabled={errors && (errors.isDefault || errors.optionName || errors.optionCode)}
           className="px-12 py-2 text-white bg-blue-600 rounded-full hover:bg-blue-300 hover:text-gray-800"
           onClick={onSubmit}
         >
