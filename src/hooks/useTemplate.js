@@ -34,9 +34,12 @@ const reducer = (state, action) => {
     case TEMPLATE_ACTIONS.ADD_ATTRIBUTE:
       return {
         ...state,
-        attributes: [...state.attributes, { id: state.attributes.length + 1 }],
+        attributes: [...state.attributes, { id: state.attributes.length > 0 ? state.attributes.pop().id + 1 : 1 }],
         variations: state.variations.map((variation) => {
-          return { ...variation, attributes: [...state.attributes, { id: state.attribute.length + 1 }] }
+          return {
+            ...variation,
+            attributes: [...state.attributes, { id: state.attributes.length > 0 ? state.attributes.pop().id + 1 : 1 }],
+          }
         }),
       }
     case TEMPLATE_ACTIONS.SET_ATTRIBUTE:
