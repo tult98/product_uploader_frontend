@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import Attribute from 'components/elements/Attribute'
 import { TEMPLATE_ACTIONS } from 'utils/templateUtils'
-import { validateVariationPrice } from 'utils/errorsUtils'
+import { validatePrice, validateVariationPrice } from 'utils/errorsUtils'
 import { debounce, DEFAULT_DELAY } from 'utils/commonUtils'
 
 const VariationInput = ({ name, index, variation, dispatch }) => {
@@ -23,11 +23,6 @@ const VariationInput = ({ name, index, variation, dispatch }) => {
     dispatch({ type: TEMPLATE_ACTIONS.SET_VARIATION, payload: { index: index, data: variation } })
   }, [variation.attributes])
 
-  const onToggleDefault = () => {
-    variation.isDefault = !variation.isDefault
-    dispatch({ type: TEMPLATE_ACTIONS.SET_VARIATION, payload: { index: index, data: variation } })
-  }
-
   const onChangeSalePrice = (event) => {
     setSalePrice(event.target.value)
     variation.salePrice = event.target.value
@@ -44,6 +39,18 @@ const VariationInput = ({ name, index, variation, dispatch }) => {
       validateVariationPrice(variation, errors, setErrors)
       dispatch({ type: TEMPLATE_ACTIONS.SET_VARIATION, payload: { index: index, data: variation } })
     }, DEFAULT_DELAY)()
+  }
+
+  const onValidateSalePrice = () => {
+    validatePrice(variation.salePrice)
+      ? setErrors({ ...errors, salePrice: null })
+      : setErrors({ ...errors, salePrice: { message: 'Invalid input' } })
+  }
+
+  const onValidateRegularPrice = () => {
+    validatePrice(variation.regularPrice)
+      ? setErrors({ ...errors, regularPrice: null })
+      : setErrors({ ...errors, regularPrice: { message: 'Invalid input' } })
   }
 
   const renderAttributes = useCallback(() => {
@@ -68,19 +75,6 @@ const VariationInput = ({ name, index, variation, dispatch }) => {
     <div className="mt-20 mb-12 rounded-lg">
       <div className="mb-4 font-semibold uppercase">{name}</div>
       <div className="p-8 border-2 border-gray-700">
-        <div className="flex flex-row items-center justify-end">
-          <input
-            type="checkbox"
-            name="default_variation"
-            id="default_variation"
-            value={variation.isDefault}
-            onChange={onToggleDefault}
-          />
-          <label className="ml-2" htmlFor="default_variation">
-            Set as default
-          </label>
-        </div>
-
         <div className="flex flex-row items-center mb-10">
           <label className="font-semibold uppercase">SKU</label>
           <span className="px-8 py-2 ml-8 text-center uppercase bg-gray-200 border border-gray-400 rounded-lg min-h-30px min-w-80px">
@@ -96,6 +90,7 @@ const VariationInput = ({ name, index, variation, dispatch }) => {
               className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
               value={salePrice || ''}
               onChange={onChangeSalePrice}
+              onBlur={onValidateSalePrice}
             />
           </div>
 
@@ -106,6 +101,7 @@ const VariationInput = ({ name, index, variation, dispatch }) => {
               className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
               value={regularPrice || ''}
               onChange={onChangeRegularPrice}
+              onBlur={onValidateRegularPrice}
             />
           </div>
         </div>

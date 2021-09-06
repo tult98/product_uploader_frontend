@@ -7,6 +7,7 @@ import ModalContext from 'context/ModalContext'
 import { convertToAttributeFormat, convertToOptionFormat } from 'utils/templateUtils'
 import { debounce, DEFAULT_DELAY } from 'utils/commonUtils'
 import { validateAttributeName, validateAttributeOptions } from 'utils/errorsUtils'
+// import Icon from 'components/elements/Icon'
 
 const Attribute = ({
   index = 0,
@@ -21,8 +22,6 @@ const Attribute = ({
   const [availableOptions, setAvailableOptions] = useState([])
   const [attributeName, setAttributeName] = useState(attribute.name)
   const [errors, setErrors] = useState({})
-
-  console.log('==============', availableOptions)
 
   const onChangeAttributeName = (event) => {
     setAttributeName(event.target.value)
@@ -64,6 +63,28 @@ const Attribute = ({
     })
   }
 
+  const onEditAttributeOption = (optionCode) => {
+    let optionIndex
+    let attributeIndex
+    attribute.options.map((option, index) => {
+      attributeIndex = option.code === optionCode ? index : null
+    })
+    availableOptions.map((option, index) => {
+      optionIndex = option.code === optionCode ? index : null
+    })
+    setModalState({
+      ...modalState,
+      openCreateOptionModal: true,
+      isModalOpen: true,
+      attributeIndex: index,
+      isEdit: true,
+      availableOptionIndex: optionIndex,
+      attributeOptionIndex: attributeIndex,
+      availableOptions: availableOptions,
+      setAvailableOptions: setAvailableOptions,
+    })
+  }
+
   const onSetPrimaryAttribute = () => {
     setModalState({
       ...modalState,
@@ -71,6 +92,14 @@ const Attribute = ({
       isModalOpen: true,
       attributeIndex: index,
     })
+  }
+
+  const formatOptionLabel = ({ label }, { context }) => {
+    if (context === 'value') {
+      return <div onClick={() => onEditAttributeOption(label.split(' - ')[1])}>{label}</div>
+    } else if (context === 'menu') {
+      return <div>{label}</div>
+    }
   }
 
   return (
@@ -110,6 +139,7 @@ const Attribute = ({
               isMulti={isMulti}
               value={convertToOptionFormat(attribute?.options || [])}
               options={convertToOptionFormat(availableOptions)}
+              formatOptionLabel={formatOptionLabel}
               onCreateOption={onCreateAttributeOption}
               onChange={onSelectedAttributeOptions}
             />

@@ -17,7 +17,7 @@ export const convertToOptionFormat = (attributes) => {
   return attributes.map((attribute) => {
     return {
       value: attribute.code,
-      label: attribute.name,
+      label: `${attribute.name} - ${attribute.code}`,
     }
   })
 }
@@ -26,7 +26,7 @@ export const convertToAttributeFormat = (options) => {
   return options.map((option) => {
     return {
       code: option.value,
-      name: option.label,
+      name: option.label.split(' - ')[0],
     }
   })
 }

@@ -1,14 +1,23 @@
-import React, { useContext, useState } from 'react'
+import React, { useEffect, useContext, useState } from 'react'
 import Icon from 'components/elements/Icon'
 import ModalContext from 'context/ModalContext'
 import { REQUIRED_FIELD_ERROR } from 'utils/errorsUtils'
 
 const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
   const { modalState, setModalState } = useContext(ModalContext)
-  const [optionName, setOptionName] = useState(modalState.initialValue)
+  const [optionName, setOptionName] = useState(modalState.initialValue || '')
   const [optionCode, setOptionCode] = useState('')
   const [isDefault, setIsDefault] = useState(false)
   const [errors, setErrors] = useState({})
+
+  useEffect(() => {
+    if (modalState.isEdit) {
+      const attribute = attributes[modalState.attributeIndex]
+      setOptionCode(attribute.options[modalState.attributeOptionIndex].code)
+      setOptionName(attribute.options[modalState.attributeOptionIndex].name)
+      setIsDefault(attribute.options[modalState.attributeOptionIndex].isDefault)
+    }
+  }, [])
 
   const onChangeOptionName = (event) => {
     setOptionName(event.target.value)
@@ -40,31 +49,71 @@ const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
   }
 
   const onCloseModal = () => {
-    setModalState({
-      ...modalState,
-      openCreateOptionModal: false,
-      isModalOpen: false,
-      initialValue: null,
-    })
+    if (modalState.isEdit) {
+      setModalState({
+        ...modalState,
+        openCreateOptionModal: false,
+        isModalOpen: false,
+        attributeIndex: null,
+        isEdit: false,
+        availableOptionIndex: null,
+        attributeOptionIndex: null,
+        availableOptions: null,
+        setAvailableOptions: null,
+      })
+    } else {
+      setModalState({
+        ...modalState,
+        openCreateOptionModal: false,
+        isModalOpen: false,
+        initialValue: null,
+        attributeIndex: null,
+        availableOptions: null,
+        setAvailableOptions: null,
+      })
+    }
   }
 
   const onSubmit = () => {
     const attribute = attributes[modalState.attributeIndex]
-    attribute.options = attribute?.options || []
-    dispatch({
-      type: actionType,
-      payload: {
-        index: modalState.attributeIndex,
-        data: {
-          ...attribute,
-          options: [...attribute?.options, { code: optionCode, name: optionName, isDefault: isDefault }],
+    const newOption = {
+      code: optionCode,
+      name: optionName,
+      isDefault: isDefault,
+    }
+    if (!modalState.isEdit) {
+      attribute.options = attribute?.options || []
+      dispatch({
+        type: actionType,
+        payload: {
+          index: modalState.attributeIndex,
+          data: {
+            ...attribute,
+            options: [...attribute?.options, { code: optionCode, name: optionName, isDefault: isDefault }],
+          },
         },
-      },
-    })
-    modalState.setAvailableOptions([
-      ...modalState.availableOptions,
-      { code: optionCode, name: optionName, isDefault: isDefault },
-    ])
+      })
+      modalState.setAvailableOptions([
+        ...modalState.availableOptions,
+        { code: optionCode, name: optionName, isDefault: isDefault },
+      ])
+    } else {
+      // update availableOptions
+      modalState.availableOptions[modalState.availableOptionIndex] = newOption
+      modalState.setAvailableOptions([...modalState.availableOptions])
+      // update options inside attribute
+      attribute.options[modalState.attributeOptionIndex] = newOption
+      dispatch({
+        type: actionType,
+        payload: {
+          index: modalState.attributeIndex,
+          data: {
+            ...attribute,
+            options: [...attribute?.options],
+          },
+        },
+      })
+    }
     onCloseModal()
   }
 
@@ -87,7 +136,7 @@ const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
   return (
     <div className="bg-white border border-gray-400 center-modal">
       <div className="flex flex-row justify-between px-4 py-8 bg-gradient-to-r from-gray-500 to-gray-600">
-        <p className="text-white ">Create a new option</p>
+        <p className="text-white ">{`${modalState.isEdit ? 'Edit' : 'Create'} a new option`}</p>
         <div onClick={onCloseModal} className="cursor-pointer">
           <Icon name="close" style="w-8 h-8 font-bold" fill="#fff" />
         </div>
@@ -118,7 +167,7 @@ const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
           {errors && errors.optionCode && <p className="input-error">{errors.optionCode.message}</p>}
         </div>
         <div className="flex flex-row items-center self-start mt-4">
-          <input type="checkbox" onClick={onToggleDefault} />
+          <input type="checkbox" checked={isDefault} onChange={onToggleDefault} />
           <label className="ml-2">Select as default option</label>
         </div>
         {errors && errors.isDefault && <p className="input-error">{errors.isDefault.message}</p>}

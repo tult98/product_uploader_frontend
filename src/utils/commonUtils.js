@@ -12,3 +12,7 @@ export const debounce = (func, delay) => {
     }, delay)
   }
 }
+
+export const removeSpace = (str) => {
+  return str.replaceAll(' ', '')
+}
