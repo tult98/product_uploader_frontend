@@ -117,7 +117,7 @@ const Attribute = ({
         }
       }
       count > 1
-        ? setErrors({ ...errors, name: { message: 'Attribute name is duplicate' } })
+        ? setErrors({ ...errors, name: { message: 'Attribute name is duplicated' } })
         : setErrors({ ...errors, name: null })
     }
   }

@@ -48,6 +48,7 @@ const TemplateInput = ({ state, dispatch }) => {
           key={state.attributes[i].id}
           index={i}
           isMulti={true}
+          attributes={state.attributes}
           attribute={state.attributes[i]}
           actionType={TEMPLATE_ACTIONS.SET_ATTRIBUTE}
           dispatch={dispatch}
