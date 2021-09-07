@@ -126,13 +126,16 @@ const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
       return false
     } else {
       let isDuplicate = false
-      for (const option of modalState.availableOptions) {
+      const availableOptions = modalState.isEdit
+        ? modalState.availableOptions.map((_, index) => index !== modalState.availableOptionIndex)
+        : modalState.availableOptions
+      for (const option of availableOptions) {
         if (optionName === option.name && !isDuplicate) {
           isDuplicate = true
           break
         }
       }
-      !modalState.isEdit && isDuplicate
+      isDuplicate
         ? setErrors({ ...errors, optionName: { message: 'Option name is duplicated' } })
         : setErrors({ ...errors, optionName: null })
       return !isDuplicate
@@ -145,13 +148,16 @@ const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
       return false
     } else {
       let isDuplicate = false
-      for (const option of modalState.availableOptions) {
+      const availableOptions = modalState.isEdit
+        ? modalState.availableOptions.map((_, index) => index !== modalState.availableOptionIndex)
+        : modalState.availableOptions
+      for (const option of availableOptions) {
         if (optionCode === option.code && !isDuplicate) {
           isDuplicate = true
           break
         }
       }
-      !modalState.isEdit && isDuplicate
+      isDuplicate
         ? setErrors({ ...errors, optionCode: { message: 'Option code is duplicated' } })
         : setErrors({ ...errors, optionCode: null })
       return !isDuplicate

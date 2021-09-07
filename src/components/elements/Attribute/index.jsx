@@ -6,12 +6,13 @@ import ModalContext from 'context/ModalContext'
 // import TemplateAttributeServices from 'services/TemplateAttributeServices'
 import { convertToAttributeFormat, convertToOptionFormat } from 'utils/templateUtils'
 import { debounce, DEFAULT_DELAY } from 'utils/commonUtils'
-import { validateAttributeName, validateAttributeOptions } from 'utils/errorsUtils'
+import { REQUIRED_FIELD_ERROR } from 'utils/errorsUtils'
 // import Icon from 'components/elements/Icon'
 
 const Attribute = ({
   index = 0,
   isMulti = false,
+  attributes,
   attribute,
   actionType,
   dispatch,
@@ -27,7 +28,6 @@ const Attribute = ({
     setAttributeName(event.target.value)
     debounce(() => {
       dispatch({ type: actionType, payload: { index: index, data: { ...attribute, name: event.target.value } } })
-      validateAttributeName(event.target.value, errors, setErrors)
     }, DEFAULT_DELAY)()
   }
 
@@ -48,7 +48,7 @@ const Attribute = ({
         ? { index: index, variationIndex: variationIndex, data: attribute }
         : { index: index, data: attribute },
     })
-    validateAttributeOptions(selectedOptions, errors, setErrors)
+    onValidateAttributeOptions()
   }
 
   const onCreateAttributeOption = (inputValue) => {
@@ -67,10 +67,14 @@ const Attribute = ({
     let optionIndex
     let attributeIndex
     attribute.options.map((option, index) => {
-      attributeIndex = option.code === optionCode ? index : null
+      if (option.code === optionCode) {
+        attributeIndex = index
+      }
     })
     availableOptions.map((option, index) => {
-      optionIndex = option.code === optionCode ? index : null
+      if (option.code === optionCode) {
+        optionIndex = index
+      }
     })
     setModalState({
       ...modalState,
@@ -102,6 +106,32 @@ const Attribute = ({
     }
   }
 
+  const onValidateAttributeName = () => {
+    if (!attributeName || attributeName === '') {
+      setErrors({ ...errors, name: { message: REQUIRED_FIELD_ERROR } })
+    } else {
+      let count = 0
+      for (const attribute of attributes) {
+        if (attribute.name === attributeName) {
+          count += 1
+        }
+      }
+      count > 1
+        ? setErrors({ ...errors, name: { message: 'Attribute name is duplicate' } })
+        : setErrors({ ...errors, name: null })
+    }
+  }
+
+  const onValidateAttributeOptions = () => {
+    let newErrors = { ...errors }
+    if (!attribute.options || attribute.options.length === 0) {
+      newErrors = { ...newErrors, options: { message: 'Required at least one option' } }
+    } else {
+      newErrors = { ...newErrors, options: null }
+    }
+    setErrors(newErrors)
+  }
+
   return (
     <div className="w-full my-10">
       {isVariationAttribute ? (
@@ -130,6 +160,7 @@ const Attribute = ({
               value={attributeName || ''}
               className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
               onChange={onChangeAttributeName}
+              onBlur={onValidateAttributeName}
             />
             {errors && errors.name && <p className="input-error">{errors?.name?.message}</p>}
           </div>
@@ -142,6 +173,7 @@ const Attribute = ({
               formatOptionLabel={formatOptionLabel}
               onCreateOption={onCreateAttributeOption}
               onChange={onSelectedAttributeOptions}
+              onBlur={onValidateAttributeOptions}
             />
             {errors && errors.options && <p className="input-error">{errors.options.message}</p>}
           </div>
