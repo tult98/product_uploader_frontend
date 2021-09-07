@@ -127,7 +127,7 @@ const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
     } else {
       let isDuplicate = false
       const availableOptions = modalState.isEdit
-        ? modalState.availableOptions.map((_, index) => index !== modalState.availableOptionIndex)
+        ? modalState.availableOptions.filter((_, index) => index !== modalState.availableOptionIndex)
         : modalState.availableOptions
       for (const option of availableOptions) {
         if (optionName === option.name && !isDuplicate) {
@@ -149,7 +149,7 @@ const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
     } else {
       let isDuplicate = false
       const availableOptions = modalState.isEdit
-        ? modalState.availableOptions.map((_, index) => index !== modalState.availableOptionIndex)
+        ? modalState.availableOptions.filter((_, index) => index !== modalState.availableOptionIndex)
         : modalState.availableOptions
       for (const option of availableOptions) {
         if (optionCode === option.code && !isDuplicate) {
