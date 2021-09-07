@@ -132,7 +132,7 @@ const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
           break
         }
       }
-      isDuplicate
+      !modalState.isEdit && isDuplicate
         ? setErrors({ ...errors, optionName: { message: 'Option name is duplicated' } })
         : setErrors({ ...errors, optionName: null })
       return !isDuplicate
@@ -151,7 +151,7 @@ const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
           break
         }
       }
-      isDuplicate
+      !modalState.isEdit && isDuplicate
         ? setErrors({ ...errors, optionCode: { message: 'Option code is duplicated' } })
         : setErrors({ ...errors, optionCode: null })
       return !isDuplicate
