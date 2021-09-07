@@ -30,7 +30,7 @@ const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
   const onToggleDefault = () => {
     if (isDefault) {
       setIsDefault(false)
-      setErrors({})
+      setErrors({ ...errors, isDefault: null })
     } else {
       if (
         !attributes[modalState.attributeIndex].options ||
@@ -39,7 +39,8 @@ const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
         setIsDefault(true)
       } else {
         attributes[modalState.attributeIndex].options.map((option) => {
-          option.isDefault === true && setErrors({ isDefault: { message: 'You already set default option' } })
+          option.isDefault === true &&
+            setErrors({ ...errors, isDefault: { message: 'You already set default option' } })
         })
       }
       if (!errors || !errors.isDefault) {
@@ -75,61 +76,85 @@ const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
   }
 
   const onSubmit = () => {
-    const attribute = attributes[modalState.attributeIndex]
-    const newOption = {
-      code: optionCode,
-      name: optionName,
-      isDefault: isDefault,
-    }
-    if (!modalState.isEdit) {
-      attribute.options = attribute?.options || []
-      dispatch({
-        type: actionType,
-        payload: {
-          index: modalState.attributeIndex,
-          data: {
-            ...attribute,
-            options: [...attribute?.options, { code: optionCode, name: optionName, isDefault: isDefault }],
+    if (onValidateOptionCode() && onValidateOptionName()) {
+      const attribute = attributes[modalState.attributeIndex]
+      const newOption = {
+        code: optionCode,
+        name: optionName,
+        isDefault: isDefault,
+      }
+      if (!modalState.isEdit) {
+        attribute.options = attribute?.options || []
+        dispatch({
+          type: actionType,
+          payload: {
+            index: modalState.attributeIndex,
+            data: {
+              ...attribute,
+              options: [...attribute?.options, { code: optionCode, name: optionName, isDefault: isDefault }],
+            },
           },
-        },
-      })
-      modalState.setAvailableOptions([
-        ...modalState.availableOptions,
-        { code: optionCode, name: optionName, isDefault: isDefault },
-      ])
-    } else {
-      // update availableOptions
-      modalState.availableOptions[modalState.availableOptionIndex] = newOption
-      modalState.setAvailableOptions([...modalState.availableOptions])
-      // update options inside attribute
-      attribute.options[modalState.attributeOptionIndex] = newOption
-      dispatch({
-        type: actionType,
-        payload: {
-          index: modalState.attributeIndex,
-          data: {
-            ...attribute,
-            options: [...attribute?.options],
+        })
+        modalState.setAvailableOptions([
+          ...modalState.availableOptions,
+          { code: optionCode, name: optionName, isDefault: isDefault },
+        ])
+      } else {
+        // update availableOptions
+        modalState.availableOptions[modalState.availableOptionIndex] = newOption
+        modalState.setAvailableOptions([...modalState.availableOptions])
+        // update options inside attribute
+        attribute.options[modalState.attributeOptionIndex] = newOption
+        dispatch({
+          type: actionType,
+          payload: {
+            index: modalState.attributeIndex,
+            data: {
+              ...attribute,
+              options: [...attribute?.options],
+            },
           },
-        },
-      })
+        })
+      }
+      onCloseModal()
     }
-    onCloseModal()
   }
 
   const onValidateOptionName = () => {
     if (!optionName || optionName === '') {
       setErrors({ ...errors, optionName: { message: REQUIRED_FIELD_ERROR } })
+      return false
     } else {
-      setErrors({ ...errors, optionName: null })
+      let isDuplicate = false
+      for (const option of modalState.availableOptions) {
+        if (optionName === option.name && !isDuplicate) {
+          isDuplicate = true
+          break
+        }
+      }
+      isDuplicate
+        ? setErrors({ ...errors, optionName: { message: 'Option name is duplicated' } })
+        : setErrors({ ...errors, optionName: null })
+      return !isDuplicate
     }
   }
 
   const onValidateOptionCode = () => {
     if (!optionCode || optionCode === '') {
       setErrors({ ...errors, optionCode: { message: REQUIRED_FIELD_ERROR } })
+      return false
     } else {
-      setErrors({ ...errors, optionCode: null })
+      let isDuplicate = false
+      for (const option of modalState.availableOptions) {
+        if (optionCode === option.code && !isDuplicate) {
+          isDuplicate = true
+          break
+        }
+      }
+      isDuplicate
+        ? setErrors({ ...errors, optionCode: { message: 'Option code is duplicated' } })
+        : setErrors({ ...errors, optionCode: null })
+      return !isDuplicate
     }
   }
 
@@ -146,7 +171,6 @@ const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
           <label className="font-semibold uppercase">Option name</label>
           <input
             type="text"
-            required
             value={optionName}
             className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
             onChange={onChangeOptionName}
@@ -158,7 +182,7 @@ const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
           <label className="font-semibold uppercase">Option code</label>
           <input
             type="text"
-            required
+            autoFocus={true}
             value={optionCode}
             className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
             onChange={onChangeOptionCode}
