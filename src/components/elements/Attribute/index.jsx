@@ -23,9 +23,10 @@ const Attribute = ({
   const [availableOptions, setAvailableOptions] = useState([])
   const [attributeName, setAttributeName] = useState(attribute?.name || '')
   const [errors, setErrors] = useState({})
+  const [isCloseModal, setIsCloseModal] = useState(false)
 
   useEffect(() => {
-    if (!modalState.openCreateOptionModal && modalState.isCloseModal) {
+    if (!modalState.openCreateOptionModal && isCloseModal) {
       onValidateAttributeOptions()
       setModalState({ ...modalState, isCloseModal: false })
     }
@@ -67,6 +68,7 @@ const Attribute = ({
       attributeIndex: index,
       availableOptions: availableOptions,
       setAvailableOptions: setAvailableOptions,
+      setIsCloseModal: setIsCloseModal,
     })
   }
 
