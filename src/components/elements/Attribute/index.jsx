@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 // import { useMutation } from 'react-query'
 import Select from 'react-select'
 import CreatableSelect from 'react-select/creatable'
@@ -21,8 +21,15 @@ const Attribute = ({
 }) => {
   const { modalState, setModalState } = useContext(ModalContext)
   const [availableOptions, setAvailableOptions] = useState([])
-  const [attributeName, setAttributeName] = useState(attribute.name)
+  const [attributeName, setAttributeName] = useState(attribute?.name || '')
   const [errors, setErrors] = useState({})
+
+  useEffect(() => {
+    if (!modalState.openCreateOptionModal && modalState.isCloseModal) {
+      onValidateAttributeOptions()
+      setModalState({ ...modalState, isCloseModal: false })
+    }
+  }, [modalState.openCreateOptionModal])
 
   const onChangeAttributeName = (event) => {
     setAttributeName(event.target.value)

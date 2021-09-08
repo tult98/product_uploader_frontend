@@ -61,6 +61,7 @@ const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
         attributeOptionIndex: null,
         availableOptions: null,
         setAvailableOptions: null,
+        isCloseModal: true,
       })
     } else {
       setModalState({
@@ -71,6 +72,7 @@ const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
         attributeIndex: null,
         availableOptions: null,
         setAvailableOptions: null,
+        isCloseModal: true,
       })
     }
   }

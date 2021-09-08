@@ -13,8 +13,8 @@ import { formatTemplateData, TEMPLATE_ACTIONS } from 'utils/templateUtils'
 import { validateTemplateInput } from 'utils/errorsUtils'
 
 const TemplateInput = ({ state, dispatch }) => {
-  const [numberOfVariations, setNumberOfVariations] = useState(state.attributes.length)
-  const [numberOfAttributes, setNumberOfAttributes] = useState(state.variations.length)
+  const [numberOfVariations, setNumberOfVariations] = useState(state.variations.length)
+  const [numberOfAttributes, setNumberOfAttributes] = useState(state.attributes.length)
   const [errors, setErrors] = useState({})
   const { modalState } = useContext(ModalContext)
 
@@ -22,7 +22,7 @@ const TemplateInput = ({ state, dispatch }) => {
 
   useEffect(() => {
     setNumberOfAttributes(state.attributes.length)
-  }, [state?.attributes])
+  }, [state?.attributes.length])
 
   const renderVariations = useCallback(() => {
     const variations = []
@@ -45,7 +45,7 @@ const TemplateInput = ({ state, dispatch }) => {
     for (let i = 0; i < numberOfAttributes; i++) {
       attributes.push(
         <Attribute
-          key={state.attributes[i].id}
+          key={state.attributes[i]?.id}
           index={i}
           isMulti={true}
           attributes={state.attributes}
@@ -64,8 +64,8 @@ const TemplateInput = ({ state, dispatch }) => {
   }
 
   const onCreateAttribute = () => {
-    setNumberOfAttributes(numberOfAttributes + 1)
     dispatch({ type: TEMPLATE_ACTIONS.ADD_ATTRIBUTE })
+    setNumberOfAttributes(numberOfAttributes + 1)
   }
 
   const onCreateTemplate = () => {

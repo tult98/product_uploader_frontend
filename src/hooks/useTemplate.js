@@ -31,17 +31,19 @@ const reducer = (state, action) => {
         ...state,
         categories: action.payload,
       }
-    case TEMPLATE_ACTIONS.ADD_ATTRIBUTE:
+    case TEMPLATE_ACTIONS.ADD_ATTRIBUTE: {
+      const attributesClone = [...state.attributes]
       return {
         ...state,
-        attributes: [...state.attributes, { id: state.attributes.length > 0 ? state.attributes.pop().id + 1 : 1 }],
+        attributes: [...attributesClone, { id: state.attributes.length > 0 ? state.attributes.pop(-1).id + 1 : 1 }],
         variations: state.variations.map((variation) => {
           return {
             ...variation,
-            attributes: [...state.attributes, { id: state.attributes.length > 0 ? state.attributes.pop().id + 1 : 1 }],
+            attributes: [...attributesClone, { id: state.attributes.length > 0 ? state.attributes.pop(-1).id + 1 : 1 }],
           }
         }),
       }
+    }
     case TEMPLATE_ACTIONS.SET_ATTRIBUTE:
       state.attributes[action.payload.index] = action.payload.data
       return {
