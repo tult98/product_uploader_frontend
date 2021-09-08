@@ -3,13 +3,14 @@ import Attribute from 'components/elements/Attribute'
 import { TEMPLATE_ACTIONS } from 'utils/templateUtils'
 import { validateRegularPrice, validateSalePrice, validateVariationPrice } from 'utils/errorsUtils'
 import { debounce, DEFAULT_DELAY } from 'utils/commonUtils'
+import { validateSKU } from 'utils/validators'
 
-const VariationInput = ({ name, index, variation, dispatch }) => {
+const VariationInput = ({ name, index, variation, variations, dispatch }) => {
   const [errors, setErrors] = useState({})
   const [salePrice, setSalePrice] = useState(variation?.salePrice)
   const [regularPrice, setRegularPrice] = useState(variation?.regularPrice)
 
-  console.log('========', errors)
+  console.log('===========errors', errors)
 
   useEffect(() => {
     let sku = ''
@@ -24,6 +25,10 @@ const VariationInput = ({ name, index, variation, dispatch }) => {
     variation.sku = sku
     dispatch({ type: TEMPLATE_ACTIONS.SET_VARIATION, payload: { index: index, data: variation } })
   }, [variation.attributes])
+
+  useEffect(() => {
+    validateSKU(variation.sku, variations, errors, setErrors)
+  }, [variation.sku])
 
   const onChangeSalePrice = (event) => {
     setSalePrice(event.target.value)
@@ -74,11 +79,15 @@ const VariationInput = ({ name, index, variation, dispatch }) => {
     <div className="mt-20 mb-12 rounded-lg">
       <div className="mb-4 font-semibold uppercase">{name}</div>
       <div className="p-8 border-2 border-gray-700">
-        <div className="flex flex-row items-center mb-10">
-          <label className="font-semibold uppercase">SKU</label>
-          <span className="px-8 py-2 ml-8 text-center uppercase bg-gray-200 border border-gray-400 rounded-lg min-h-30px min-w-80px">
-            {variation.sku}
-          </span>
+        <div className="flex flex-col mb-10">
+          <div className="flex flex-row items-center">
+            <label className="font-semibold uppercase">SKU</label>
+            <span className="px-8 py-2 ml-8 text-center uppercase bg-gray-200 border border-gray-400 rounded-lg min-h-30px min-w-80px">
+              {variation.sku}
+            </span>
+          </div>
+
+          <p className="input-error">{errors.sku}</p>
         </div>
 
         <div className="flex flex-row justify-between">

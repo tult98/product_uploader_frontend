@@ -32,6 +32,7 @@ const TemplateInput = ({ state, dispatch }) => {
           key={i}
           index={i}
           name={`Variation ${i + 1}`}
+          variations={state.variations}
           variation={state.variations[i]}
           dispatch={dispatch}
         />,
