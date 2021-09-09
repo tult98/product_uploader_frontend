@@ -35,11 +35,14 @@ const TemplateInput = ({ state, dispatch }) => {
           variations={state.variations}
           variation={state.variations[i]}
           dispatch={dispatch}
+          variationErrors={errors.variationErrors?.length > i ? errors.variationErrors[i] : {}}
+          templateErrors={errors}
+          setTemplateErrors={setErrors}
         />,
       )
     }
     return variations
-  }, [numberOfVariations, state.sku, state.attributes, state.variations])
+  }, [numberOfVariations, state.sku, state.attributes, state.variations, errors.variationErrors])
 
   const renderAttributes = useCallback(() => {
     const attributes = []
@@ -53,11 +56,14 @@ const TemplateInput = ({ state, dispatch }) => {
           attribute={state.attributes[i]}
           actionType={TEMPLATE_ACTIONS.SET_ATTRIBUTE}
           dispatch={dispatch}
+          attributeErrors={errors?.attributeErrors?.length > i ? errors.attributeErrors[i] : {}}
+          templateErrors={errors}
+          setTemplateErrors={setErrors}
         />,
       )
     }
     return attributes
-  }, [numberOfAttributes])
+  }, [numberOfAttributes, errors.attributeErrors])
 
   const onCreateVariation = () => {
     setNumberOfVariations(numberOfVariations + 1)
@@ -148,6 +154,12 @@ const TemplateInput = ({ state, dispatch }) => {
               Create Template
             </button>
           </div>
+          {errors && (errors.attributes || errors.variations) && (
+            <div className="mt-10 general-errors">
+              {errors.attributes && <p className="input-error">*{errors.attributes}</p>}
+              {errors.variations && <p className="input-error">*{errors.variations}</p>}
+            </div>
+          )}
         </form>
       </div>
       {modalState.openCreateAttributeModal && (

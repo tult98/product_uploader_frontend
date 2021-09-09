@@ -18,6 +18,9 @@ const Attribute = ({
   dispatch,
   isVariationAttribute = false,
   variationIndex,
+  attributeErrors,
+  templateErrors,
+  setTemplateErrors,
 }) => {
   const { modalState, setModalState } = useContext(ModalContext)
   const [availableOptions, setAvailableOptions] = useState([])
@@ -116,6 +119,10 @@ const Attribute = ({
   }
 
   const onValidateAttributeName = () => {
+    if (templateErrors.attributeErrors) {
+      templateErrors.attributeErrors[index].name = null
+    }
+    setTemplateErrors({ ...templateErrors })
     if (!attributeName || attributeName === '') {
       setErrors({ ...errors, name: { message: REQUIRED_FIELD_ERROR } })
     } else {
@@ -132,11 +139,30 @@ const Attribute = ({
   }
 
   const onValidateAttributeOptions = () => {
+    if (templateErrors.attributeErrors) {
+      templateErrors.attributeErrors[index].options = null
+    }
+    setTemplateErrors({ ...templateErrors })
     let newErrors = { ...errors }
     if (!attribute.options || attribute.options.length === 0) {
       newErrors = { ...newErrors, options: { message: 'Required at least one option' } }
     } else {
       newErrors = { ...newErrors, options: null }
+    }
+    setErrors(newErrors)
+  }
+
+  const onValidateAttributeValue = () => {
+    if (templateErrors.variationErrors && templateErrors.variationErrors[variationIndex].attributeErrors) {
+      templateErrors.variationErrors[variationIndex].attributeErrors[index].value = null
+      setTemplateErrors({ ...templateErrors })
+    }
+
+    let newErrors = { ...errors }
+    if (!attribute.value) {
+      newErrors = { ...newErrors, value: REQUIRED_FIELD_ERROR }
+    } else {
+      newErrors = { ...newErrors, value: null }
     }
     setErrors(newErrors)
   }
@@ -153,7 +179,12 @@ const Attribute = ({
             value={{ value: attribute?.value?.code, label: attribute?.value?.name }}
             onChange={onSelectedAttributeOptions}
             options={convertToOptionFormat(attribute?.options || [])}
+            onBlur={onValidateAttributeValue}
           />
+          {errors && errors.value && <p className="input-error">{errors.value}</p>}
+          {!(errors && errors.value) && attributeErrors && attributeErrors.value && (
+            <p className="input-error">{attributeErrors.value}</p>
+          )}
         </>
       ) : (
         <>
@@ -172,6 +203,9 @@ const Attribute = ({
               onBlur={onValidateAttributeName}
             />
             {errors && errors.name && <p className="input-error">{errors?.name?.message}</p>}
+            {!(errors && errors.name) && attributeErrors && attributeErrors.name && (
+              <p className="input-error">{attributeErrors.name}</p>
+            )}
           </div>
           <div className="mt-10">
             <option className="font-semibold uppercase">{`Attribute value(s) ${index + 1}`}</option>
@@ -185,6 +219,9 @@ const Attribute = ({
               onBlur={onValidateAttributeOptions}
             />
             {errors && errors.options && <p className="input-error">{errors.options.message}</p>}
+            {!(errors && errors.options) && attributeErrors && attributeErrors.options && (
+              <p className="input-error">{attributeErrors.options}</p>
+            )}
           </div>
           <div className="flex justify-end mt-8">
             {!attribute?.isPrimary && (

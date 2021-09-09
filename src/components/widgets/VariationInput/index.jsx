@@ -5,12 +5,21 @@ import { validateRegularPrice, validateSalePrice, validateVariationPrice } from 
 import { debounce, DEFAULT_DELAY } from 'utils/commonUtils'
 import { validateSKU } from 'utils/validators'
 
-const VariationInput = ({ name, index, variation, variations, dispatch }) => {
+const VariationInput = ({
+  name,
+  index,
+  variation,
+  variations,
+  dispatch,
+  variationErrors,
+  templateErrors,
+  setTemplateErrors,
+}) => {
   const [errors, setErrors] = useState({})
   const [salePrice, setSalePrice] = useState(variation?.salePrice)
   const [regularPrice, setRegularPrice] = useState(variation?.regularPrice)
 
-  console.log('===========errors', errors)
+  console.log('=============', templateErrors)
 
   useEffect(() => {
     let sku = ''
@@ -27,14 +36,15 @@ const VariationInput = ({ name, index, variation, variations, dispatch }) => {
   }, [variation.attributes])
 
   useEffect(() => {
-    validateSKU(variation.sku, variations, errors, setErrors)
+    if (variation.sku && variation.sku !== '') {
+      validateSKU(variation.sku, variations, errors, setErrors)
+    }
   }, [variation.sku])
 
   const onChangeSalePrice = (event) => {
     setSalePrice(event.target.value)
     variation.salePrice = event.target.value
     debounce(() => {
-      // validateVariationPrice(variation, errors, setErrors)
       dispatch({ type: TEMPLATE_ACTIONS.SET_VARIATION, payload: { index: index, data: variation } })
     }, DEFAULT_DELAY)()
   }
@@ -43,16 +53,23 @@ const VariationInput = ({ name, index, variation, variations, dispatch }) => {
     setRegularPrice(event.target.value)
     variation.regularPrice = event.target.value
     debounce(() => {
-      // validateVariationPrice(variation, errors, setErrors)
       dispatch({ type: TEMPLATE_ACTIONS.SET_VARIATION, payload: { index: index, data: variation } })
     }, DEFAULT_DELAY)()
   }
 
   const onValidateSalePrice = () => {
+    if (templateErrors.variationErrors) {
+      templateErrors.variationErrors[index].salePrice = null
+      setTemplateErrors({ ...templateErrors })
+    }
     validateSalePrice(variation.salePrice, errors, setErrors) && validateVariationPrice(variation, errors, setErrors)
   }
 
   const onValidateRegularPrice = () => {
+    if (templateErrors.variationErrors) {
+      templateErrors.variationErrors[index].regularPrice = null
+      setTemplateErrors({ ...templateErrors })
+    }
     validateRegularPrice(variation.regularPrice, errors, setErrors) &&
       validateVariationPrice(variation, errors, setErrors)
   }
@@ -69,11 +86,14 @@ const VariationInput = ({ name, index, variation, variations, dispatch }) => {
           isVariationAttribute={true}
           actionType={TEMPLATE_ACTIONS.SET_VARIATION_ATTRIBUTE}
           dispatch={dispatch}
+          attributeErrors={variationErrors.attributeErrors?.length > i ? variationErrors.attributeErrors[i] : {}}
+          templateErrors={templateErrors}
+          setTemplateErrors={setTemplateErrors}
         />,
       )
     }
     return listAttributes
-  }, [variation.attributes])
+  }, [variation.attributes, variationErrors.attributeErrors])
 
   return (
     <div className="mt-20 mb-12 rounded-lg">
@@ -87,7 +107,10 @@ const VariationInput = ({ name, index, variation, variations, dispatch }) => {
             </span>
           </div>
 
-          <p className="input-error">{errors.sku}</p>
+          {errors && errors.sku && <p className="input-error">{errors.sku}</p>}
+          {!(errors && errors.sku) && variationErrors && variationErrors.sku && (
+            <p className="input-error">{variationErrors.sku}</p>
+          )}
         </div>
 
         <div className="flex flex-row justify-between">
@@ -101,6 +124,9 @@ const VariationInput = ({ name, index, variation, variations, dispatch }) => {
               onBlur={onValidateRegularPrice}
             />
             {errors && errors.regularPrice && <p className="input-error">{errors?.regularPrice?.message}</p>}
+            {!(errors && errors.regularPrice) && variationErrors && variationErrors.regularPrice && (
+              <p className="input-error">{variationErrors.regularPrice}</p>
+            )}
           </div>
 
           <div className="flex flex-col w-5/12">
@@ -113,9 +139,15 @@ const VariationInput = ({ name, index, variation, variations, dispatch }) => {
               onBlur={onValidateSalePrice}
             />
             {errors && errors.salePrice && <p className="input-error">{errors?.salePrice?.message}</p>}
+            {!(errors && errors.salePrice) && variationErrors && variationErrors.salePrice && (
+              <p className="input-error">{variationErrors.salePrice}</p>
+            )}
           </div>
         </div>
         {errors && errors.price && <p className="input-error">{errors.price.message}</p>}
+        {!(errors && errors.price) && variationErrors && variationErrors.price && (
+          <p className="input-error">{variationErrors.price}</p>
+        )}
         {renderAttributes(variation.attributes.length)}
       </div>
     </div>
