@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import Attribute from 'components/elements/Attribute'
 import { TEMPLATE_ACTIONS } from 'utils/templateUtils'
-import { validateRegularPrice, validateSalePrice, validateVariationPrice } from 'utils/errorsUtils'
+import { validateRegularPrice, validateSalePrice } from 'utils/errorsUtils'
 import { debounce, DEFAULT_DELAY } from 'utils/commonUtils'
 import { validateSKU } from 'utils/validators'
 import Icon from 'components/elements/Icon'
@@ -50,6 +50,8 @@ const VariationInput = ({
     }, DEFAULT_DELAY)()
   }
 
+  console.log(11111111111, errors)
+
   const onChangeRegularPrice = (event) => {
     setRegularPrice(event.target.value)
     variation.regularPrice = event.target.value
@@ -63,7 +65,7 @@ const VariationInput = ({
       templateErrors.variationErrors[index].salePrice = null
       setTemplateErrors({ ...templateErrors })
     }
-    validateSalePrice(variation.salePrice, errors, setErrors) && validateVariationPrice(variation, errors, setErrors)
+    validateSalePrice(variation, errors, setErrors)
   }
 
   const onValidateRegularPrice = () => {
@@ -71,8 +73,7 @@ const VariationInput = ({
       templateErrors.variationErrors[index].regularPrice = null
       setTemplateErrors({ ...templateErrors })
     }
-    validateRegularPrice(variation.regularPrice, errors, setErrors) &&
-      validateVariationPrice(variation, errors, setErrors)
+    validateRegularPrice(variation, errors, setErrors)
   }
 
   const onShowToolTip = () => {

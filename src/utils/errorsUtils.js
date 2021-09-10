@@ -166,41 +166,42 @@ export const validatePrice = (price) => {
   return true
 }
 
-export const validateVariationPrice = (data, errors, setErrors) => {
+export const validateSalePrice = (data, errors, setErrors) => {
   let newErrors = { ...errors }
+  if (!data.salePrice || data.salePrice === '') {
+    newErrors = { ...newErrors, salePrice: { message: REQUIRED_FIELD_ERROR } }
+  } else if (!validatePrice(data.salePrice)) {
+    newErrors = { ...newErrors, salePrice: { message: 'Invalid input' } }
+  } else {
+    newErrors = { ...newErrors, salePrice: null }
+  }
 
-  newErrors =
-    Number(data.salePrice) > Number(data.regularPrice)
-      ? { ...newErrors, price: { message: 'Sale price must be smaller than regular price' } }
-      : { ...newErrors, price: null }
-
+  if (data.salePrice && data.regularPrice) {
+    newErrors =
+      Number(data.salePrice) > Number(data.regularPrice)
+        ? { ...newErrors, price: { message: 'Sale price must be smaller than regular price' } }
+        : { ...newErrors, price: null }
+  }
   setErrors(newErrors)
 }
 
-export const validateSalePrice = (salePrice, errors, setErrors) => {
-  if (!salePrice || salePrice === '') {
-    setErrors({ ...errors, salePrice: { message: REQUIRED_FIELD_ERROR } })
-    return false
+export const validateRegularPrice = (data, errors, setErrors) => {
+  let newErrors = { ...errors }
+  if (!data.regularPrice || data.regularPrice === '') {
+    newErrors = { ...newErrors, regularPrice: { message: REQUIRED_FIELD_ERROR } }
+  } else if (!validatePrice(data.regularPrice)) {
+    newErrors = { ...newErrors, regularPrice: { message: 'Invalid input' } }
+  } else {
+    newErrors = { ...newErrors, regularPrice: null }
   }
-  if (validatePrice(salePrice)) {
-    setErrors({ ...errors, salePrice: null })
-    return true
-  }
-  setErrors({ ...errors, salePrice: { message: 'Invalid input' } })
-  return false
-}
 
-export const validateRegularPrice = (regularPrice, errors, setErrors) => {
-  if (!regularPrice || regularPrice === '') {
-    setErrors({ ...errors, regularPrice: { message: REQUIRED_FIELD_ERROR } })
-    return false
+  if (data.salePrice && data.regularPrice) {
+    newErrors =
+      Number(data.salePrice) > Number(data.regularPrice)
+        ? { ...newErrors, price: { message: 'Sale price must be smaller than regular price' } }
+        : { ...newErrors, price: null }
   }
-  if (validatePrice(regularPrice)) {
-    setErrors({ ...errors, regularPrice: null })
-    return true
-  }
-  setErrors({ ...errors, regularPrice: { message: 'Invalid input' } })
-  return false
+  setErrors(newErrors)
 }
 
 export const isDuplicate = (value, poolData) => {
