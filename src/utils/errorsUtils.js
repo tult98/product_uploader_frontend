@@ -130,7 +130,7 @@ export const validateTemplateInput = (data, errors, setErrors) => {
 
       // TODO: check both sale price and regular price
       if (variation.salePrice && variation.regularPrice) {
-        if (variation.salePrice > variation.regularPrice) {
+        if (Number(variation.salePrice) > Number(variation.regularPrice)) {
           isValidInput = false
           errors.price = 'Sale price must be smaller than regular price'
         }

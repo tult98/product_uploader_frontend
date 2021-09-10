@@ -50,8 +50,6 @@ const VariationInput = ({
     }, DEFAULT_DELAY)()
   }
 
-  console.log(11111111111, errors)
-
   const onChangeRegularPrice = (event) => {
     setRegularPrice(event.target.value)
     variation.regularPrice = event.target.value
