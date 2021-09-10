@@ -21,6 +21,7 @@ const Attribute = ({
   attributeErrors,
   templateErrors,
   setTemplateErrors,
+  isDefaultVariation = false,
 }) => {
   const { modalState, setModalState } = useContext(ModalContext)
   const [availableOptions, setAvailableOptions] = useState([])
@@ -48,7 +49,7 @@ const Attribute = ({
 
   const onSelectedAttributeOptions = (selectedOptions) => {
     attribute = isVariationAttribute
-      ? { ...attribute, value: { code: selectedOptions.value, name: selectedOptions.label } }
+      ? { ...attribute, value: convertToAttributeFormat([selectedOptions])[0] }
       : {
           ...attribute,
           options: convertToAttributeFormat(selectedOptions),
@@ -176,11 +177,16 @@ const Attribute = ({
             {attribute.isPrimary && <span className="text-red-500">{`  (*)`} </span>}
           </label>
           <Select
-            value={{ value: attribute?.value?.code, label: attribute?.value?.name }}
+            value={{
+              value: attribute?.value?.code,
+              label: attribute?.value && `${attribute?.value?.name} - ${attribute?.value?.code}`,
+            }}
             onChange={onSelectedAttributeOptions}
             options={convertToOptionFormat(attribute?.options || [])}
             onBlur={onValidateAttributeValue}
+            isDisabled={isDefaultVariation}
           />
+
           {errors && errors.value && <p className="input-error">{errors.value}</p>}
           {!(errors && errors.value) && attributeErrors && attributeErrors.value && (
             <p className="input-error">{attributeErrors.value}</p>

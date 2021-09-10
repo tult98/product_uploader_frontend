@@ -26,7 +26,7 @@ const TemplateInput = ({ state, dispatch }) => {
 
   const renderVariations = useCallback(() => {
     const variations = []
-    for (let i = 0; i < numberOfVariations; i++) {
+    for (let i = 1; i < numberOfVariations; i++) {
       variations.push(
         <VariationInput
           key={i}
@@ -132,6 +132,18 @@ const TemplateInput = ({ state, dispatch }) => {
           >
             Add new attribute
           </button>
+          <VariationInput
+            isDefaultVariation={true}
+            key="default-variation"
+            index={0}
+            name="Default variation"
+            variations={state.variations}
+            variation={state.variations[0]}
+            dispatch={dispatch}
+            variationErrors={errors.variationErrors?.length > 0 ? errors.variationErrors[0] : {}}
+            templateErrors={errors}
+            setTemplateErrors={setErrors}
+          />
           {renderVariations(numberOfAttributes)}
           <div className="mt-10">
             <button

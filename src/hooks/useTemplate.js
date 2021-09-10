@@ -6,7 +6,15 @@ const initialState = {
   productTitle: DEFAULT_PRODUCT_TITLE,
   description: '',
   attributes: [],
-  variations: [],
+  variations: [
+    {
+      sku: null,
+      isDefault: true,
+      salePrice: null,
+      regularPrice: null,
+      attributes: [],
+    },
+  ],
 }
 
 const reducer = (state, action) => {
@@ -44,15 +52,38 @@ const reducer = (state, action) => {
         }),
       }
     }
-    case TEMPLATE_ACTIONS.SET_ATTRIBUTE:
+    case TEMPLATE_ACTIONS.SET_ATTRIBUTE: {
       state.attributes[action.payload.index] = action.payload.data
+      const defaultAttributes = []
+      state.attributes.map((attribute) => {
+        let defaultOption
+        const options = attribute?.options || []
+        for (const option of options) {
+          if (option.isDefault) {
+            defaultOption = option
+            break
+          }
+        }
+        const defaultAttribute = defaultOption
+          ? {
+              ...attribute,
+              value: { code: defaultOption.code, name: defaultOption.name },
+            }
+          : { ...attribute }
+        defaultAttributes.push(defaultAttribute)
+      })
+      state.variations[0].attributes = defaultAttributes
       return {
         ...state,
         attributes: state.attributes,
-        variations: state.variations.map((variation) => {
+        variations: state.variations.map((variation, index) => {
+          if (index === 0) {
+            return variation
+          }
           return { ...variation, attributes: state.attributes }
         }),
       }
+    }
     case TEMPLATE_ACTIONS.ADD_VARIATION:
       return {
         ...state,

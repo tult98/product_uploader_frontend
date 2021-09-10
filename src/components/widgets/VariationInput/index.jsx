@@ -4,6 +4,7 @@ import { TEMPLATE_ACTIONS } from 'utils/templateUtils'
 import { validateRegularPrice, validateSalePrice, validateVariationPrice } from 'utils/errorsUtils'
 import { debounce, DEFAULT_DELAY } from 'utils/commonUtils'
 import { validateSKU } from 'utils/validators'
+import Icon from 'components/elements/Icon'
 
 const VariationInput = ({
   name,
@@ -14,12 +15,12 @@ const VariationInput = ({
   variationErrors,
   templateErrors,
   setTemplateErrors,
+  isDefaultVariation = false,
 }) => {
   const [errors, setErrors] = useState({})
   const [salePrice, setSalePrice] = useState(variation?.salePrice)
   const [regularPrice, setRegularPrice] = useState(variation?.regularPrice)
-
-  console.log('=============', templateErrors)
+  const [showToolTip, setShowToolTip] = useState(false)
 
   useEffect(() => {
     let sku = ''
@@ -74,6 +75,14 @@ const VariationInput = ({
       validateVariationPrice(variation, errors, setErrors)
   }
 
+  const onShowToolTip = () => {
+    setShowToolTip(true)
+  }
+
+  const onHideToolTip = () => {
+    setShowToolTip(false)
+  }
+
   const renderAttributes = useCallback(() => {
     const listAttributes = []
     for (let i = 0; i < variation.attributes.length; i++) {
@@ -89,6 +98,7 @@ const VariationInput = ({
           attributeErrors={variationErrors.attributeErrors?.length > i ? variationErrors.attributeErrors[i] : {}}
           templateErrors={templateErrors}
           setTemplateErrors={setTemplateErrors}
+          isDefaultVariation={isDefaultVariation}
         />,
       )
     }
@@ -97,7 +107,20 @@ const VariationInput = ({
 
   return (
     <div className="mt-20 mb-12 rounded-lg">
-      <div className="mb-4 font-semibold uppercase">{name}</div>
+      <div className="flex flex-row">
+        <div className="mb-4 font-semibold uppercase">{name}</div>
+        {isDefaultVariation && (
+          <div onMouseEnter={onShowToolTip} onMouseLeave={onHideToolTip}>
+            <Icon style="w-8 h-8 ml-2 cursor-pointer" name="questionMark" fill="#e8544f" />
+            {showToolTip && (
+              <div className="absolute flex justify-center w-1/3 px-4 py-4 italic text-gray-600 bg-white border border-gray-500 rounded-lg">
+                The default variation will be created by our system automatically based on the default value of your
+                attributes.
+              </div>
+            )}
+          </div>
+        )}
+      </div>
       <div className="p-8 border-2 border-gray-700">
         <div className="flex flex-col mb-10">
           <div className="flex flex-row items-center">
