@@ -12,6 +12,10 @@ module.exports = {
       spacing: {
         '1px': '0.1rem',
       },
+      inset: {
+        '-24rem': '-24rem',
+        '24rem': '24rem',
+      },
     },
   },
   variants: {

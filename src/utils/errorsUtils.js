@@ -5,21 +5,21 @@ export const validateTemplateInput = (data, errors, setErrors) => {
   let newErrors = { ...errors }
   if (!data.name || data.name === '') {
     isValidInput = false
-    newErrors = { ...newErrors, name: { message: REQUIRED_FIELD_ERROR } }
+    newErrors = { ...newErrors, name: REQUIRED_FIELD_ERROR }
   } else {
     newErrors = { ...newErrors, name: null }
   }
 
   if (!data.productTitle || data.productTitle === '') {
     isValidInput = false
-    newErrors = { ...newErrors, 'product title': { message: REQUIRED_FIELD_ERROR } }
+    newErrors = { ...newErrors, productTitle: REQUIRED_FIELD_ERROR }
   } else {
-    newErrors = { ...newErrors, 'product title': null }
+    newErrors = { ...newErrors, productTitle: null }
   }
 
   if (!data.description || data.description === '') {
     isValidInput = false
-    newErrors = { ...newErrors, description: { message: REQUIRED_FIELD_ERROR } }
+    newErrors = { ...newErrors, description: REQUIRED_FIELD_ERROR }
   } else {
     newErrors = { ...newErrors, description: null }
   }

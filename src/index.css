@@ -22,4 +22,10 @@ html {
   .center-modal {
     @apply fixed transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2;
   }
+  .slideIn {
+    @apply right-12;
+  }
+  .slideOut {
+    @apply -right-24rem;
+  }
 }

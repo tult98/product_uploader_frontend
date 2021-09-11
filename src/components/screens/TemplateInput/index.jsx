@@ -1,5 +1,6 @@
 import React, { useCallback, useState, useContext, useEffect } from 'react'
-// import { useMutation } from 'react-query'
+import { useMutation } from 'react-query'
+import { useHistory } from 'react-router-dom'
 import TextAreaInput from 'components/elements/Input/TextAreaInput'
 import TextInput from 'components/elements/Input/TextInput'
 import Attribute from 'components/elements/Attribute'
@@ -7,22 +8,44 @@ import VariationInput from 'components/widgets/VariationInput'
 import CreateAttributeModal from 'components/elements/Attribute/CreateAttributeModal'
 import CreateAttributeOptionModal from 'components/elements/Attribute/CreateAttributeOptionModal'
 import DeleteAttributeModal from 'components/elements/Attribute/DeleteAttributeModal'
-// import TemplateServices from 'services/TemplateServices'
+import LoadingIndicator from 'components/elements/LoadingIndicator'
+import NotificationPopup from 'components/elements/NotificationPopup'
+import { useNotification } from 'hooks/useNotification'
 import ModalContext from 'context/ModalContext'
+import TemplateServices from 'services/TemplateServices'
+import { TEMPLATE_ROUTES } from 'routes'
 import { formatTemplateData, TEMPLATE_ACTIONS } from 'utils/templateUtils'
 import { validateTemplateInput } from 'utils/errorsUtils'
+import { validateRequired } from 'utils/validators'
 
 const TemplateInput = ({ state, dispatch }) => {
   const [numberOfVariations, setNumberOfVariations] = useState(state.variations.length)
   const [numberOfAttributes, setNumberOfAttributes] = useState(state.attributes.length)
   const [errors, setErrors] = useState({})
   const { modalState } = useContext(ModalContext)
+  const history = useHistory()
 
-  // const mutation = useMutation(TemplateServices.createTemplate)
+  const { isShow, setIsShow, type, setType, message, setMessage, allowRedirect, setAllowRedirect } = useNotification()
+
+  const mutation = useMutation(TemplateServices.createTemplate)
 
   useEffect(() => {
     setNumberOfAttributes(state.attributes.length)
   }, [state?.attributes.length])
+
+  useEffect(() => {
+    if (mutation.isSuccess && !allowRedirect) {
+      setIsShow(true)
+      setType('success')
+      setMessage('Your template has been created successfully')
+    } else if (mutation.isError) {
+      setIsShow(true)
+      setType('error')
+      setMessage('Your template cannot be created at this time')
+    } else if (mutation.isSuccess && allowRedirect) {
+      history.push(TEMPLATE_ROUTES.LIST_TEMPLATE)
+    }
+  }, [mutation.status, allowRedirect])
 
   const renderVariations = useCallback(() => {
     const variations = []
@@ -31,7 +54,7 @@ const TemplateInput = ({ state, dispatch }) => {
         <VariationInput
           key={i}
           index={i}
-          name={`Variation ${i + 1}`}
+          name={`Variation ${i}`}
           variations={state.variations}
           variation={state.variations[i]}
           dispatch={dispatch}
@@ -78,12 +101,22 @@ const TemplateInput = ({ state, dispatch }) => {
   const onCreateTemplate = () => {
     const isValidInput = validateTemplateInput(state, errors, setErrors)
     if (isValidInput) {
-      // TODO: handle data before sending to backend
+      setErrors({})
       const data = formatTemplateData(state)
-      console.log('==========data:', data)
-      // TODO: calling api
-      // mutation.mutate(state)
+      mutation.mutate(data)
     }
+  }
+
+  const onValidateTemplateName = () => {
+    setErrors({ ...errors, name: validateRequired(state.name) })
+  }
+
+  const onValidateProductTitle = () => {
+    setErrors({ ...errors, productTitle: validateRequired(state.productTitle) })
+  }
+
+  const onValidateTemplateDescription = () => {
+    setErrors({ ...errors, description: validateRequired(state.description) })
   }
 
   return (
@@ -98,8 +131,9 @@ const TemplateInput = ({ state, dispatch }) => {
             style="mb-10"
             value={state.name}
             dispatch={dispatch}
-            error={errors['name']}
+            error={errors.name}
             actionType={TEMPLATE_ACTIONS.SET_NAME}
+            onBlur={onValidateTemplateName}
           />
 
           <TextInput
@@ -109,8 +143,9 @@ const TemplateInput = ({ state, dispatch }) => {
             style="mb-10"
             value={state.productTitle}
             dispatch={dispatch}
-            error={errors['product title']}
+            error={errors.productTitle}
             actionType={TEMPLATE_ACTIONS.SET_PRODUCT_TITLE}
+            onBlur={onValidateProductTitle}
           />
           <TextAreaInput
             label="description"
@@ -120,8 +155,9 @@ const TemplateInput = ({ state, dispatch }) => {
             style="mb-10"
             value={state.description}
             dispatch={dispatch}
-            error={errors['description']}
+            error={errors.description}
             actionType={TEMPLATE_ACTIONS.SET_DESCRIPTION}
+            onBlur={onValidateTemplateDescription}
           />
 
           {renderAttributes(numberOfAttributes)}
@@ -160,9 +196,10 @@ const TemplateInput = ({ state, dispatch }) => {
             </button>
             <button
               type="button"
-              className="px-12 py-4 ml-8 bg-yellow-400 rounded-full hover:bg-yellow-500"
+              className="flex items-center px-12 py-4 ml-8 bg-yellow-400 rounded-full hover:bg-yellow-500"
               onClick={onCreateTemplate}
             >
+              {mutation.isLoading && <LoadingIndicator style="w-8 h-8 mr-2" />}
               Create Template
             </button>
           </div>
@@ -170,6 +207,19 @@ const TemplateInput = ({ state, dispatch }) => {
             <div className="mt-10 general-errors">
               {errors.attributes && <p className="input-error">*{errors.attributes}</p>}
               {errors.variations && <p className="input-error">*{errors.variations}</p>}
+            </div>
+          )}
+          {/* TODO: handle error from server */}
+          {mutation.isError && (
+            <div className="mt-10">
+              {mutation.error.code === 4000 && <p className="input-error">*{mutation.error.errors.message}</p>}
+              {mutation.error.code === 400 ? (
+                mutation.error.errors.name ? (
+                  <p className="input-error">*Template with this name already exits</p>
+                ) : (
+                  <p className="input-error">*Input is invalid, please re-check your input before try again</p>
+                )
+              ) : null}
             </div>
           )}
         </form>
@@ -193,6 +243,15 @@ const TemplateInput = ({ state, dispatch }) => {
           attributes={state.attributes}
           actionType={TEMPLATE_ACTIONS.DELETE_ATTRIBUTE}
           dispatch={dispatch}
+        />
+      )}
+      {isShow && (
+        <NotificationPopup
+          isShow={isShow}
+          setIsShow={setIsShow}
+          type={type}
+          message={message}
+          setAllowRedirect={setAllowRedirect}
         />
       )}
     </>

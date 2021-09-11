@@ -4,11 +4,15 @@ import { useTemplate } from 'hooks/useTemplate'
 
 const CreateTemplatePage = () => {
   const { state, dispatch } = useTemplate()
-
   return (
-    <div className="main-content">
-      <TemplateInput state={state} dispatch={dispatch} />
-    </div>
+    <>
+      <header>
+        <title className="capitalize">Product Uploader | Create Template</title>
+      </header>
+      <div className="main-content">
+        <TemplateInput state={state} dispatch={dispatch} />
+      </div>
+    </>
   )
 }
 

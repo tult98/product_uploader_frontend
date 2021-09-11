@@ -1,4 +1,5 @@
 export const DEFAULT_DELAY = 500
+export const DEFAULT_SHOW_TIME = 3000
 
 let timeoutId
 
