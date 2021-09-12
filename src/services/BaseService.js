@@ -4,10 +4,16 @@ import { ERROR_UNKNOWN, SUCCESS_STATUS_CODE } from 'utils/responseUtils'
 const DEFAULT_REQUEST_CONFIG = {
   withAuthorization: true,
   // TODO: get baseURL from environments variables
-  baseURL: 'http://127.0.0.1:8000/api/',
+  baseURL:
+    process.env.NODE_ENV === 'production'
+      ? 'https://product-uploader-api.herokuapp.com/api/'
+      : 'http://127.0.0.1:8000/api/',
 }
 
-axios.defaults.baseURL = 'http://127.0.0.1:8000/api/'
+axios.defaults.baseURL =
+  process.env.NODE_ENV === 'production'
+    ? 'https://product-uploader-api.herokuapp.com/api/'
+    : 'http://127.0.0.1:8000/api/'
 
 const injectAuthorizationHeader = (config = {}) => {
   if (!config.withAuthorization) {
