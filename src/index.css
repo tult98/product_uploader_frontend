@@ -14,7 +14,7 @@ html {
 
 @layer components {
   .main-content {
-    @apply flex flex-row self-center justify-center w-full;
+    @apply flex flex-row self-center justify-center w-full mt-28;
   }
   .input-error {
     @apply mt-2 mb-4 text-2xl italic text-red-500;
@@ -27,5 +27,8 @@ html {
   }
   .slideOut {
     @apply -right-24rem;
+  }
+  .navigation-item {
+    @apply flex items-center h-full px-8 font-medium uppercase cursor-pointer hover:bg-yellow-400;
   }
 }

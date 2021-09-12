@@ -4,6 +4,7 @@ import { QueryClientProvider, QueryClient } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import CreateTemplatePage from 'pages/create-template'
 import ListTemplatePage from 'pages/list-template'
+import Navigation from 'components/widgets/Navigation'
 import { ModalProvider } from 'context/ModalContext'
 import { TEMPLATE_ROUTES } from 'routes'
 
@@ -19,10 +20,11 @@ function App() {
               <Route path={TEMPLATE_ROUTES.LIST_TEMPLATE} exact>
                 <ListTemplatePage />
               </Route>
-              <Route path={TEMPLATE_ROUTES.CREATE_TEMPLATE}>
+              <Route path={TEMPLATE_ROUTES.CREATE_TEMPLATE} exact>
                 <CreateTemplatePage />
               </Route>
             </Switch>
+            <Navigation />
           </Router>
           <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
         </div>

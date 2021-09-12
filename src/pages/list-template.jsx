@@ -2,9 +2,11 @@ import React from 'react'
 
 const ListTemplatePage = () => {
   return (
-    <div className="main-content">
-      <p>List all templates</p>
-    </div>
+    <>
+      <div className="main-content">
+        <p>List all templates</p>
+      </div>
+    </>
   )
 }
 
