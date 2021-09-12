@@ -6,6 +6,7 @@ import Error from 'components/widgets/Error'
 import LoadingIndicator from 'components/elements/LoadingIndicator'
 import TemplateServices from 'services/TemplateServices'
 import Paginator from 'components/widgets/Paginator'
+import NoRecordFound from 'components/widgets/NoRecordFound'
 
 const TemplateList = () => {
   const [searchPattern, setSearchPattern] = useState('')
@@ -27,20 +28,24 @@ const TemplateList = () => {
         </div>
       )}
       {isError && <Error error={error} />}
-      {isSuccess && (
-        <>
-          {data.results.map((template) => (
-            <TemplateItem key={template.id} data={template} />
-          ))}
-          <Paginator
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            count={data.count}
-            next={data.next}
-            previous={data.previous}
-          />
-        </>
-      )}
+      {isSuccess ? (
+        data.results.length > 0 ? (
+          <>
+            {data.results.map((template) => (
+              <TemplateItem key={template.id} data={template} />
+            ))}
+            <Paginator
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              count={data.count}
+              next={data.next}
+              previous={data.previous}
+            />
+          </>
+        ) : (
+          <NoRecordFound />
+        )
+      ) : null}
     </div>
   )
 }
