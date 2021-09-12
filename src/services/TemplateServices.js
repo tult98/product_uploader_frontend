@@ -13,4 +13,8 @@ export default class TemplateServices {
   static async createTemplate(data) {
     return await BaseService.post(TEMPLATE_URL, {}, data)
   }
+
+  static async deleteTemplate({ id }) {
+    return await BaseService.delete(`${TEMPLATE_URL}${id}`, {})
+  }
 }

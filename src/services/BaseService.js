@@ -103,7 +103,7 @@ const BaseService = {
 
     return new Promise((resolve, reject) => {
       axios
-        .post(url, data, config)
+        .put(url, data, config)
         .then((res) => {
           const { data } = res
           if (!SUCCESS_STATUS_CODE.includes(res.status)) {
@@ -132,7 +132,7 @@ const BaseService = {
 
     return new Promise((resolve, reject) => {
       axios
-        .post(url, data, config)
+        .delete(url, data, config)
         .then((res) => {
           const { data } = res
           if (!SUCCESS_STATUS_CODE.includes(res.status)) {
