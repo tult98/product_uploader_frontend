@@ -6,6 +6,7 @@ import CreateTemplatePage from 'pages/create-template'
 import ListTemplatePage from 'pages/list-template'
 import Navigation from 'components/widgets/Navigation'
 import { ModalProvider } from 'context/ModalContext'
+import { NotificationProvider } from 'context/NotificationContext'
 import { TEMPLATE_ROUTES } from 'routes'
 
 const queryClient = new QueryClient()
@@ -14,20 +15,22 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ModalProvider>
-        <div className="flex flex-col">
-          <Router>
-            <Switch>
-              <Route path={TEMPLATE_ROUTES.LIST_TEMPLATE} exact>
-                <ListTemplatePage />
-              </Route>
-              <Route path={TEMPLATE_ROUTES.CREATE_TEMPLATE} exact>
-                <CreateTemplatePage />
-              </Route>
-            </Switch>
-            <Navigation />
-          </Router>
-          <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
-        </div>
+        <NotificationProvider>
+          <div className="flex flex-col">
+            <Router>
+              <Switch>
+                <Route path={TEMPLATE_ROUTES.LIST_TEMPLATE} exact>
+                  <ListTemplatePage />
+                </Route>
+                <Route path={TEMPLATE_ROUTES.CREATE_TEMPLATE} exact>
+                  <CreateTemplatePage />
+                </Route>
+              </Switch>
+              <Navigation />
+            </Router>
+            <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+          </div>
+        </NotificationProvider>
       </ModalProvider>
     </QueryClientProvider>
   )

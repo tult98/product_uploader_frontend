@@ -9,9 +9,8 @@ import CreateAttributeModal from 'components/elements/Attribute/CreateAttributeM
 import CreateAttributeOptionModal from 'components/elements/Attribute/CreateAttributeOptionModal'
 import DeleteAttributeModal from 'components/elements/Attribute/DeleteAttributeModal'
 import LoadingIndicator from 'components/elements/LoadingIndicator'
-import NotificationPopup from 'components/elements/NotificationPopup'
-import { useNotification } from 'hooks/useNotification'
 import ModalContext from 'context/ModalContext'
+import NotificationContext from 'context/NotificationContext'
 import TemplateServices from 'services/TemplateServices'
 import { TEMPLATE_ROUTES } from 'routes'
 import { formatTemplateData, TEMPLATE_ACTIONS } from 'utils/templateUtils'
@@ -19,13 +18,12 @@ import { validateTemplateInput } from 'utils/errorsUtils'
 import { validateRequired } from 'utils/validators'
 
 const TemplateInput = ({ state, dispatch }) => {
+  const { modalState } = useContext(ModalContext)
+  const { setNotificationState } = useContext(NotificationContext)
   const [numberOfVariations, setNumberOfVariations] = useState(state.variations.length)
   const [numberOfAttributes, setNumberOfAttributes] = useState(state.attributes.length)
   const [errors, setErrors] = useState({})
-  const { modalState } = useContext(ModalContext)
   const history = useHistory()
-
-  const { isShow, setIsShow, type, setType, message, setMessage, allowRedirect, setAllowRedirect } = useNotification()
 
   const mutation = useMutation(TemplateServices.createTemplate)
 
@@ -34,18 +32,21 @@ const TemplateInput = ({ state, dispatch }) => {
   }, [state?.attributes.length])
 
   useEffect(() => {
-    if (mutation.isSuccess && !allowRedirect) {
-      setIsShow(true)
-      setType('success')
-      setMessage('Your template has been created successfully')
-    } else if (mutation.isError) {
-      setIsShow(true)
-      setType('error')
-      setMessage('Your template cannot be created at this time')
-    } else if (mutation.isSuccess && allowRedirect) {
+    if (mutation.isSuccess) {
+      setNotificationState({
+        type: 'success',
+        message: 'Your template has been created successfully',
+        isShow: true,
+      })
       history.push(TEMPLATE_ROUTES.LIST_TEMPLATE)
+    } else if (mutation.isError) {
+      setNotificationState({
+        type: 'success',
+        message: 'Your template has been created successfully',
+        isShow: true,
+      })
     }
-  }, [mutation.status, allowRedirect])
+  }, [mutation.status])
 
   const renderVariations = useCallback(() => {
     const variations = []
@@ -243,15 +244,6 @@ const TemplateInput = ({ state, dispatch }) => {
           attributes={state.attributes}
           actionType={TEMPLATE_ACTIONS.DELETE_ATTRIBUTE}
           dispatch={dispatch}
-        />
-      )}
-      {isShow && (
-        <NotificationPopup
-          isShow={isShow}
-          setIsShow={setIsShow}
-          type={type}
-          message={message}
-          setAllowRedirect={setAllowRedirect}
         />
       )}
     </>

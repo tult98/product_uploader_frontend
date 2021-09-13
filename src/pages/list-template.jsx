@@ -1,15 +1,15 @@
 import React, { useContext, useEffect } from 'react'
 import { useQueryClient, useMutation } from 'react-query'
 import TemplateList from 'components/screens/TemplateList'
+import NotificationPopup from 'components/elements/NotificationPopup'
 import DeleteTemplateModal from 'modals/DeleteTemplateModal'
 import ModalContext from 'context/ModalContext'
 import TemplateServices from 'services/TemplateServices'
-import { useNotification } from 'hooks/useNotification'
-import NotificationPopup from 'components/elements/NotificationPopup'
+import NotificationContext from 'context/NotificationContext'
 
 const ListTemplatePage = () => {
   const { modalState } = useContext(ModalContext)
-  const { isShow, setIsShow, type, setType, message, setMessage, setAllowRedirect } = useNotification()
+  const { notificationState, setNotificationState } = useContext(NotificationContext)
   const queryClient = useQueryClient()
   const mutation = useMutation(TemplateServices.deleteTemplate, {
     onSuccess: () => {
@@ -19,13 +19,17 @@ const ListTemplatePage = () => {
 
   useEffect(() => {
     if (mutation.isError) {
-      setIsShow(true)
-      setType('error')
-      setMessage('Your template cannot be deleted at this moment')
+      setNotificationState({
+        type: 'error',
+        message: 'Your template cannot be deleted at this moment',
+        isShow: true,
+      })
     } else if (mutation.isSuccess) {
-      setIsShow(true)
-      setType('success')
-      setMessage('Delete your template successfully')
+      setNotificationState({
+        type: 'success',
+        message: 'Delete your template successfully',
+        isShow: true,
+      })
     }
   }, [mutation.status])
 
@@ -40,13 +44,7 @@ const ListTemplatePage = () => {
         <TemplateList />
       </div>
       {modalState.isModalOpen && modalState.openDeleteTemplateModal && <DeleteTemplateModal mutation={mutation} />}
-      <NotificationPopup
-        type={type}
-        message={message}
-        isShow={isShow}
-        setIsShow={setIsShow}
-        setAllowRedirect={setAllowRedirect}
-      />
+      {notificationState.isShow && <NotificationPopup />}
     </>
   )
 }
