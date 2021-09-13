@@ -10,6 +10,11 @@ export default class TemplateServices {
     return await BaseService.get(`${TEMPLATE_URL}?offset=${offset}&search=${searchPattern}`, {})
   }
 
+  static async queryTemplate({ queryKey }) {
+    const [_key, { id }] = queryKey /* eslint-disable-line */
+    return await BaseService.get(`${TEMPLATE_URL}${id}`, {})
+  }
+
   static async createTemplate(data) {
     return await BaseService.post(TEMPLATE_URL, {}, data)
   }

@@ -4,6 +4,7 @@ import { QueryClientProvider, QueryClient } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
 import CreateTemplatePage from 'pages/create-template'
 import ListTemplatePage from 'pages/list-template'
+import EditTemplatePage from 'pages/edit-template'
 import Navigation from 'components/widgets/Navigation'
 import { ModalProvider } from 'context/ModalContext'
 import { NotificationProvider } from 'context/NotificationContext'
@@ -24,6 +25,9 @@ function App() {
                 </Route>
                 <Route path={TEMPLATE_ROUTES.CREATE_TEMPLATE} exact>
                   <CreateTemplatePage />
+                </Route>
+                <Route path={TEMPLATE_ROUTES.GET_TEMPLATE} exact>
+                  <EditTemplatePage />
                 </Route>
               </Switch>
               <Navigation />

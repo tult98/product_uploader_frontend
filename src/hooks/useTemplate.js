@@ -126,6 +126,11 @@ const reducer = (state, action) => {
         }),
       }
     }
+    case TEMPLATE_ACTIONS.SET_TEMPLATE:
+      return {
+        ...action.payload,
+        isFinish: true,
+      }
     default:
       return state
   }

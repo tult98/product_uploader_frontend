@@ -17,7 +17,7 @@ import { formatTemplateData, TEMPLATE_ACTIONS } from 'utils/templateUtils'
 import { validateTemplateInput } from 'utils/errorsUtils'
 import { validateRequired } from 'utils/validators'
 
-const TemplateInput = ({ state, dispatch }) => {
+const TemplateInput = ({ state, dispatch, isEdit = false }) => {
   const { modalState } = useContext(ModalContext)
   const { setNotificationState } = useContext(NotificationContext)
   const [numberOfVariations, setNumberOfVariations] = useState(state.variations.length)
@@ -124,7 +124,9 @@ const TemplateInput = ({ state, dispatch }) => {
     <>
       <div className={`w-2/5 mb-44 ${modalState.isModalOpen ? 'opacity-20' : ''}`}>
         <form className="flex flex-col justify-start">
-          <div className="self-center my-20 text-5xl font-bold uppercase">Create a new template</div>
+          <div className="self-center my-20 text-5xl font-bold uppercase">
+            {isEdit ? 'Edit a template' : 'Create a new template'}
+          </div>
           <TextInput
             label="name"
             isRequired={true}
@@ -201,7 +203,7 @@ const TemplateInput = ({ state, dispatch }) => {
               onClick={onCreateTemplate}
             >
               {mutation.isLoading && <LoadingIndicator style="w-8 h-8 mr-2" />}
-              Create Template
+              {isEdit ? 'Edit Template' : 'Create Template'}
             </button>
           </div>
           {errors && (errors.attributes || errors.variations) && (

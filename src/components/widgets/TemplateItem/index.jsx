@@ -1,12 +1,20 @@
 import React, { useContext } from 'react'
+import { useHistory } from 'react-router-dom'
 import Icon from 'components/elements/Icon'
 import ModalContext from 'context/ModalContext'
+import { TEMPLATE_ROUTES } from 'routes'
 
 const TemplateItem = ({ data }) => {
   const { modalState, setModalState } = useContext(ModalContext)
 
+  const history = useHistory()
+
   const onDeleteTemplate = () => {
     setModalState({ ...modalState, openDeleteTemplateModal: true, isModalOpen: true, templateId: data.id })
+  }
+
+  const onDetailsTemplate = () => {
+    history.push(`${TEMPLATE_ROUTES.LIST_TEMPLATE}${data.id}`)
   }
 
   return (
@@ -16,6 +24,7 @@ const TemplateItem = ({ data }) => {
         <button
           type="button"
           className="flex flex-row px-8 py-4 mr-4 text-gray-200 bg-blue-500 rounded-full focus:outline-none hover:bg-blue-400"
+          onClick={onDetailsTemplate}
         >
           <Icon name="detail" style="w-8 h-8 mr-2" fill="#ebedeb" />
           Details
