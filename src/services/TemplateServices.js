@@ -22,4 +22,8 @@ export default class TemplateServices {
   static async deleteTemplate({ id }) {
     return await BaseService.delete(`${TEMPLATE_URL}${id}`, {})
   }
+
+  static async editTemplate({ id, data }) {
+    return await BaseService.put(`${TEMPLATE_URL}${id}`, {}, data)
+  }
 }

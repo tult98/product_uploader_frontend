@@ -68,6 +68,7 @@ export const formatTemplateData = (data) => {
 export const formatToFormData = (data) => {
   // TODO: convert to valid form data before send it to API
   const formData = {
+    id: data.id,
     name: data.name,
     productTitle: data.product_title,
     description: data.description.slice(39, -9),

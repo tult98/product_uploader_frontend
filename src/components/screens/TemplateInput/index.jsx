@@ -25,7 +25,7 @@ const TemplateInput = ({ state, dispatch, isEdit = false }) => {
   const [errors, setErrors] = useState({})
   const history = useHistory()
 
-  const mutation = useMutation(TemplateServices.createTemplate)
+  const mutation = isEdit ? useMutation(TemplateServices.editTemplate) : useMutation(TemplateServices.createTemplate)
 
   useEffect(() => {
     setNumberOfAttributes(state.attributes.length)
@@ -35,14 +35,14 @@ const TemplateInput = ({ state, dispatch, isEdit = false }) => {
     if (mutation.isSuccess) {
       setNotificationState({
         type: 'success',
-        message: 'Your template has been created successfully',
+        message: isEdit ? 'Template edit success' : 'Template creation success',
         isShow: true,
       })
-      history.push(TEMPLATE_ROUTES.LIST_TEMPLATE)
+      !isEdit && history.push(TEMPLATE_ROUTES.LIST_TEMPLATE)
     } else if (mutation.isError) {
       setNotificationState({
-        type: 'success',
-        message: 'Your template has been created successfully',
+        type: 'error',
+        message: isEdit ? 'Template edit failed' : 'Template creation failed',
         isShow: true,
       })
     }
@@ -105,6 +105,15 @@ const TemplateInput = ({ state, dispatch, isEdit = false }) => {
       setErrors({})
       const data = formatTemplateData(state)
       mutation.mutate(data)
+    }
+  }
+
+  const onEditTemplate = () => {
+    const isValidInput = validateTemplateInput(state, errors, setErrors)
+    if (isValidInput) {
+      setErrors({})
+      const data = formatTemplateData(state)
+      mutation.mutate({ id: state.id, data: data })
     }
   }
 
@@ -200,7 +209,7 @@ const TemplateInput = ({ state, dispatch, isEdit = false }) => {
             <button
               type="button"
               className="flex items-center px-12 py-4 ml-8 bg-yellow-400 rounded-full hover:bg-yellow-500"
-              onClick={onCreateTemplate}
+              onClick={!isEdit ? onCreateTemplate : onEditTemplate}
             >
               {mutation.isLoading && <LoadingIndicator style="w-8 h-8 mr-2" />}
               {isEdit ? 'Edit Template' : 'Create Template'}
