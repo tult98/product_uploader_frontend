@@ -42,7 +42,13 @@ export const formatTemplateData = (data) => {
       return {
         name: attribute.name,
         is_primary: attribute.isPrimary,
-        options: attribute.options,
+        options: attribute.options.map((option) => {
+          return {
+            code: option.code,
+            name: option.name,
+            is_default: option.isDefault,
+          }
+        }),
       }
     }),
     variations: data.variations.map((variation, index) => {
@@ -77,7 +83,13 @@ export const formatToFormData = (data) => {
         id: attribute.id,
         name: attribute.name,
         isPrimary: attribute.is_primary,
-        options: attribute.options,
+        options: attribute.options.map((option) => {
+          return {
+            code: option.code,
+            name: option.name,
+            isDefault: option.is_default,
+          }
+        }),
       }
     }),
     variations: data.variations.map((variation) => {
