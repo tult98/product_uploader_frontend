@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useContext, useEffect } from 'react'
-import { useMutation } from 'react-query'
+import { useMutation, useQueryClient } from 'react-query'
 import { useHistory } from 'react-router-dom'
 import TextAreaInput from 'components/elements/Input/TextAreaInput'
 import TextInput from 'components/elements/Input/TextInput'
@@ -24,8 +24,15 @@ const TemplateInput = ({ state, dispatch, isEdit = false }) => {
   const [numberOfAttributes, setNumberOfAttributes] = useState(state.attributes.length)
   const [errors, setErrors] = useState({})
   const history = useHistory()
+  const queryClient = useQueryClient()
 
-  const mutation = isEdit ? useMutation(TemplateServices.editTemplate) : useMutation(TemplateServices.createTemplate)
+  const mutation = isEdit
+    ? useMutation(TemplateServices.editTemplate, {
+        onSuccess: () => {
+          queryClient.invalidateQueries()
+        },
+      })
+    : useMutation(TemplateServices.createTemplate)
 
   useEffect(() => {
     setNumberOfAttributes(state.attributes.length)
