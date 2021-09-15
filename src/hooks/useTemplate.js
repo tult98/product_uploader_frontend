@@ -41,13 +41,20 @@ const reducer = (state, action) => {
       }
     case TEMPLATE_ACTIONS.ADD_ATTRIBUTE: {
       const attributesClone = [...state.attributes]
+      const newAttributes = [
+        ...state.attributes,
+        { id: attributesClone.length > 0 ? attributesClone.pop(-1).id + 1 : 1 },
+      ]
       return {
         ...state,
-        attributes: [...attributesClone, { id: state.attributes.length > 0 ? state.attributes.pop(-1).id + 1 : 1 }],
+        attributes: newAttributes,
         variations: state.variations.map((variation) => {
           return {
             ...variation,
-            attributes: [...attributesClone, { id: state.attributes.length > 0 ? state.attributes.pop(-1).id + 1 : 1 }],
+            attributes: [
+              ...variation.attributes,
+              { id: attributesClone.length > 0 ? attributesClone.pop(-1).id + 1 : 1 },
+            ],
           }
         }),
       }
@@ -128,6 +135,7 @@ const reducer = (state, action) => {
     }
     case TEMPLATE_ACTIONS.SET_TEMPLATE:
       return {
+        ...state,
         ...action.payload,
         isFinish: true,
       }
