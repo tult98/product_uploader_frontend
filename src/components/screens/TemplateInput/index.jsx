@@ -8,6 +8,7 @@ import VariationInput from 'components/widgets/VariationInput'
 import CreateAttributeModal from 'components/elements/Attribute/CreateAttributeModal'
 import CreateAttributeOptionModal from 'components/elements/Attribute/CreateAttributeOptionModal'
 import DeleteAttributeModal from 'components/elements/Attribute/DeleteAttributeModal'
+import DeleteVariationModal from 'modals/DeleteVariationModal'
 import LoadingIndicator from 'components/elements/LoadingIndicator'
 import ModalContext from 'context/ModalContext'
 import NotificationContext from 'context/NotificationContext'
@@ -57,10 +58,10 @@ const TemplateInput = ({ state, dispatch, isEdit = false }) => {
 
   const renderVariations = useCallback(() => {
     const variations = []
-    for (let i = 1; i < numberOfVariations; i++) {
+    for (let i = 1; i < state.variations.length; i++) {
       variations.push(
         <VariationInput
-          key={i}
+          key={state.variations[i]?.id}
           index={i}
           name={`Variation ${i}`}
           variations={state.variations}
@@ -261,6 +262,13 @@ const TemplateInput = ({ state, dispatch, isEdit = false }) => {
         <DeleteAttributeModal
           attributes={state.attributes}
           actionType={TEMPLATE_ACTIONS.DELETE_ATTRIBUTE}
+          dispatch={dispatch}
+        />
+      )}
+      {modalState.openDeleteVariationModal && (
+        <DeleteVariationModal
+          attributes={state.attributes}
+          actionType={TEMPLATE_ACTIONS.DELETE_VARIATION}
           dispatch={dispatch}
         />
       )}

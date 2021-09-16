@@ -8,6 +8,7 @@ const initialState = {
   attributes: [],
   variations: [
     {
+      id: 1,
       sku: null,
       isDefault: true,
       salePrice: null,
@@ -96,12 +97,14 @@ const reducer = (state, action) => {
         }),
       }
     }
-    case TEMPLATE_ACTIONS.ADD_VARIATION:
+    case TEMPLATE_ACTIONS.ADD_VARIATION: {
+      const variationsClone = [...state.variations]
       return {
         ...state,
         variations: [
           ...state.variations,
           {
+            id: variationsClone.length > 0 ? variationsClone.pop(-1).id + 1 : 1,
             sku: null,
             isDefault: false,
             salePrice: null,
@@ -110,6 +113,7 @@ const reducer = (state, action) => {
           },
         ],
       }
+    }
     case TEMPLATE_ACTIONS.SET_VARIATION:
       state.variations[action.payload.index] = action.payload.data
       return {
@@ -150,6 +154,15 @@ const reducer = (state, action) => {
         ...action.payload,
         variations: variations,
         isFinish: true,
+      }
+    }
+    case TEMPLATE_ACTIONS.DELETE_VARIATION: {
+      const remainVariations = state.variations.filter((variation) => {
+        return variation.id !== action.payload.id
+      })
+      return {
+        ...state,
+        variations: remainVariations,
       }
     }
     default:

@@ -1,10 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import Attribute from 'components/elements/Attribute'
-import { TEMPLATE_ACTIONS } from 'utils/templateUtils'
+import Icon from 'components/elements/Icon'
+import ModalContext from 'context/ModalContext'
 import { validateRegularPrice, validateSalePrice } from 'utils/errorsUtils'
 import { debounce, DEFAULT_DELAY } from 'utils/commonUtils'
 import { validateSKU } from 'utils/validators'
-import Icon from 'components/elements/Icon'
+import { TEMPLATE_ACTIONS } from 'utils/templateUtils'
 
 const VariationInput = ({
   name,
@@ -21,6 +22,8 @@ const VariationInput = ({
   const [salePrice, setSalePrice] = useState(variation?.salePrice)
   const [regularPrice, setRegularPrice] = useState(variation?.regularPrice)
   const [showToolTip, setShowToolTip] = useState(false)
+
+  const { modalState, setModalState } = useContext(ModalContext)
 
   useEffect(() => {
     let sku = ''
@@ -80,6 +83,10 @@ const VariationInput = ({
 
   const onHideToolTip = () => {
     setShowToolTip(false)
+  }
+
+  const onDeleteVariation = () => {
+    setModalState({ ...modalState, openDeleteVariationModal: true, variationId: variation.id, isModalOpen: true })
   }
 
   const renderAttributes = useCallback(() => {
@@ -179,6 +186,17 @@ const VariationInput = ({
         )}
         {renderAttributes(variation.attributes.length)}
       </div>
+      {!isDefaultVariation && (
+        <div className="flex justify-end w-full">
+          <button
+            className="px-12 py-4 mt-8 text-white bg-red-500 rounded-full hover:bg-red-400 focus:outline-none"
+            type="button"
+            onClick={onDeleteVariation}
+          >
+            Delete
+          </button>
+        </div>
+      )}
     </div>
   )
 }

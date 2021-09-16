@@ -10,6 +10,7 @@ export const TEMPLATE_ACTIONS = {
   SET_VARIATION: 'SET_VARIATION',
   SET_VARIATION_ATTRIBUTE: 'SET_VARIATION_ATTRIBUTE',
   SET_TEMPLATE: 'SET_TEMPLATE',
+  DELETE_VARIATION: 'DELETE_VARIATION',
 }
 
 export const DEFAULT_PRODUCT_TITLE = 'Limited Edition 3D All Over Printed Shirts For Men & Women'
@@ -94,6 +95,7 @@ export const formatToFormData = (data) => {
     }),
     variations: data.variations.map((variation) => {
       return {
+        id: variation.id,
         sku: variation.sku,
         isDefault: variation.is_default,
         salePrice: variation.sale_price,
