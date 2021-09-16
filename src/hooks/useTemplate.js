@@ -71,6 +71,7 @@ const reducer = (state, action) => {
             break
           }
         }
+        // get attribute with default option as value
         const defaultAttribute = defaultOption
           ? {
               ...attribute,
@@ -87,7 +88,11 @@ const reducer = (state, action) => {
           if (index === 0) {
             return variation
           }
-          return { ...variation, attributes: state.attributes }
+          // get old variation attribute with new options
+          const newAttributes = variation.attributes.map((attribute, index) => {
+            return { ...attribute, options: state.attributes[index].options }
+          })
+          return { ...variation, attributes: newAttributes }
         }),
       }
     }
