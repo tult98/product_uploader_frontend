@@ -138,12 +138,20 @@ const reducer = (state, action) => {
         }),
       }
     }
-    case TEMPLATE_ACTIONS.SET_TEMPLATE:
+    case TEMPLATE_ACTIONS.SET_TEMPLATE: {
+      const variations = action.payload.variations.map((variation) => {
+        const newAttributes = variation.attributes.map((attribute, index) => {
+          return { ...attribute, options: action.payload.attributes[index].options }
+        })
+        return { ...variation, attributes: newAttributes }
+      })
       return {
         ...state,
         ...action.payload,
+        variations: variations,
         isFinish: true,
       }
+    }
     default:
       return state
   }
