@@ -1,15 +1,14 @@
 import React, { useContext, useEffect } from 'react'
 import { useQueryClient, useMutation } from 'react-query'
 import TemplateList from 'components/screens/TemplateList'
-import NotificationPopup from 'components/elements/NotificationPopup'
 import DeleteTemplateModal from 'modals/DeleteTemplateModal'
 import ModalContext from 'context/ModalContext'
-import TemplateServices from 'services/TemplateServices'
 import NotificationContext from 'context/NotificationContext'
+import TemplateServices from 'services/TemplateServices'
 
 const ListTemplatePage = () => {
   const { modalState } = useContext(ModalContext)
-  const { notificationState, setNotificationState } = useContext(NotificationContext)
+  const { setNotificationState } = useContext(NotificationContext)
   const queryClient = useQueryClient()
   const mutation = useMutation(TemplateServices.deleteTemplate, {
     onSuccess: () => {
@@ -44,7 +43,6 @@ const ListTemplatePage = () => {
         <TemplateList />
       </div>
       {modalState.isModalOpen && modalState.openDeleteTemplateModal && <DeleteTemplateModal mutation={mutation} />}
-      {notificationState.isShow && <NotificationPopup />}
     </>
   )
 }

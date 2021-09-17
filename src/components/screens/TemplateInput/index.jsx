@@ -139,110 +139,112 @@ const TemplateInput = ({ state, dispatch, isEdit = false }) => {
 
   return (
     <>
-      <div className={`w-2/5 mb-44 ${modalState.isModalOpen ? 'opacity-20' : ''}`}>
-        <form className="flex flex-col justify-start">
-          <div className="self-center my-20 text-5xl font-bold uppercase">
-            {isEdit ? 'Edit a template' : 'Create a new template'}
-          </div>
-          <TextInput
-            label="name"
-            isRequired={true}
-            type="text"
-            style="mb-10"
-            value={state.name}
-            dispatch={dispatch}
-            error={errors.name}
-            actionType={TEMPLATE_ACTIONS.SET_NAME}
-            onBlur={onValidateTemplateName}
-          />
-
-          <TextInput
-            label="product title"
-            isRequired={true}
-            type="text"
-            style="mb-10"
-            value={state.productTitle}
-            dispatch={dispatch}
-            error={errors.productTitle}
-            actionType={TEMPLATE_ACTIONS.SET_PRODUCT_TITLE}
-            onBlur={onValidateProductTitle}
-          />
-          <TextAreaInput
-            label="description"
-            isRequired={true}
-            type="text"
-            options={{ rows: 6 }}
-            style="mb-10"
-            value={state.description}
-            dispatch={dispatch}
-            error={errors.description}
-            actionType={TEMPLATE_ACTIONS.SET_DESCRIPTION}
-            onBlur={onValidateTemplateDescription}
-          />
-
-          {renderAttributes(numberOfAttributes)}
-          <button
-            type="button"
-            className="self-start mt-10 text-blue-600 hover:text-blue-700 hover:underline"
-            onClick={onCreateAttribute}
-          >
-            Add new attribute
-          </button>
-          <VariationInput
-            isDefaultVariation={true}
-            key="default-variation"
-            index={0}
-            name="Default variation"
-            variations={state.variations}
-            variation={state.variations[0]}
-            dispatch={dispatch}
-            variationErrors={errors.variationErrors?.length > 0 ? errors.variationErrors[0] : {}}
-            templateErrors={errors}
-            setTemplateErrors={setErrors}
-          />
-          {renderVariations(numberOfAttributes)}
-          <div className="mt-10">
-            <button
-              type="button"
-              className="text-blue-600 hover:text-blue-700 hover:underline"
-              onClick={onCreateVariation}
-            >
-              Add new variation
-            </button>
-          </div>
-          <div className="flex justify-center mt-20">
-            <button type="button" className="px-12 py-4 bg-gray-400 rounded-full hover:bg-gray-500">
-              Back
-            </button>
-            <button
-              type="button"
-              className="flex items-center px-12 py-4 ml-8 bg-yellow-400 rounded-full hover:bg-yellow-500"
-              onClick={!isEdit ? onCreateTemplate : onEditTemplate}
-            >
-              {mutation.isLoading && <LoadingIndicator style="w-8 h-8 mr-2" />}
-              {isEdit ? 'Edit Template' : 'Create Template'}
-            </button>
-          </div>
-          {errors && (errors.attributes || errors.variations) && (
-            <div className="mt-10 general-errors">
-              {errors.attributes && <p className="input-error">*{errors.attributes}</p>}
-              {errors.variations && <p className="input-error">*{errors.variations}</p>}
+      <div className={`w-full flex justify-center mb-44 ${modalState.isModalOpen ? 'opacity-20' : ''}`}>
+        <div className="flex w-3/5">
+          <form className="flex flex-col">
+            <div className="self-center my-20 text-5xl font-bold uppercase">
+              {isEdit ? 'Edit a template' : 'Create a new template'}
             </div>
-          )}
-          {/* TODO: handle error from server */}
-          {mutation.isError && (
+            <TextInput
+              label="name"
+              isRequired={true}
+              type="text"
+              style="mb-10"
+              value={state.name}
+              dispatch={dispatch}
+              error={errors.name}
+              actionType={TEMPLATE_ACTIONS.SET_NAME}
+              onBlur={onValidateTemplateName}
+            />
+
+            <TextInput
+              label="product title"
+              isRequired={true}
+              type="text"
+              style="mb-10"
+              value={state.productTitle}
+              dispatch={dispatch}
+              error={errors.productTitle}
+              actionType={TEMPLATE_ACTIONS.SET_PRODUCT_TITLE}
+              onBlur={onValidateProductTitle}
+            />
+            <TextAreaInput
+              label="description"
+              isRequired={true}
+              type="text"
+              options={{ rows: 6 }}
+              style="mb-10"
+              value={state.description}
+              dispatch={dispatch}
+              error={errors.description}
+              actionType={TEMPLATE_ACTIONS.SET_DESCRIPTION}
+              onBlur={onValidateTemplateDescription}
+            />
+
+            {renderAttributes(numberOfAttributes)}
+            <button
+              type="button"
+              className="self-start mt-10 text-blue-600 hover:text-blue-700 hover:underline"
+              onClick={onCreateAttribute}
+            >
+              Add new attribute
+            </button>
+            <VariationInput
+              isDefaultVariation={true}
+              key="default-variation"
+              index={0}
+              name="Default variation"
+              variations={state.variations}
+              variation={state.variations[0]}
+              dispatch={dispatch}
+              variationErrors={errors.variationErrors?.length > 0 ? errors.variationErrors[0] : {}}
+              templateErrors={errors}
+              setTemplateErrors={setErrors}
+            />
+            {renderVariations(numberOfAttributes)}
             <div className="mt-10">
-              {mutation.error.code === 4000 && <p className="input-error">*{mutation.error.errors.message}</p>}
-              {mutation.error.code === 400 ? (
-                mutation.error.errors.name ? (
-                  <p className="input-error">*Template with this name already exits</p>
-                ) : (
-                  <p className="input-error">*Input is invalid, please re-check your input before try again</p>
-                )
-              ) : null}
+              <button
+                type="button"
+                className="text-blue-600 hover:text-blue-700 hover:underline"
+                onClick={onCreateVariation}
+              >
+                Add new variation
+              </button>
             </div>
-          )}
-        </form>
+            <div className="flex justify-center mt-20">
+              <button type="button" className="px-12 py-4 bg-gray-400 rounded-full hover:bg-gray-500">
+                Back
+              </button>
+              <button
+                type="button"
+                className="flex items-center px-12 py-4 ml-8 bg-yellow-400 rounded-full hover:bg-yellow-500"
+                onClick={!isEdit ? onCreateTemplate : onEditTemplate}
+              >
+                {mutation.isLoading && <LoadingIndicator style="w-8 h-8 mr-2" />}
+                {isEdit ? 'Edit Template' : 'Create Template'}
+              </button>
+            </div>
+            {errors && (errors.attributes || errors.variations) && (
+              <div className="mt-10 general-errors">
+                {errors.attributes && <p className="input-error">*{errors.attributes}</p>}
+                {errors.variations && <p className="input-error">*{errors.variations}</p>}
+              </div>
+            )}
+            {/* TODO: handle error from server */}
+            {mutation.isError && (
+              <div className="mt-10">
+                {mutation.error.code === 4000 && <p className="input-error">*{mutation.error.errors.message}</p>}
+                {mutation.error.code === 400 ? (
+                  mutation.error.errors.name ? (
+                    <p className="input-error">*Template with this name already exits</p>
+                  ) : (
+                    <p className="input-error">*Input is invalid, please re-check your input before try again</p>
+                  )
+                ) : null}
+              </div>
+            )}
+          </form>
+        </div>
       </div>
       {modalState.openCreateAttributeModal && (
         <CreateAttributeModal

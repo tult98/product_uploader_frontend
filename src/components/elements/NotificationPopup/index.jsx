@@ -1,25 +1,36 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import Icon from 'components/elements/Icon'
 import NotificationContext from 'context/NotificationContext'
 import { DEFAULT_SHOW_TIME } from 'utils/commonUtils'
+import { colors } from 'theme/variables/platform'
+import { useEffect } from 'react/cjs/react.development'
 
 const NotificationPopup = () => {
   const { notificationState, setNotificationState } = useContext(NotificationContext)
+  const [isShow, setIsShow] = useState(notificationState.isShow)
 
   setTimeout(() => {
-    setNotificationState({ type: null, message: null, isShow: false })
+    setIsShow(false)
   }, DEFAULT_SHOW_TIME)
+
+  useEffect(() => {
+    if (!isShow) {
+      setTimeout(() => {
+        setNotificationState({ type: null, message: null, isShow: false })
+      }, 300)
+    }
+  }, [isShow])
 
   return (
     <div
-      className={`fixed flex items-center justify-center px-8 py-4 text-gray-300 transition-all bg-gray-700 rounded-lg top-32 w-96 drop-shadow-2xl duration-300 shadow-xl ${
-        notificationState.isShow ? 'slideIn' : 'slideOut'
-      }`}
+      className={`fixed flex items-center justify-start px-12 py-4 text-white100 transition-all bg-gray-900 top-32 w-96 duration-300 ${
+        notificationState.type === 'success' ? 'shadow-greenShadow' : 'shadow-redShadow'
+      } ${isShow ? 'slideIn' : 'slideOut'}`}
     >
       <Icon
         name="bell"
         style="w-16 h-16 mr-2"
-        fill={`${notificationState.type === 'success' ? '#1f9c40' : '#fc0313'}`}
+        fill={`${notificationState.type === 'success' ? colors.primaryGreen : colors.lightRed}`}
       />
       <span className="leading-7 text-left">{notificationState.message}</span>
     </div>

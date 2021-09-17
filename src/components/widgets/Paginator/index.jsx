@@ -28,7 +28,7 @@ const Paginator = ({ count, currentPage, next, previous, setCurrentPage }) => {
   }
 
   return (
-    <div className="flex flex-row items-center mb-20">
+    <div className="flex flex-row items-center justify-center w-full mb-20">
       <button type="button" disabled={currentPage === 1} onClick={onGoToFirstPage}>
         <Icon
           name="doubleChevronLeft"

@@ -1,14 +1,9 @@
 import React from 'react'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { QueryClientProvider, QueryClient } from 'react-query'
-import { ReactQueryDevtools } from 'react-query/devtools'
-import CreateTemplatePage from 'pages/create-template'
-import ListTemplatePage from 'pages/list-template'
-import EditTemplatePage from 'pages/edit-template'
-import Navigation from 'components/widgets/Navigation'
 import { ModalProvider } from 'context/ModalContext'
 import { NotificationProvider } from 'context/NotificationContext'
-import { TEMPLATE_ROUTES } from 'routes'
+
+import IndexPage from 'pages'
 
 const queryClient = new QueryClient()
 
@@ -17,23 +12,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ModalProvider>
         <NotificationProvider>
-          <div className="flex flex-col">
-            <Router>
-              <Switch>
-                <Route path={TEMPLATE_ROUTES.LIST_TEMPLATE} exact>
-                  <ListTemplatePage />
-                </Route>
-                <Route path={TEMPLATE_ROUTES.CREATE_TEMPLATE} exact>
-                  <CreateTemplatePage />
-                </Route>
-                <Route path={TEMPLATE_ROUTES.GET_TEMPLATE} exact>
-                  <EditTemplatePage />
-                </Route>
-              </Switch>
-              <Navigation />
-            </Router>
-            <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
-          </div>
+          <IndexPage />
         </NotificationProvider>
       </ModalProvider>
     </QueryClientProvider>

@@ -4,7 +4,7 @@ import Icon from 'components/elements/Icon'
 import ModalContext from 'context/ModalContext'
 import { TEMPLATE_ROUTES } from 'routes'
 
-const TemplateItem = ({ data }) => {
+const TemplateCard = ({ data }) => {
   const { modalState, setModalState } = useContext(ModalContext)
 
   const history = useHistory()
@@ -18,8 +18,19 @@ const TemplateItem = ({ data }) => {
   }
 
   return (
-    <div className="w-2/3 p-8 mb-10 bg-white border-2 border-gray-500 rounded-lg">
-      <p className="mb-8 font-medium">{data.name}</p>
+    <div className="self-start w-full p-12 mb-10 rounded-3xl bg-white100 shadow-grayShadow">
+      <div className="mb-10">
+        <p className="mb-8 text-4xl font-semibold text-font1">{data.name}</p>
+        <p>{data.productTitle}</p>
+        <div className="flex justify-between w-full mt-10">
+          <p className="font-medium text-lightPurple">Attributes</p>
+          <p>{data.variations.length || 0}</p>
+        </div>
+        <div className="flex justify-between w-full mt-10">
+          <p className="font-medium text-lightPurple">Variations</p>
+          <p>{data.attributes.length || 0}</p>
+        </div>
+      </div>
       <div className="flex justify-end w-full button-section">
         <button
           type="button"
@@ -42,4 +53,4 @@ const TemplateItem = ({ data }) => {
   )
 }
 
-export default TemplateItem
+export default TemplateCard
