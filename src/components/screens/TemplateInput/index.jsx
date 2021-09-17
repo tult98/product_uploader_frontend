@@ -140,7 +140,7 @@ const TemplateInput = ({ state, dispatch, isEdit = false }) => {
   return (
     <>
       <div className={`w-full flex justify-center mb-44 ${modalState.isModalOpen ? 'opacity-20' : ''}`}>
-        <div className="flex w-3/5">
+        <div className="flex justify-center w-3/5">
           <form className="flex flex-col">
             <div className="self-center my-20 text-5xl font-bold uppercase">
               {isEdit ? 'Edit a template' : 'Create a new template'}
