@@ -36,11 +36,7 @@ const EditTemplatePage = () => {
             <LoadingIndicator style="w-12 h-12" />
           </div>
         )}
-        {isError && (
-          <div className="center-modal -translate-x-7/12 left-7/12">
-            <Error error={error} />
-          </div>
-        )}
+        {isError && <Error error={error} />}
         {isSuccess && state.isFinish && <TemplateInput state={state} dispatch={dispatch} isEdit={true} />}
       </div>
     </>
