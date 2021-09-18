@@ -1,6 +1,32 @@
+import { GENERAL_ROUTES, PRODUCT_ROUTES, TEMPLATE_ROUTES } from 'routes'
+
 export const DEFAULT_DELAY = 500
 export const DEFAULT_SHOW_TIME = 3000
 export const DEFAULT_LIMIT = 6
+
+export const navigationItems = [
+  {
+    name: 'home',
+    route: GENERAL_ROUTES.HOME,
+  },
+  {
+    name: 'template',
+    child: [
+      {
+        name: 'all',
+        route: TEMPLATE_ROUTES.LIST_TEMPLATE,
+      },
+      {
+        name: 'new template',
+        route: TEMPLATE_ROUTES.CREATE_TEMPLATE,
+      },
+    ],
+  },
+  {
+    name: 'product',
+    route: PRODUCT_ROUTES.LIST_PRODUCT,
+  },
+]
 
 let timeoutId
 

@@ -184,7 +184,7 @@ const TemplateInput = ({ state, dispatch, isEdit = false }) => {
             {renderAttributes(numberOfAttributes)}
             <button
               type="button"
-              className="self-start mt-10 text-blue-600 hover:text-blue-700 hover:underline"
+              className="self-start mt-10 text-blue-600 hover:text-blue-700 hover:underline focus:outline-none"
               onClick={onCreateAttribute}
             >
               Add new attribute
@@ -205,7 +205,7 @@ const TemplateInput = ({ state, dispatch, isEdit = false }) => {
             <div className="mt-10">
               <button
                 type="button"
-                className="text-blue-600 hover:text-blue-700 hover:underline"
+                className="text-blue-600 hover:text-blue-700 hover:underline focus:outline-none"
                 onClick={onCreateVariation}
               >
                 Add new variation
