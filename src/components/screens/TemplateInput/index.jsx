@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useContext, useEffect } from 'react'
+import React, { useState, useContext, useEffect, useMemo } from 'react'
 import { useMutation, useQueryClient } from 'react-query'
 import { useHistory } from 'react-router-dom'
 import TextAreaInput from 'components/elements/Input/TextAreaInput'
@@ -21,8 +21,6 @@ import { validateRequired } from 'utils/validators'
 const TemplateInput = ({ state, dispatch, isEdit = false }) => {
   const { modalState } = useContext(ModalContext)
   const { setNotificationState } = useContext(NotificationContext)
-  const [numberOfVariations, setNumberOfVariations] = useState(state.variations.length)
-  const [numberOfAttributes, setNumberOfAttributes] = useState(state.attributes.length)
   const [errors, setErrors] = useState({})
   const history = useHistory()
   const queryClient = useQueryClient()
@@ -34,10 +32,6 @@ const TemplateInput = ({ state, dispatch, isEdit = false }) => {
         },
       })
     : useMutation(TemplateServices.createTemplate)
-
-  useEffect(() => {
-    setNumberOfAttributes(state.attributes.length)
-  }, [state?.attributes.length])
 
   useEffect(() => {
     if (mutation.isSuccess) {
@@ -56,7 +50,7 @@ const TemplateInput = ({ state, dispatch, isEdit = false }) => {
     }
   }, [mutation.status])
 
-  const renderVariations = useCallback(() => {
+  const renderVariations = useMemo(() => {
     const variations = []
     for (let i = 1; i < state.variations.length; i++) {
       variations.push(
@@ -74,11 +68,16 @@ const TemplateInput = ({ state, dispatch, isEdit = false }) => {
       )
     }
     return variations
-  }, [numberOfVariations, state.sku, state.attributes, state.variations, errors.variationErrors])
+  }, [
+    state.attributes,
+    state.variations,
+    [...state.variations.map((variation) => variation.attributes)],
+    errors.variationErrors,
+  ])
 
-  const renderAttributes = useCallback(() => {
+  const renderAttributes = useMemo(() => {
     const attributes = []
-    for (let i = 0; i < numberOfAttributes; i++) {
+    for (let i = 0; i < state.attributes.length; i++) {
       attributes.push(
         <Attribute
           key={state.attributes[i]?.id}
@@ -95,16 +94,13 @@ const TemplateInput = ({ state, dispatch, isEdit = false }) => {
       )
     }
     return attributes
-  }, [numberOfAttributes, errors.attributeErrors])
-
+  }, [[...state.attributes.map((attribute) => attribute.options)], errors.attributeErrors])
   const onCreateVariation = () => {
-    setNumberOfVariations(numberOfVariations + 1)
     dispatch({ type: TEMPLATE_ACTIONS.ADD_VARIATION })
   }
 
   const onCreateAttribute = () => {
     dispatch({ type: TEMPLATE_ACTIONS.ADD_ATTRIBUTE })
-    setNumberOfAttributes(numberOfAttributes + 1)
   }
 
   const onCreateTemplate = () => {
@@ -181,7 +177,7 @@ const TemplateInput = ({ state, dispatch, isEdit = false }) => {
               onBlur={onValidateTemplateDescription}
             />
 
-            {renderAttributes(numberOfAttributes)}
+            {renderAttributes}
             <button
               type="button"
               className="self-start mt-10 text-blue-600 hover:text-blue-700 hover:underline focus:outline-none"
@@ -201,7 +197,7 @@ const TemplateInput = ({ state, dispatch, isEdit = false }) => {
               templateErrors={errors}
               setTemplateErrors={setErrors}
             />
-            {renderVariations(numberOfAttributes)}
+            {renderVariations}
             <div className="mt-10">
               <button
                 type="button"
