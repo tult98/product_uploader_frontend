@@ -24,7 +24,16 @@ export const navigationItems = [
   },
   {
     name: 'product',
-    route: PRODUCT_ROUTES.LIST_PRODUCT,
+    child: [
+      {
+        name: 'edit products',
+        route: PRODUCT_ROUTES.EDIT,
+      },
+      {
+        name: 'upload products',
+        route: PRODUCT_ROUTES.UPLOAD_PRODUCT,
+      },
+    ],
   },
 ]
 

@@ -22,16 +22,16 @@ const NavigationItem = ({ name, route, child }) => {
           <div className="relative navigation-item " onClick={onToggleNavigation}>
             <Icon name={name} style="w-12 h-12 mr-4" fill={colors.white100} />
             {name}
-            {!isExpand ? (
-              <Icon name="chevronDown" style="w-8 h-8 absolute right-4" fill={colors.white100} />
-            ) : (
-              <Icon name="chevronUp" style="w-8 h-8 absolute right-4" fill={colors.white100} />
-            )}
+            <Icon
+              name="chevronRight"
+              style={`w-8 h-8 absolute right-4 transform duration-300 ${isExpand ? 'rotate-90 ' : ''}`}
+              fill={colors.white100}
+            />
           </div>
           {isExpand && (
             <>
-              {child.map((item) => (
-                <Link to={item.route} key={item.name} className="navigation-item bg-font3">
+              {child.map((item, index) => (
+                <Link to={item.route} key={index} className="navigation-item bg-font3">
                   <p>{item.name}</p>
                 </Link>
               ))}

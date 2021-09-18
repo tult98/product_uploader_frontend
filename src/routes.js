@@ -10,6 +10,9 @@ export const GENERAL_ROUTES = {
 
 export const PRODUCT_ROUTES = {
   LIST_PRODUCT: '/products',
+  UPLOAD_PRODUCT: '/products/upload',
   CREATE_PRODUCT: '/products/create',
   GET_PRODUCT: '/products/:productId',
+  GET_LOGS: '/products/upload/logs',
+  EDIT: '/products/edit',
 }

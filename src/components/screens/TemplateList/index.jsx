@@ -27,33 +27,37 @@ const TemplateList = () => {
         title="Template Dashboard"
         description="This is where you control all your templates."
       />
-      <SearchBar searchPattern={searchPattern} setSearchPattern={setSearchPattern} />
-      {isLoading && (
-        <div className="flex flex-col items-center center-modal -translate-x-7/12 left-7/12">
-          <LoadingIndicator style="w-16 h-16" />
+      <div className="flex justify-center w-full">
+        <div className="w-3/5">
+          <SearchBar searchPattern={searchPattern} setSearchPattern={setSearchPattern} />
+          {isLoading && (
+            <div className="flex flex-col items-center center-modal -translate-x-7/12 left-7/12">
+              <LoadingIndicator style="w-16 h-16" />
+            </div>
+          )}
+          {isError && <ErrorIndicator error={error} />}
+          {isSuccess ? (
+            data.results.length > 0 ? (
+              <>
+                {data.results.map((template) => (
+                  <TemplateCard key={template.id} data={formatToFormData(template)} />
+                ))}
+                {data.next && (
+                  <Paginator
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                    count={data.count}
+                    next={data.next}
+                    previous={data.previous}
+                  />
+                )}
+              </>
+            ) : (
+              <NoRecordFound />
+            )
+          ) : null}
         </div>
-      )}
-      {isError && <ErrorIndicator error={error} />}
-      {isSuccess ? (
-        data.results.length > 0 ? (
-          <>
-            {data.results.map((template) => (
-              <TemplateCard key={template.id} data={formatToFormData(template)} />
-            ))}
-            {data.next && (
-              <Paginator
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-                count={data.count}
-                next={data.next}
-                previous={data.previous}
-              />
-            )}
-          </>
-        ) : (
-          <NoRecordFound />
-        )
-      ) : null}
+      </div>
     </div>
   )
 }

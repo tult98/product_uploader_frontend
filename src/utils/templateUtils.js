@@ -62,7 +62,7 @@ export const formatTemplateData = (data) => {
         attributes: variation.attributes.map((attribute) => {
           return {
             name: attribute.name,
-            value: attribute.value.code,
+            value: attribute.value.name,
           }
         }),
       }

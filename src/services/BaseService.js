@@ -127,12 +127,12 @@ const BaseService = {
     })
   },
 
-  delete(url, config = DEFAULT_REQUEST_CONFIG, data = {}) {
+  delete(url, config = DEFAULT_REQUEST_CONFIG) {
     injectAuthorizationHeader(config)
 
     return new Promise((resolve, reject) => {
       axios
-        .delete(url, data, config)
+        .delete(url, config)
         .then((res) => {
           const { data } = res
           if (!SUCCESS_STATUS_CODE.includes(res.status)) {

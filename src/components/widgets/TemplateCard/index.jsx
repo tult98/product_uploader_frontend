@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 import { useHistory } from 'react-router-dom'
 import Icon from 'components/elements/Icon'
 import ModalContext from 'context/ModalContext'
@@ -17,6 +17,14 @@ const TemplateCard = ({ data }) => {
     history.push(`${TEMPLATE_ROUTES.LIST_TEMPLATE}${data.id}`)
   }
 
+  const totalVariations = useMemo(() => {
+    let total = 1
+    data.attributes.forEach((attribute) => {
+      total = total * attribute.options.length
+    })
+    return total
+  }, [data.attributes])
+
   return (
     <div className="self-start w-full p-12 mb-10 rounded-3xl bg-white100 shadow-grayShadow">
       <div className="mb-10">
@@ -28,7 +36,7 @@ const TemplateCard = ({ data }) => {
         </div>
         <div className="flex justify-between w-full mt-10">
           <p className="font-medium text-lightPurple">Variations</p>
-          <p>{data.attributes.length || 0}</p>
+          <p>{totalVariations}</p>
         </div>
       </div>
       <div className="flex justify-end w-full button-section">
