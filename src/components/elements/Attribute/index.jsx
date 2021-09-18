@@ -7,6 +7,8 @@ import ModalContext from 'context/ModalContext'
 import { convertToAttributeFormat, convertToOptionFormat } from 'utils/templateUtils'
 import { debounce, DEFAULT_DELAY } from 'utils/commonUtils'
 import { REQUIRED_FIELD_ERROR } from 'utils/errorsUtils'
+import { colors } from 'theme/variables/platform'
+import Icon from '../Icon'
 // import Icon from 'components/elements/Icon'
 
 const Attribute = ({
@@ -169,9 +171,11 @@ const Attribute = ({
   }
 
   return (
-    <div className="w-full my-10">
+    <div
+      className={`w-full mt-8 ${!isVariationAttribute ? 'bg-white100 rounded-3xl shadow-grayShadow p-8 relative' : ''}`}
+    >
       {isVariationAttribute ? (
-        <>
+        <div>
           <label className="font-semibold uppercase">
             {attribute?.name || `Attribute name ${index + 1}`}
             {attribute.isPrimary && <span className="text-red-500">{`  (*)`} </span>}
@@ -191,10 +195,20 @@ const Attribute = ({
           {!(errors && errors.value) && attributeErrors && attributeErrors.value && (
             <p className="input-error">{attributeErrors.value}</p>
           )}
-        </>
+        </div>
       ) : (
         <>
-          <div className="flex flex-col justify-start w-full">
+          <div className="flex flex-col justify-start w-full ">
+            <div className="absolute flex flex-row top-4 right-4">
+              {!attribute.isPrimary && (
+                <div className="cursor-pointer" onClick={onSetPrimaryAttribute}>
+                  <Icon name="mark" style="w-8 h-8" fill={colors.darkGray} />
+                </div>
+              )}
+              <div className="cursor-pointer" onClick={onDeleteAttribute}>
+                <Icon name="close" style="w-8 h-8" fill={colors.darkGray} />
+              </div>
+            </div>
             <label className="font-semibold uppercase">
               {`Attribute name ${index + 1}  `}
               {attribute?.isPrimary && <span className="text-red-500">(*)</span>}
@@ -228,24 +242,6 @@ const Attribute = ({
             {!(errors && errors.options) && attributeErrors && attributeErrors.options && (
               <p className="input-error">{attributeErrors.options}</p>
             )}
-          </div>
-          <div className="flex justify-end mt-8">
-            {!attribute?.isPrimary && (
-              <button
-                type="button"
-                className="px-8 py-4 mr-4 text-gray-200 bg-blue-700 rounded-full hover:bg-blue-500"
-                onClick={onSetPrimaryAttribute}
-              >
-                Set as primary
-              </button>
-            )}
-            <button
-              type="button"
-              className="px-12 py-4 text-gray-200 bg-red-500 rounded-full hover:bg-red-400"
-              onClick={onDeleteAttribute}
-            >
-              Delete
-            </button>
           </div>
         </>
       )}

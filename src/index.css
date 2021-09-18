@@ -31,4 +31,13 @@ html {
   .navigation-item {
     @apply flex items-center justify-start w-full px-8 py-6 font-medium capitalize border-b border-gray-400 cursor-pointer hover:bg-yellow-400;
   }
+  .primary-btn {
+    @apply px-12 py-4 rounded-full bg-purple text-white100 hover:opacity-80 focus:outline-none;
+  }
+  .dangerous-btn {
+    @apply px-12 py-4 rounded-full bg-lightRed text-white100 hover:opacity-80 focus:outline-none;
+  }
+  .secondary-btn {
+    @apply px-12 py-4 rounded-full bg-darkGray opacity-80 text-white100 hover:opacity-60 focus:outline-none;
+  }
 }

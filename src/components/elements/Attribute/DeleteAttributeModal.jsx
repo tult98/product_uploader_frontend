@@ -15,7 +15,7 @@ const DeleteAttributeModal = ({ actionType, dispatch }) => {
   }
 
   return (
-    <div className="bg-white border border-gray-400 -translate-x-7/12 left-7/12">
+    <div className="bg-white border border-gray-400 center-modal -translate-x-7/12 left-7/12">
       <div className="flex flex-row justify-between px-4 py-8 bg-gradient-to-r from-gray-500 to-gray-600">
         <p className="text-white ">Confirm delete attribute?</p>
         <div onClick={onCloseModal} className="cursor-pointer">

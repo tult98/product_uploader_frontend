@@ -6,6 +6,7 @@ import { validateRegularPrice, validateSalePrice } from 'utils/errorsUtils'
 import { debounce, DEFAULT_DELAY } from 'utils/commonUtils'
 import { validateSKU } from 'utils/validators'
 import { TEMPLATE_ACTIONS } from 'utils/templateUtils'
+import { colors } from 'theme/variables/platform'
 
 const VariationInput = ({
   name,
@@ -112,7 +113,7 @@ const VariationInput = ({
   }, [variation.attributes, variationErrors.attributeErrors])
 
   return (
-    <div className="mt-20 mb-12 rounded-lg">
+    <div className="my-8 rounded-lg">
       <div className="flex flex-row">
         <div className="mb-4 font-semibold uppercase">{name}</div>
         {isDefaultVariation && (
@@ -127,7 +128,13 @@ const VariationInput = ({
           </div>
         )}
       </div>
-      <div className="p-8 border-2 border-gray-700">
+      <div className="relative p-8 shadow-grayShadow bg-white100 rounded-3xl">
+        {!isDefaultVariation && (
+          <div className="cursor-pointer hover:opacity-80" onClick={onDeleteVariation}>
+            <Icon name="close" style="w-8 h-8 absolute top-4 right-4" fill={colors.darkGray} />
+          </div>
+        )}
+
         <div className="flex flex-col mb-10">
           <div className="flex flex-row items-center">
             <label className="font-semibold uppercase">SKU</label>
@@ -186,17 +193,6 @@ const VariationInput = ({
         )}
         {renderAttributes(variation.attributes.length)}
       </div>
-      {!isDefaultVariation && (
-        <div className="flex justify-end w-full">
-          <button
-            className="px-12 py-4 mt-8 text-white bg-red-500 rounded-full hover:bg-red-400 focus:outline-none"
-            type="button"
-            onClick={onDeleteVariation}
-          >
-            Delete
-          </button>
-        </div>
-      )}
     </div>
   )
 }

@@ -1,9 +1,8 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import Icon from 'components/elements/Icon'
 import NotificationContext from 'context/NotificationContext'
 import { DEFAULT_SHOW_TIME } from 'utils/commonUtils'
 import { colors } from 'theme/variables/platform'
-import { useEffect } from 'react/cjs/react.development'
 
 const NotificationPopup = () => {
   const { notificationState, setNotificationState } = useContext(NotificationContext)

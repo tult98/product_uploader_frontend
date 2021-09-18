@@ -32,19 +32,11 @@ const TemplateCard = ({ data }) => {
         </div>
       </div>
       <div className="flex justify-end w-full button-section">
-        <button
-          type="button"
-          className="flex flex-row px-8 py-4 mr-4 text-gray-200 bg-blue-500 rounded-full focus:outline-none hover:bg-blue-400"
-          onClick={onDetailsTemplate}
-        >
+        <button type="button" className="flex flex-row mr-4 primary-btn" onClick={onDetailsTemplate}>
           <Icon name="detail" style="w-8 h-8 mr-2" fill="#ebedeb" />
           Details
         </button>
-        <button
-          type="button"
-          className="flex flex-row px-8 py-4 text-gray-200 bg-red-500 rounded-full focus:outline-none hover:bg-red-400"
-          onClick={onDeleteTemplate}
-        >
+        <button type="button" className="flex flex-row dangerous-btn" onClick={onDeleteTemplate}>
           <Icon name="trash" style="w-8 -h8 mr-2" fill="#ebedeb" />
           Delete
         </button>

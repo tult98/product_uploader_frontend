@@ -33,8 +33,8 @@ module.exports = {
       },
       boxShadow: {
         grayShadow: '0 3px 10px rgb(0 0 0 / 0.2)',
-        greenShadow: '0 3px 5px rgb(44, 185, 120)',
-        redShadow: '0 3px 5x rgb(255, 48, 79)',
+        greenShadow: '0 3px 5px rgba(44, 185, 120, 0.8)',
+        redShadow: '0 3px 5x rgba(255, 48, 79, 0.8)',
       },
       translate: {
         '7/12': '58.3333333%',

@@ -212,12 +212,12 @@ const TemplateInput = ({ state, dispatch, isEdit = false }) => {
               </button>
             </div>
             <div className="flex justify-center mt-20">
-              <button type="button" className="px-12 py-4 bg-gray-400 rounded-full hover:bg-gray-500">
+              <button type="button" className="secondary-btn">
                 Back
               </button>
               <button
                 type="button"
-                className="flex items-center px-12 py-4 ml-8 bg-yellow-400 rounded-full hover:bg-yellow-500"
+                className="flex items-center ml-8 primary-btn"
                 onClick={!isEdit ? onCreateTemplate : onEditTemplate}
               >
                 {mutation.isLoading && <LoadingIndicator style="w-8 h-8 mr-2" />}
