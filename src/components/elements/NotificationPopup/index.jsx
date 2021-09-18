@@ -15,9 +15,10 @@ const NotificationPopup = () => {
 
   useEffect(() => {
     if (!isShow) {
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         setNotificationState({ type: null, message: null, isShow: false })
       }, 300)
+      return () => clearTimeout(timer)
     }
   }, [isShow])
 
