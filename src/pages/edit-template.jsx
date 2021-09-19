@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useQuery } from 'react-query'
 import { useParams } from 'react-router-dom'
-import Error from 'components/widgets/Error'
+import ErrorIndicator from 'components/widgets/ErrorIndicator'
 import TemplateInput from 'components/screens/TemplateInput'
 import LoadingIndicator from 'components/elements/LoadingIndicator'
 import { useTemplate } from 'hooks/useTemplate'
@@ -33,10 +33,10 @@ const EditTemplatePage = () => {
       <div className="main-content">
         {isLoading && (
           <div className="center-modal -translate-x-7/12 left-7/12">
-            <LoadingIndicator style="w-12 h-12" />
+            <LoadingIndicator style="w-16 h-16" />
           </div>
         )}
-        {isError && <Error error={error} />}
+        {isError && <ErrorIndicator error={error} />}
         {isSuccess && state.isFinish && <TemplateInput state={state} dispatch={dispatch} isEdit={true} />}
       </div>
     </>
