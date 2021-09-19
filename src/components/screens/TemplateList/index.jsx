@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useQuery } from 'react-query'
 import TemplateCard from 'components/widgets/TemplateCard'
 import SearchBar from 'components/widgets/SearchBar'
-import Error from 'components/widgets/Error'
+import ErrorIndicator from 'components/widgets/ErrorIndicator'
 import LoadingIndicator from 'components/elements/LoadingIndicator'
 import Paginator from 'components/widgets/Paginator'
 import NoRecordFound from 'components/widgets/NoRecordFound'
@@ -33,7 +33,7 @@ const TemplateList = () => {
           <LoadingIndicator style="w-16 h-16" />
         </div>
       )}
-      {isError && <Error error={error} />}
+      {isError && <ErrorIndicator error={error} />}
       {isSuccess ? (
         data.results.length > 0 ? (
           <>
