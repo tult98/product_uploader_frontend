@@ -1,6 +1,7 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import Attribute from 'components/elements/Attribute'
 import Icon from 'components/elements/Icon'
+import ToolTip from 'components/elements/ToolTip'
 import ModalContext from 'context/ModalContext'
 import { validateRegularPrice, validateSalePrice } from 'utils/errorsUtils'
 import { debounce, DEFAULT_DELAY } from 'utils/commonUtils'
@@ -22,7 +23,6 @@ const VariationInput = ({
   const [errors, setErrors] = useState({})
   const [salePrice, setSalePrice] = useState(variation?.salePrice)
   const [regularPrice, setRegularPrice] = useState(variation?.regularPrice)
-  const [showToolTip, setShowToolTip] = useState(false)
 
   const { modalState, setModalState } = useContext(ModalContext)
 
@@ -78,14 +78,6 @@ const VariationInput = ({
     validateRegularPrice(variation, errors, setErrors)
   }
 
-  const onShowToolTip = () => {
-    setShowToolTip(true)
-  }
-
-  const onHideToolTip = () => {
-    setShowToolTip(false)
-  }
-
   const onDeleteVariation = () => {
     setModalState({ ...modalState, openDeleteVariationModal: true, variationId: variation.id, isModalOpen: true })
   }
@@ -115,17 +107,12 @@ const VariationInput = ({
   return (
     <div className="my-8 rounded-lg">
       <div className="flex flex-row">
-        <div className="mb-4 font-semibold uppercase">{name}</div>
+        <div className="mb-4 mr-1 font-semibold uppercase">{name}</div>
         {isDefaultVariation && (
-          <div onMouseEnter={onShowToolTip} onMouseLeave={onHideToolTip}>
-            <Icon style="w-8 h-8 ml-2 cursor-pointer" name="questionMark" fill="#e8544f" />
-            {showToolTip && (
-              <div className="absolute flex justify-center w-1/3 px-4 py-4 italic text-gray-600 bg-white border border-gray-500 rounded-lg">
-                The default variation will be created by our system automatically based on the default value of your
-                attributes.
-              </div>
-            )}
-          </div>
+          <ToolTip
+            message="The default variation will be created by our system automatically based on the default value of your
+                attributes."
+          />
         )}
       </div>
       <div className="relative p-8 shadow-grayShadow bg-white100 rounded-3xl">
