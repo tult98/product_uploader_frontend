@@ -54,7 +54,8 @@
     "lint-staged": ">=10",
     "postcss": "^7",
     "prettier": "^2.3.2",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat"
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat",
+    "typescript": "^4.4.3"
   },
   "husky": {
     "hooks": {
