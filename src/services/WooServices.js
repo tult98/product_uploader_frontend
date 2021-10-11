@@ -1,12 +1,264 @@
 import BaseService from 'services/BaseService'
+import {
+  handleProductData,
+  handleProductVariationsData,
+  UPLOAD_STATUS,
+  UPLOAD_SUCCESS_MESSAGE,
+  UPLOAD_UNKNOWN_MESSAGE,
+  UPLOAD_VARIATION_SUCCESS_MESSAGE,
+} from 'utils/productUtils'
+import WPServices from './WPServices'
 
 const WOO_BASE_URL = 'https://yourgears.net/wp-json/wc/v3'
+export const HOST_IMAGE_SERVER = 'https://yourgears.net/wp-content/uploads'
 const CONSUMER_KEY = 'ck_314aa3b442262eee58ab8eb25147e0e89e52a587'
 const CONSUMER_SECRET = 'cs_e17b1d2677df1b12e2ec54540bec0fe37bac5789'
 const authorizeValue = `consumer_key=${CONSUMER_KEY}&consumer_secret=${CONSUMER_SECRET}`
 
 export default class WooServices {
-  static async queryCategories() {
-    return await BaseService.get(`/products/categories?${authorizeValue}`, { baseURL: WOO_BASE_URL }, {})
+  static async queryCategories({ queryKey }) {
+    const searchPattern = queryKey[1].searchPattern
+    return await BaseService.get(
+      `/products/categories?search=${searchPattern}&${authorizeValue}`,
+      { baseURL: WOO_BASE_URL },
+      {},
+    )
+  }
+
+  static async batchCreateAttributes(attributes) {
+    let globalAttributes, error
+    const data = {
+      create: attributes,
+    }
+    try {
+      const result = await BaseService.post(
+        `/products/attributes/batch?${authorizeValue}`,
+        { baseURL: WOO_BASE_URL },
+        data,
+      )
+      globalAttributes = result.create
+    } catch (e) {
+      error = e
+    }
+    return { globalAttributes, error }
+  }
+
+  static async getProductBySku(sku) {
+    return BaseService.get(`/products?sku=${sku}&${authorizeValue}`, { baseURL: WOO_BASE_URL })
+  }
+
+  static async uploadProduct({ data }) {
+    const { images, errors } = await WPServices.uploadImages({ data })
+
+    if (errors && errors.length > 0) {
+      let message = 'Failed at uploading the following files: '
+      errors.map((error) => {
+        message += error.file
+      })
+      return { sku: data.sku, status: UPLOAD_STATUS.ERROR, message: message }
+    }
+
+    const productData = handleProductData(
+      {
+        ...data.template,
+        sku: data.sku,
+        name: data?.name || data.template.product_title,
+        categories: data.categories
+          ? data.categories.map((category) => {
+              return {
+                id: category.id,
+              }
+            })
+          : null,
+      },
+      images,
+    )
+
+    try {
+      const product = await BaseService.post(
+        `/products?${authorizeValue}`,
+        {
+          baseURL: WOO_BASE_URL,
+        },
+        productData,
+      )
+
+      const productVariations = handleProductVariationsData(data.template.variations, product)
+      const variationLogs = await WooServices.uploadProductVariations({
+        productId: product.id,
+        data: productVariations,
+      })
+
+      let productLog = {
+        sku: data.sku,
+        status: UPLOAD_STATUS.SUCCESS,
+        message: UPLOAD_SUCCESS_MESSAGE,
+        variations: variationLogs,
+      }
+      for (const variationLog of variationLogs) {
+        if (variationLog.status === UPLOAD_STATUS.ERROR) {
+          productLog = { ...productLog, status: UPLOAD_STATUS.WARN }
+          break
+        }
+      }
+
+      return productLog
+    } catch (error) {
+      images.map(async (item) => {
+        await WPServices.deleteImage(item.id)
+      })
+      return { sku: data.sku, status: UPLOAD_STATUS.ERROR, message: error?.errors?.message || UPLOAD_UNKNOWN_MESSAGE }
+    }
+  }
+
+  // update an existing product
+  static async updateProduct({ data }) {
+    let products
+    try {
+      const result = await WooServices.getProductBySku(data.sku)
+      products = Object.values(result)
+      if (!products || products.length !== 1) {
+        return { sku: data.sku, status: UPLOAD_STATUS.ERROR, message: 'Cannot found any product with that SKU.' }
+      }
+    } catch (error) {
+      return { sku: data.sku, status: UPLOAD_STATUS.ERROR, message: error.errors.message || UPLOAD_UNKNOWN_MESSAGE }
+    }
+
+    const originalProduct = products[0]
+
+    const { images, errors } = await WPServices.uploadImages({ data })
+
+    if (errors && errors.length > 0) {
+      let message = 'Failed at uploading the following files: '
+      errors.map((error) => {
+        message += error.file
+      })
+      return { sku: data.sku, status: UPLOAD_STATUS.ERROR, message: message }
+    }
+
+    const productData = handleProductData(
+      {
+        ...data.template,
+        sku: data.sku,
+        name: data?.name || data.template.product_title,
+        categories: data.categories
+          ? data.categories.map((category) => {
+              return {
+                id: category.id,
+              }
+            })
+          : null,
+      },
+      images,
+    )
+
+    try {
+      const product = await BaseService.put(
+        `/products/${originalProduct.id}?${authorizeValue}`,
+        {
+          baseURL: WOO_BASE_URL,
+        },
+        productData,
+      )
+
+      const productVariations = handleProductVariationsData(data.template.variations, product)
+      // attach id for a variation
+      productVariations.forEach((variation, index) => {
+        variation.id = products[0].variations[index]
+      })
+
+      const variationLogs = await WooServices.updateProductVariations({
+        productId: product.id,
+        data: productVariations,
+      })
+
+      // TODO: only delete image after update product success
+      const { errors } = await WPServices.deleteImages(originalProduct.images)
+
+      let productLog = {
+        sku: data.sku,
+        status: UPLOAD_STATUS.SUCCESS,
+        message: UPLOAD_SUCCESS_MESSAGE,
+        variations: variationLogs,
+      }
+      if (errors && errors.length > 0) {
+        productLog = {
+          ...productLog,
+          status: UPLOAD_STATUS.WARN,
+          message: `${UPLOAD_SUCCESS_MESSAGE}. But delete the old images is failed. Please do it manually.`,
+        }
+      }
+      for (const variationLog of variationLogs) {
+        if (variationLog.status === UPLOAD_STATUS.ERROR) {
+          productLog = { ...productLog, status: UPLOAD_STATUS.WARN }
+          break
+        }
+      }
+
+      return productLog
+    } catch (error) {
+      images.map(async (item) => {
+        await WPServices.deleteImage(item.id)
+      })
+      return { sku: data.sku, status: UPLOAD_STATUS.ERROR, message: error?.errors?.message || UPLOAD_UNKNOWN_MESSAGE }
+    }
+  }
+
+  static async uploadProducts({ data, isUpdate }) {
+    return await Promise.all(
+      data.map(async (productData) => {
+        return isUpdate
+          ? await WooServices.updateProduct({ data: productData })
+          : await WooServices.uploadProduct({ data: productData })
+      }),
+    )
+  }
+
+  static async uploadProductVariations({ productId, data }) {
+    return await Promise.all(
+      data.map(async (variation) => {
+        let log = { sku: variation.sku }
+        try {
+          await BaseService.post(
+            `/products/${productId}/variations?${authorizeValue}`,
+            {
+              baseURL: WOO_BASE_URL,
+            },
+            variation,
+          )
+          return { ...log, status: UPLOAD_STATUS.SUCCESS, message: UPLOAD_VARIATION_SUCCESS_MESSAGE }
+        } catch (error) {
+          return { ...log, status: UPLOAD_STATUS.ERROR, message: error?.errors?.message || UPLOAD_UNKNOWN_MESSAGE }
+        }
+      }),
+    )
+  }
+
+  static async updateProductVariations({ productId, data }) {
+    return await Promise.all(
+      data.map(async (variation) => {
+        let log = { sku: variation.sku }
+        const variationId = variation.id
+        delete variation.id
+        delete variation.sku
+        try {
+          await BaseService.put(
+            `/products/${productId}/variations/${variationId}?${authorizeValue}`,
+            {
+              baseURL: WOO_BASE_URL,
+            },
+            variation,
+          )
+          return { ...log, status: UPLOAD_STATUS.SUCCESS, message: UPLOAD_VARIATION_SUCCESS_MESSAGE }
+        } catch (error) {
+          return { ...log, status: UPLOAD_STATUS.ERROR, message: error?.errors?.message || UPLOAD_UNKNOWN_MESSAGE }
+        }
+      }),
+    )
+  }
+
+  static async queryProducts({ queryKey }) {
+    const sku = queryKey[1].sku
+    return BaseService.get(`/products?search=${sku}&${authorizeValue}`, { baseURL: WOO_BASE_URL })
   }
 }

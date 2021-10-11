@@ -183,6 +183,27 @@ const paths = {
     type: 'fill',
     path: <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />,
   },
+  upload: {
+    type: 'stroke',
+    path: (
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+      />
+    ),
+  },
+  image: {
+    type: 'fill',
+    path: (
+      <path
+        fillRule="evenodd"
+        d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
+        clipRule="evenodd"
+      />
+    ),
+  },
 }
 
 export default paths

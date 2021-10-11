@@ -6,10 +6,13 @@ import IndexPage from 'pages'
 import ListTemplatePage from 'pages/list-template'
 import CreateTemplatePage from 'pages/create-template'
 import EditTemplatePage from 'pages/edit-template'
+import UploadProductPage from 'pages/upload-product'
+import UploadProductLogsPage from 'pages/upload-product-logs'
+import EditProductsPage from 'pages/edit-products'
 import Navigation from 'components/layouts/Navigation'
 import { ModalProvider } from 'context/ModalContext'
 import { NotificationProvider } from 'context/NotificationContext'
-import { TEMPLATE_ROUTES } from 'routes'
+import { PRODUCT_ROUTES, TEMPLATE_ROUTES } from 'routes'
 
 const queryClient = new QueryClient()
 
@@ -29,6 +32,15 @@ function App() {
                 </Route>
                 <Route path={TEMPLATE_ROUTES.GET_TEMPLATE} exact>
                   <EditTemplatePage />
+                </Route>
+                <Route path={PRODUCT_ROUTES.UPLOAD_PRODUCT} exact>
+                  <UploadProductPage />
+                </Route>
+                <Route path={PRODUCT_ROUTES.GET_LOGS} exact>
+                  <UploadProductLogsPage />
+                </Route>
+                <Route path={PRODUCT_ROUTES.EDIT} exact>
+                  <EditProductsPage />
                 </Route>
               </Switch>
               <IndexPage />

@@ -1,38 +1,44 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Select from 'react-select'
 import { useQuery } from 'react-query'
 import WooServices from 'services/WooServices'
-import { formatCategoriesData } from 'utils/categoryUtils'
-import { TEMPLATE_ACTIONS } from 'utils/templateUtils'
+import ToolTip from 'components/elements/ToolTip'
+import { debounce, DEFAULT_DELAY } from 'utils/commonUtils'
 
-const CategoriesInput = ({ dispatch }) => {
-  const { isLoading, isError, data, error } = useQuery('fetching-categories', WooServices.queryCategories)
-  let fetchedOptions = null
-
-  if (!isLoading && !isError) {
-    fetchedOptions = Object.values(data).map((category) => {
-      return {
-        value: category.id,
-        label: category.name,
-      }
-    })
-  }
+const CategoriesInput = ({ onSelect, style, labelStyle, label, isDisabled }) => {
+  const [inputValue, setInputValue] = useState('')
+  const { isLoading, isError, isSuccess, data, error } = useQuery(
+    ['fetching-categories', { searchPattern: inputValue }],
+    WooServices.queryCategories,
+  )
 
   const onChangeOptions = (selectedOptions) => {
-    const categoriesData = formatCategoriesData(selectedOptions)
-    dispatch({ type: TEMPLATE_ACTIONS.SET_CATEGORIES, payload: categoriesData })
+    onSelect(selectedOptions)
+  }
+
+  const onInputChange = (newInputValue) => {
+    debounce(() => {
+      setInputValue(newInputValue)
+    }, DEFAULT_DELAY)()
   }
 
   return (
-    <div className="flex flex-col w-full">
-      <label className="font-semibold uppercase">Categories</label>
+    <div className={style}>
+      <div className="flex">
+        <label className={`${labelStyle} mr-2`}>{label}</label>
+        <ToolTip message="Default category will be used if you do not enter a value" />
+      </div>
       <Select
-        placeholder={isLoading ? 'Loading...' : 'Select...'}
+        isDisabled={isDisabled}
+        placeholder={isLoading ? 'Loading...' : 'Select category...'}
         closeMenuOnSelect={false}
-        options={fetchedOptions || []}
-        isMulti
-        onChange={onChangeOptions}
+        options={isSuccess ? Object.values(data) : []}
         isLoading={isLoading}
+        isMulti
+        getOptionLabel={(option) => option.name}
+        getOptionValue={(option) => option.id}
+        onChange={onChangeOptions}
+        onInputChange={onInputChange}
       />
       {!isLoading && isError && <p className="input-error">{error.errors.message}</p>}
     </div>

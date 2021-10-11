@@ -32,7 +32,7 @@ html {
     @apply flex items-center justify-start w-full px-8 py-6 font-medium capitalize border-b border-gray-400 cursor-pointer hover:bg-yellow-400;
   }
   .primary-btn {
-    @apply px-12 py-4 rounded-full bg-bluePrimary text-white100 hover:opacity-80 focus:outline-none;
+    @apply px-12 py-4 rounded-full bg-primaryBlue text-white100 hover:opacity-80 focus:outline-none;
   }
   .dangerous-btn {
     @apply px-12 py-4 rounded-full bg-lightRed text-white100 hover:opacity-80 focus:outline-none;

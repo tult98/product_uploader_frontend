@@ -24,7 +24,7 @@ module.exports = {
         font3: '#4A4A4A',
         purple: '#9c1de7',
         lightPurple: '#ba53de',
-        bluePrimary: '#482ff7',
+        primaryBlue: '#482ff7',
         primaryRed: '#fc5185',
         lightRed: '#ff304f',
         primaryGreen: '#2cb978',
@@ -41,6 +41,10 @@ module.exports = {
       },
       translate: {
         '7/12': '58.3333333%',
+      },
+      width: {
+        '9/20': '45%',
+        '47.5%': '47.5%',
       },
     },
   },

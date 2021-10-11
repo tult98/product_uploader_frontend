@@ -17,6 +17,7 @@ import { TEMPLATE_ROUTES } from 'routes'
 import { formatTemplateData, TEMPLATE_ACTIONS } from 'utils/templateUtils'
 import { validateTemplateInput } from 'utils/errorsUtils'
 import { validateRequired } from 'utils/validators'
+import IntroducePage from 'components/widgets/IntroducePage'
 
 const TemplateInput = ({ state, dispatch, isEdit = false }) => {
   const { modalState } = useContext(ModalContext)
@@ -135,12 +136,21 @@ const TemplateInput = ({ state, dispatch, isEdit = false }) => {
 
   return (
     <>
-      <div className={`w-full flex justify-center mb-44 ${modalState.isModalOpen ? 'opacity-20' : ''}`}>
-        <div className="flex justify-center w-3/5">
-          <form className="flex flex-col">
-            <div className="self-center my-20 text-5xl font-bold uppercase">
+      <div className={`w-full flex flex-col mb-44 ${modalState.isModalOpen ? 'opacity-20' : ''}`}>
+        <IntroducePage
+          name="template"
+          title={isEdit ? 'Edit a template' : 'Create a template'}
+          description={
+            isEdit
+              ? 'Where you can edit your existing template'
+              : 'Defining the best template for your future products.'
+          }
+        />
+        <div className="flex justify-center w-4/5 w-full mt-20">
+          <form className="flex flex-col w-3/5">
+            {/* <div className="self-center my-20 text-5xl font-bold uppercase">
               {isEdit ? 'Edit a template' : 'Create a new template'}
-            </div>
+            </div> */}
             <TextInput
               label="name"
               isRequired={true}

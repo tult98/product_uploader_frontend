@@ -21,3 +21,24 @@ export const validateRequired = (value) => {
   }
   return null
 }
+
+export const validateFileType = (files) => {
+  let error = ''
+  Object.values(files).every((file) => {
+    if (!file.type.includes('image')) {
+      error = 'Please only upload image files'
+      return false
+    }
+    return true
+  })
+  if (error === '') {
+    Object.values(files).every((file) => {
+      if (file.webkitRelativePath.split('/').length !== 3) {
+        error = 'Please upload the correct folder structure'
+        return false
+      }
+      return true
+    })
+  }
+  return error
+}
