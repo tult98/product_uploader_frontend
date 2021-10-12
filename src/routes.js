@@ -6,6 +6,7 @@ export const TEMPLATE_ROUTES = {
 
 export const GENERAL_ROUTES = {
   HOME: '/',
+  LOGIN: '/login',
 }
 
 export const PRODUCT_ROUTES = {
@@ -14,5 +15,7 @@ export const PRODUCT_ROUTES = {
   CREATE_PRODUCT: '/products/create',
   GET_PRODUCT: '/products/:productId',
   GET_LOGS: '/products/upload/logs',
-  EDIT: '/products/edit',
+  UPDATE: '/products/update',
 }
+
+export const NON_NAVIGATION_ROUTES = [GENERAL_ROUTES.LOGIN]

@@ -1,8 +1,14 @@
 import { GENERAL_ROUTES, PRODUCT_ROUTES, TEMPLATE_ROUTES } from 'routes'
 
-export const DEFAULT_DELAY = 500
+export const DEFAULT_DELAY = 300
 export const DEFAULT_SHOW_TIME = 3000
 export const DEFAULT_LIMIT = 6
+
+export const LOCAL_STORAGE = {
+  ACCESS_TOKEN: '@access_token',
+  REFRESH_TOKEN: '@refresh_token',
+  ME: '@me',
+}
 
 export const navigationItems = [
   {
@@ -26,8 +32,8 @@ export const navigationItems = [
     name: 'product',
     child: [
       {
-        name: 'edit products',
-        route: PRODUCT_ROUTES.EDIT,
+        name: 'Update products',
+        route: PRODUCT_ROUTES.UPDATE,
       },
       {
         name: 'upload products',

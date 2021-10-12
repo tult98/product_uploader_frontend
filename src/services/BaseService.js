@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { getAccessToken, getRefreshToken, logout } from 'utils/authUtils'
+import { LOCAL_STORAGE } from 'utils/commonUtils'
 import { ERROR_UNKNOWN, SUCCESS_STATUS_CODE } from 'utils/responseUtils'
 
 const DEFAULT_REQUEST_CONFIG = {
@@ -21,7 +23,7 @@ const injectAuthorizationHeader = (config = {}) => {
   }
 
   // TODO: get the authToken from cookies, localStorage
-  const authToken = 'thisIsAuthToken'
+  const authToken = getAccessToken()
   if (authToken) {
     if (!config.headers) {
       config.headers = {}
@@ -33,10 +35,83 @@ const injectAuthorizationHeader = (config = {}) => {
     }
   }
 }
+// indicate the get new access_token from refresh token are happening.
+let isRefreshing = false
+let failedQueue = []
+
+const processQueue = async (error, token = null) => {
+  failedQueue.forEach((promise) => {
+    if (error) {
+      promise.reject(error)
+    } else {
+      promise.resolve(token)
+    }
+  })
+}
+
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const originalRequest = error.config
+
+    // failed at refresh token -> remove current token
+    if (error?.config?.url === 'auth/jwt/refresh/' && error?.response?.status === 401) {
+      logout()
+    }
+
+    if (error.response.status === 401 && !originalRequest._retry) {
+      // unauthorize at create access_token
+      if (error?.config.url === 'auth/jwt/create/') {
+        return Promise.reject(error)
+      }
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject })
+        })
+          .then((token) => {
+            originalRequest.headers['Authorization'] = `Bearer ${token}`
+            return Promise.resolve(axios(originalRequest))
+          })
+          .catch((err) => {
+            return Promise.reject(err)
+          })
+      }
+
+      originalRequest._retry = true
+      isRefreshing = true
+
+      const refreshToken = getRefreshToken()
+
+      if (!refreshToken) {
+        isRefreshing = false
+        return Promise.reject(error)
+      }
+      return new Promise((resolve, reject) => {
+        axios
+          .post('auth/jwt/refresh/', { refresh: refreshToken })
+          .then((res) => {
+            const { data } = res
+            window.localStorage.setItem(LOCAL_STORAGE.ACCESS_TOKEN, data.access)
+            originalRequest.headers['Authorization'] = `Bearer ${data.access}`
+            processQueue(null, data.access)
+            resolve(axios(originalRequest))
+          })
+          .catch((err) => {
+            processQueue(err, null)
+            reject(err)
+          })
+          .finally(() => {
+            isRefreshing = false
+          })
+      })
+    }
+    return Promise.reject(error)
+  },
+)
 
 const BaseService = {
-  get(url, config = DEFAULT_REQUEST_CONFIG, data = {}) {
-    if (data.params) {
+  get(url, data = {}, config = DEFAULT_REQUEST_CONFIG) {
+    if (data?.params) {
       config.params = data.params
     }
 
@@ -69,7 +144,7 @@ const BaseService = {
     })
   },
 
-  post(url, config = DEFAULT_REQUEST_CONFIG, data = {}) {
+  post(url, data = {}, config = DEFAULT_REQUEST_CONFIG) {
     injectAuthorizationHeader(config)
 
     return new Promise((resolve, reject) => {
@@ -98,7 +173,7 @@ const BaseService = {
     })
   },
 
-  put(url, config = DEFAULT_REQUEST_CONFIG, data = {}) {
+  put(url, data = {}, config = DEFAULT_REQUEST_CONFIG) {
     injectAuthorizationHeader(config)
 
     return new Promise((resolve, reject) => {

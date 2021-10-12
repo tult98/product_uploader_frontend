@@ -18,11 +18,9 @@ const authorizeValue = `consumer_key=${CONSUMER_KEY}&consumer_secret=${CONSUMER_
 export default class WooServices {
   static async queryCategories({ queryKey }) {
     const searchPattern = queryKey[1].searchPattern
-    return await BaseService.get(
-      `/products/categories?search=${searchPattern}&${authorizeValue}`,
-      { baseURL: WOO_BASE_URL },
-      {},
-    )
+    return await BaseService.get(`/products/categories?search=${searchPattern}&${authorizeValue}`, null, {
+      baseURL: WOO_BASE_URL,
+    })
   }
 
   static async batchCreateAttributes(attributes) {
@@ -31,11 +29,9 @@ export default class WooServices {
       create: attributes,
     }
     try {
-      const result = await BaseService.post(
-        `/products/attributes/batch?${authorizeValue}`,
-        { baseURL: WOO_BASE_URL },
-        data,
-      )
+      const result = await BaseService.post(`/products/attributes/batch?${authorizeValue}`, data, {
+        baseURL: WOO_BASE_URL,
+      })
       globalAttributes = result.create
     } catch (e) {
       error = e
@@ -44,7 +40,7 @@ export default class WooServices {
   }
 
   static async getProductBySku(sku) {
-    return BaseService.get(`/products?sku=${sku}&${authorizeValue}`, { baseURL: WOO_BASE_URL })
+    return BaseService.get(`/products?sku=${sku}&${authorizeValue}`, null, { baseURL: WOO_BASE_URL })
   }
 
   static async uploadProduct({ data }) {
@@ -75,13 +71,9 @@ export default class WooServices {
     )
 
     try {
-      const product = await BaseService.post(
-        `/products?${authorizeValue}`,
-        {
-          baseURL: WOO_BASE_URL,
-        },
-        productData,
-      )
+      const product = await BaseService.post(`/products?${authorizeValue}`, productData, {
+        baseURL: WOO_BASE_URL,
+      })
 
       const productVariations = handleProductVariationsData(data.template.variations, product)
       const variationLogs = await WooServices.uploadProductVariations({
@@ -153,13 +145,9 @@ export default class WooServices {
     )
 
     try {
-      const product = await BaseService.put(
-        `/products/${originalProduct.id}?${authorizeValue}`,
-        {
-          baseURL: WOO_BASE_URL,
-        },
-        productData,
-      )
+      const product = await BaseService.put(`/products/${originalProduct.id}?${authorizeValue}`, productData, {
+        baseURL: WOO_BASE_URL,
+      })
 
       const productVariations = handleProductVariationsData(data.template.variations, product)
       // attach id for a variation
@@ -219,13 +207,9 @@ export default class WooServices {
       data.map(async (variation) => {
         let log = { sku: variation.sku }
         try {
-          await BaseService.post(
-            `/products/${productId}/variations?${authorizeValue}`,
-            {
-              baseURL: WOO_BASE_URL,
-            },
-            variation,
-          )
+          await BaseService.post(`/products/${productId}/variations?${authorizeValue}`, variation, {
+            baseURL: WOO_BASE_URL,
+          })
           return { ...log, status: UPLOAD_STATUS.SUCCESS, message: UPLOAD_VARIATION_SUCCESS_MESSAGE }
         } catch (error) {
           return { ...log, status: UPLOAD_STATUS.ERROR, message: error?.errors?.message || UPLOAD_UNKNOWN_MESSAGE }
@@ -242,13 +226,9 @@ export default class WooServices {
         delete variation.id
         delete variation.sku
         try {
-          await BaseService.put(
-            `/products/${productId}/variations/${variationId}?${authorizeValue}`,
-            {
-              baseURL: WOO_BASE_URL,
-            },
-            variation,
-          )
+          await BaseService.put(`/products/${productId}/variations/${variationId}?${authorizeValue}`, variation, {
+            baseURL: WOO_BASE_URL,
+          })
           return { ...log, status: UPLOAD_STATUS.SUCCESS, message: UPLOAD_VARIATION_SUCCESS_MESSAGE }
         } catch (error) {
           return { ...log, status: UPLOAD_STATUS.ERROR, message: error?.errors?.message || UPLOAD_UNKNOWN_MESSAGE }
@@ -259,6 +239,6 @@ export default class WooServices {
 
   static async queryProducts({ queryKey }) {
     const sku = queryKey[1].sku
-    return BaseService.get(`/products?search=${sku}&${authorizeValue}`, { baseURL: WOO_BASE_URL })
+    return BaseService.get(`/products?search=${sku}&${authorizeValue}`, null, { baseURL: WOO_BASE_URL })
   }
 }

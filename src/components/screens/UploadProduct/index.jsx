@@ -75,7 +75,7 @@ const UploadProduct = ({ isUpdateProduct = false }) => {
       <div className={`flex flex-col w-full mt-20 ${mutation.isLoading ? 'opacity-20' : ''}`}>
         <IntroducePage
           name="product"
-          title={isUpdateProduct ? 'Update your products' : 'Product Uploader'}
+          title={isUpdateProduct ? 'Update products' : 'Upload products'}
           description={
             isUpdateProduct
               ? 'This is where you update your existing products.'
