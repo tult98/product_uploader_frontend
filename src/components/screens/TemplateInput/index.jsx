@@ -146,7 +146,7 @@ const TemplateInput = ({ state, dispatch, isEdit = false }) => {
               : 'Defining the best template for your future products.'
           }
         />
-        <div className="flex justify-center w-4/5 w-full mt-20">
+        <div className="flex justify-center w-4/5 mt-20">
           <form className="flex flex-col w-3/5">
             {/* <div className="self-center my-20 text-5xl font-bold uppercase">
               {isEdit ? 'Edit a template' : 'Create a new template'}

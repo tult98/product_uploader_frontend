@@ -1,4 +1,4 @@
-import { GENERAL_ROUTES, PRODUCT_ROUTES, TEMPLATE_ROUTES } from 'routes'
+import { GENERAL_ROUTES, PRODUCT_ROUTES, STORE_ROUTES, TEMPLATE_ROUTES } from 'routes'
 
 export const DEFAULT_DELAY = 300
 export const DEFAULT_SHOW_TIME = 3000
@@ -38,6 +38,19 @@ export const navigationItems = [
       {
         name: 'upload products',
         route: PRODUCT_ROUTES.UPLOAD_PRODUCT,
+      },
+    ],
+  },
+  {
+    name: 'store',
+    child: [
+      {
+        name: 'all store',
+        route: STORE_ROUTES.LIST_STORE,
+      },
+      {
+        name: 'new store',
+        route: STORE_ROUTES.CREATE_STORE,
       },
     ],
   },

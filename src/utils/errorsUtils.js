@@ -221,3 +221,15 @@ export const hasValue = (value) => {
   }
   return true
 }
+
+export const textRequiredField = (name, value) => {
+  if (!value || value === '') {
+    return { [name]: REQUIRED_FIELD_ERROR }
+  }
+}
+
+export const arrayRequiredField = (name, value) => {
+  if (!(Array.isArray(value) && value.length > 0)) {
+    return { [name]: REQUIRED_FIELD_ERROR }
+  }
+}
