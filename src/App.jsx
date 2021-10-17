@@ -9,47 +9,54 @@ import EditTemplatePage from 'pages/edit-template'
 import UploadProductPage from 'pages/upload-product'
 import UploadProductLogsPage from 'pages/upload-product-logs'
 import EditProductsPage from 'pages/edit-products'
+import LoginPage from 'pages/login'
 import Navigation from 'components/layouts/Navigation'
 import { ModalProvider } from 'context/ModalContext'
 import { NotificationProvider } from 'context/NotificationContext'
-import { PRODUCT_ROUTES, TEMPLATE_ROUTES } from 'routes'
+import { GENERAL_ROUTES, PRODUCT_ROUTES, TEMPLATE_ROUTES } from 'routes'
+import { AuthenticationProvider } from 'context/AuthenticationContext'
 
 const queryClient = new QueryClient()
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ModalProvider>
-        <NotificationProvider>
-          <div className="flex flex-col">
-            <Router>
-              <Switch>
-                <Route path={TEMPLATE_ROUTES.LIST_TEMPLATE} exact>
-                  <ListTemplatePage />
-                </Route>
-                <Route path={TEMPLATE_ROUTES.CREATE_TEMPLATE} exact>
-                  <CreateTemplatePage />
-                </Route>
-                <Route path={TEMPLATE_ROUTES.GET_TEMPLATE} exact>
-                  <EditTemplatePage />
-                </Route>
-                <Route path={PRODUCT_ROUTES.UPLOAD_PRODUCT} exact>
-                  <UploadProductPage />
-                </Route>
-                <Route path={PRODUCT_ROUTES.GET_LOGS} exact>
-                  <UploadProductLogsPage />
-                </Route>
-                <Route path={PRODUCT_ROUTES.EDIT} exact>
-                  <EditProductsPage />
-                </Route>
-              </Switch>
-              <IndexPage />
-              <Navigation />
-            </Router>
-            <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
-          </div>
-        </NotificationProvider>
-      </ModalProvider>
+      <Router>
+        <ModalProvider>
+          <NotificationProvider>
+            <AuthenticationProvider>
+              <div className="flex flex-col">
+                <Switch>
+                  <Route path={TEMPLATE_ROUTES.LIST_TEMPLATE} exact>
+                    <ListTemplatePage />
+                  </Route>
+                  <Route path={TEMPLATE_ROUTES.CREATE_TEMPLATE} exact>
+                    <CreateTemplatePage />
+                  </Route>
+                  <Route path={TEMPLATE_ROUTES.GET_TEMPLATE} exact>
+                    <EditTemplatePage />
+                  </Route>
+                  <Route path={PRODUCT_ROUTES.UPLOAD_PRODUCT} exact>
+                    <UploadProductPage />
+                  </Route>
+                  <Route path={PRODUCT_ROUTES.GET_LOGS} exact>
+                    <UploadProductLogsPage />
+                  </Route>
+                  <Route path={PRODUCT_ROUTES.UPDATE} exact>
+                    <EditProductsPage />
+                  </Route>
+                  <Route path={GENERAL_ROUTES.LOGIN} exact>
+                    <LoginPage />
+                  </Route>
+                </Switch>
+                <IndexPage />
+                <Navigation />
+                <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+              </div>
+            </AuthenticationProvider>
+          </NotificationProvider>
+        </ModalProvider>
+      </Router>
     </QueryClientProvider>
   )
 }

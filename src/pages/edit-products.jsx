@@ -5,7 +5,7 @@ const EditProductsPage = () => {
   return (
     <>
       <header>
-        <title>Product Uploader | Edit Products</title>
+        <title>Product Uploader | Update Products</title>
       </header>
       <div className="main-content">
         <div className="flex flex-col w-full">

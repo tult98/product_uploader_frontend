@@ -8,21 +8,17 @@ const AUTH_ACCOUNT = {
 
 export default class WPServices {
   static async uploadImage(data, productSku) {
-    return await BaseService.post(
-      '/media',
-      {
-        baseURL: WP_BASE_URL,
-        auth: AUTH_ACCOUNT,
-        headers: {
-          'Content-Disposition': `attachment; filename=${productSku}-${data.name}`,
-        },
+    return await BaseService.post('/media', data, {
+      baseURL: WP_BASE_URL,
+      auth: AUTH_ACCOUNT,
+      headers: {
+        'Content-Disposition': `attachment; filename=${productSku}-${data.name}`,
       },
-      data,
-    )
+    })
   }
 
   static async updateImage(data, productSku) {
-    return await BaseService.put(`/media/${data.id}`, {
+    return await BaseService.put(`/media/${data.id}`, null, {
       baseURL: WP_BASE_URL,
       auth: AUTH_ACCOUNT,
       headers: {
@@ -56,7 +52,7 @@ export default class WPServices {
   }
 
   static async deleteImage(id) {
-    return await BaseService.delete(`/media/${id}?force=true`, {
+    return await BaseService.delete(`/media/${id}?force=true`, null, {
       baseURL: WP_BASE_URL,
       auth: {
         username: 'tulethanh',

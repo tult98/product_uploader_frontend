@@ -6,6 +6,6 @@ const PRODUCT_URL = 'products/'
 export default class ProductServices {
   static async createProduct({ data }) {
     WPServices.uploadImage()
-    return await BaseService.post(`${PRODUCT_URL}`, {}, data)
+    return await BaseService.post(`${PRODUCT_URL}`, data, {})
   }
 }

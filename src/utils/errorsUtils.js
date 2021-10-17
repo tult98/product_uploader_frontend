@@ -1,4 +1,5 @@
 export const REQUIRED_FIELD_ERROR = 'This field is required.'
+export const UNKNOWN_ERROR_MESSAGE = 'There are system errors. Please contact with admin.'
 
 export const validateTemplateInput = (data, errors, setErrors) => {
   let isValidInput = true
