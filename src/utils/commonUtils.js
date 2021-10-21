@@ -87,3 +87,10 @@ export const calculateAvailablePages = (currentPage, totalPage) => {
   }
   return availablePages
 }
+
+export const truncateLongText = (text, expectedLength = 30) => {
+  if (text.length > expectedLength) {
+    return `${text.slice(0, expectedLength)}...`
+  }
+  return text
+}

@@ -4,6 +4,12 @@ module.exports = {
   theme: {
     minHeight: {
       '30px': '3rem',
+      '400px': '40rem',
+    },
+    maxHeight: {
+      '400px': '40rem',
+      '500px': '50rem',
+      '600px': '60rem',
     },
     extend: {
       theme: {

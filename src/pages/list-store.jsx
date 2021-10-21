@@ -1,6 +1,6 @@
+import React from 'react'
 import StoreList from 'components/screens/StoreList'
 import IntroducePage from 'components/widgets/IntroducePage'
-import React from 'react'
 
 const ListStorePage = () => {
   return (

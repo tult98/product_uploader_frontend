@@ -10,8 +10,12 @@ export default class StoreService {
   }
 
   static async queryStores({ queryKey }) {
-    const [_key, { currentPage }] = queryKey /* eslint-disable-line */
-    const offset = (currentPage - 1) * DEFAULT_LIMIT
-    return await BaseService.get(`${STORE_URL}/?offset=${offset}`, null, {})
+    const [_key, { currentPage, searchPattern, limit }] = queryKey /* eslint-disable-line */
+    const offset = (currentPage - 1) * (limit || DEFAULT_LIMIT)
+    return await BaseService.get(`${STORE_URL}/?offset=${offset}&search=${searchPattern}&limit=${limit}`, null, {})
+  }
+
+  static async deleteStore(id) {
+    return BaseService.delete(`${STORE_URL}/${id}`, {})
   }
 }
