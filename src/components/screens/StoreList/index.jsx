@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import LoadingIndicator from 'components/elements/LoadingIndicator'
 import ErrorIndicator from 'components/widgets/ErrorIndicator'
@@ -10,6 +11,7 @@ import ModalContext from 'context/ModalContext'
 import NotificationContext from 'context/NotificationContext'
 import StoreService from 'services/StoreService'
 import { truncateLongText } from 'utils/commonUtils'
+import { STORE_ROUTES } from 'routes'
 
 const getAssignedUsers = (users) => {
   const assignedUsers = users.reduce((assignedUser, user, index) => {
@@ -19,6 +21,7 @@ const getAssignedUsers = (users) => {
 }
 
 const StoreList = () => {
+  const history = useHistory()
   const [currentPage, setCurrentPage] = useState(1)
   const [searchPattern, setSearchPattern] = useState('')
   const { modalState, setModalState } = useContext(ModalContext)
@@ -54,6 +57,10 @@ const StoreList = () => {
 
   const onDeleteStore = (storeId) => {
     setModalState({ ...modalState, isModalOpen: true, openDeleteStoreModal: true, storeId: storeId })
+  }
+
+  const onEditStore = (storeId) => {
+    history.push(`${STORE_ROUTES.LIST_STORE}/${storeId}`)
   }
 
   return (
@@ -101,6 +108,7 @@ const StoreList = () => {
                         <button
                           type="button"
                           className="ml-6 font-medium text-blue-500 uppercase hover:underline hover:text-blue-400"
+                          onClick={() => onEditStore(store.id)}
                         >
                           Edit
                         </button>

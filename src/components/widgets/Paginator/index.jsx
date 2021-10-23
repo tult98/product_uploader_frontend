@@ -11,8 +11,6 @@ const Paginator = ({ count, currentPage, next, previous, setCurrentPage, limit =
   }
   const availablePages = calculateAvailablePages(currentPage, totalPage)
 
-  console.log(totalPage)
-
   const onGoToFirstPage = () => {
     setCurrentPage(1)
   }

@@ -17,6 +17,7 @@ import { ModalProvider } from 'context/ModalContext'
 import { NotificationProvider } from 'context/NotificationContext'
 import { AuthenticationProvider } from 'context/AuthenticationContext'
 import { GENERAL_ROUTES, PRODUCT_ROUTES, STORE_ROUTES, TEMPLATE_ROUTES } from 'routes'
+import EditStorePage from 'pages/edit-store'
 
 const queryClient = new QueryClient()
 
@@ -55,6 +56,9 @@ function App() {
                   </Route>
                   <Route path={STORE_ROUTES.CREATE_STORE} exact>
                     <CreateStorePage />
+                  </Route>
+                  <Route path={STORE_ROUTES.EDIT_STORE} exact>
+                    <EditStorePage />
                   </Route>
                 </Switch>
                 <IndexPage />

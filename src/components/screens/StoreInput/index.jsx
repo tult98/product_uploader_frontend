@@ -9,34 +9,44 @@ import StoreService from 'services/StoreService'
 import { colors } from 'theme/variables/platform'
 import { debounce, DEFAULT_DELAY } from 'utils/commonUtils'
 import { STORE_ROUTES } from 'routes'
-import { arrayRequiredField, textRequiredField } from 'utils/errorsUtils'
+import { arrayRequiredField, validateConsumerKey, validateConsumerSecret, validateDomainName } from 'utils/errorsUtils'
 
-const StoreInput = () => {
+const StoreInput = ({ store, isEdit = false }) => {
   const history = useHistory()
   const [storeInput, setStoreInput] = useState({
-    domain_name: '',
-    consumer_key: '',
-    secret_key: '',
-    users: [],
+    domain_name: store.domain_name || '',
+    consumer_key: store.consumer_key || '',
+    secret_key: store.secret_key || '',
+    users: store.users || [],
   })
   const [errors, setErrors] = useState({})
   const { setNotificationState } = useContext(NotificationContext)
 
-  const mutation = useMutation(StoreService.createStore)
+  const mutation = isEdit ? useMutation(StoreService.editStore) : useMutation(StoreService.createStore)
   const { isLoading, isError, isSuccess, error, data } = useQuery('query-users', AuthServices.queryUsers)
 
   useEffect(() => {
     if (mutation.isSuccess) {
       setNotificationState({
         type: 'success',
-        message: 'Create a new store successful.',
+        message: isEdit ? 'Edit the store successful.' : 'Create a new store successful.',
         isShow: true,
       })
-      history.push(STORE_ROUTES.LIST_STORE)
+      if (!isEdit) {
+        history.push(STORE_ROUTES.LIST_STORE)
+      }
     } else if (mutation.isError) {
+      if (mutation.error.code === 400) {
+        // TODO: re-organize the errors to matching with response from server
+        const errors = mutation.error.errors
+        Object.keys(errors).forEach((key) => {
+          errors[key] = errors[key][0]
+        })
+        setErrors(errors)
+      }
       setNotificationState({
         type: 'error',
-        message: 'Failed at create a new store.',
+        message: isEdit ? 'Failed at edit the store.' : 'Failed at create a new store.',
         isShow: true,
       })
     }
@@ -59,8 +69,12 @@ const StoreInput = () => {
   const onValidateForm = () => {
     let errors = {}
     Object.keys(storeInput).forEach((key) => {
-      if (key !== 'users') {
-        errors = { ...errors, ...textRequiredField(key, storeInput[key]) }
+      if (key === 'domain_name') {
+        errors = { ...errors, ...validateDomainName(storeInput[key]) }
+      } else if (key === 'consumer_key') {
+        errors = { ...errors, ...validateConsumerKey(storeInput[key]) }
+      } else if (key === 'secret_key') {
+        errors = { ...errors, ...validateConsumerSecret(storeInput[key]) }
       } else {
         errors = { ...errors, ...arrayRequiredField(key, storeInput[key]) }
       }
@@ -72,7 +86,13 @@ const StoreInput = () => {
   const onSubmit = (e) => {
     e.preventDefault()
     if (onValidateForm()) {
-      mutation.mutate(storeInput)
+      if (!isEdit) {
+        mutation.mutate(storeInput)
+      } else {
+        const selectedUserIds = store.users.map((user) => user.id)
+        const storeData = { ...storeInput, users: selectedUserIds }
+        mutation.mutate({ storeId: store.id, storeData })
+      }
     }
   }
 
@@ -86,6 +106,7 @@ const StoreInput = () => {
           <input
             type="text"
             name="domain_name"
+            defaultValue={store?.domain_name || ''}
             className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
             onChange={onChangeTextInput}
           />
@@ -98,6 +119,7 @@ const StoreInput = () => {
           <input
             type="text"
             name="consumer_key"
+            defaultValue={store?.consumer_key || ''}
             className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
             onChange={onChangeTextInput}
           />
@@ -111,6 +133,7 @@ const StoreInput = () => {
           <input
             type="text"
             name="secret_key"
+            defaultValue={store?.secret_key || ''}
             className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
             onChange={onChangeTextInput}
           />
@@ -127,6 +150,7 @@ const StoreInput = () => {
             placeholder="Select user..."
             isLoading={isLoading}
             options={isSuccess ? data.results : []}
+            defaultValue={store.users}
             getOptionLabel={(option) => option.username}
             getOptionValue={(option) => option.id}
             onChange={onChangeUsers}
@@ -147,9 +171,10 @@ const StoreInput = () => {
             onClick={onSubmit}
           >
             {mutation.isLoading && <LoadingIndicator style="w-8 h-8 mr-2" color={colors.white100} />}
-            Create
+            {isEdit ? 'Edit' : 'Create'}
           </button>
         </div>
+        {isError && <p>{error.errors.message || 'Something went wrong, Please try later!'}</p>}
       </form>
     </div>
   )

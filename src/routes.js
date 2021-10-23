@@ -21,6 +21,7 @@ export const PRODUCT_ROUTES = {
 export const STORE_ROUTES = {
   LIST_STORE: '/stores',
   CREATE_STORE: '/stores/create',
+  EDIT_STORE: '/stores/:storeId',
 }
 
 export const NON_NAVIGATION_ROUTES = [GENERAL_ROUTES.LOGIN]

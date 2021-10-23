@@ -18,4 +18,13 @@ export default class StoreService {
   static async deleteStore(id) {
     return BaseService.delete(`${STORE_URL}/${id}`, {})
   }
+
+  static async queryStore({ queryKey }) {
+    const [_key, { storeId }] = queryKey /* eslint-disable-line */
+    return await BaseService.get(`${STORE_URL}/${storeId}`, {})
+  }
+
+  static async editStore({ storeId, storeData }) {
+    return await BaseService.put(`${STORE_URL}/${storeId}`, storeData, {})
+  }
 }
