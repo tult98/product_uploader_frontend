@@ -8,10 +8,12 @@ import LoadingIndicator from 'components/elements/LoadingIndicator'
 import WooServices from 'services/WooServices'
 import { REQUIRED_FIELD_ERROR } from 'utils/errorsUtils'
 import { PRODUCT_ROUTES } from 'routes'
+import StoreInput from 'components/elements/Input/StoreInput'
 
 const UploadProduct = ({ isUpdateProduct = false }) => {
   const history = useHistory()
   const [products, setProducts] = useState([])
+  const [store, setStore] = useState()
   const mutation = useMutation(WooServices.uploadProducts)
 
   useEffect(() => {
@@ -27,7 +29,7 @@ const UploadProduct = ({ isUpdateProduct = false }) => {
 
   const onUploadProducts = () => {
     if (onValidateTemplate()) {
-      mutation.mutate({ data: products, isUpdate: isUpdateProduct })
+      mutation.mutate({ data: products, isUpdate: isUpdateProduct, store })
     }
   }
 
@@ -69,6 +71,10 @@ const UploadProduct = ({ isUpdateProduct = false }) => {
     return isValidForm
   }
 
+  const onSelectStore = (store) => {
+    setStore(store)
+  }
+
   return (
     <>
       {mutation.isLoading && <LoadingIndicator style="w-16 h-16 center-modal -translate-x-7/12 left-7/12" />}
@@ -95,11 +101,19 @@ const UploadProduct = ({ isUpdateProduct = false }) => {
               />
             ))}
           {products && products.length > 0 && (
-            <div className="flex justify-center mt-6 mb-12">
-              <button className="primary-btn" type="button" onClick={onUploadProducts}>
-                {isUpdateProduct ? 'Update products' : 'Upload products'}
-              </button>
-            </div>
+            <>
+              <StoreInput
+                label="Targeted product"
+                style="mt-10"
+                labelStyle="font-medium capitalize"
+                onSelect={onSelectStore}
+              />
+              <div className="flex justify-center mt-6 mb-12">
+                <button className="primary-btn" type="button" onClick={onUploadProducts}>
+                  {isUpdateProduct ? 'Update products' : 'Upload products'}
+                </button>
+              </div>
+            </>
           )}
         </div>
       </div>

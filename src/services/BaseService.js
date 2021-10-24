@@ -54,8 +54,8 @@ axios.interceptors.response.use(
   (error) => {
     const originalRequest = error.config
 
-    // failed at refresh token -> remove current token
     if (error?.config?.url === 'auth/jwt/refresh/' && error?.response?.status === 401) {
+      // failed at refresh token -> remove current token
       logout()
     }
 

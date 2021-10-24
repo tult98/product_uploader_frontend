@@ -48,9 +48,7 @@ function App() {
                   <Route path={PRODUCT_ROUTES.UPDATE} exact>
                     <EditProductsPage />
                   </Route>
-                  <Route path={GENERAL_ROUTES.LOGIN} exact>
-                    <LoginPage />
-                  </Route>
+
                   <Route path={STORE_ROUTES.LIST_STORE} exact>
                     <ListStorePage />
                   </Route>
@@ -60,9 +58,12 @@ function App() {
                   <Route path={STORE_ROUTES.EDIT_STORE} exact>
                     <EditStorePage />
                   </Route>
+                  <Route path={GENERAL_ROUTES.LOGIN} exact>
+                    <LoginPage />
+                  </Route>
                 </Switch>
-                <IndexPage />
                 <Navigation />
+                <IndexPage />
                 <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
               </div>
             </AuthenticationProvider>
