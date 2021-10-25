@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useQuery } from 'react-query'
 import { useParams } from 'react-router-dom'
 import ErrorIndicator from 'components/widgets/ErrorIndicator'
@@ -7,9 +7,12 @@ import LoadingIndicator from 'components/elements/LoadingIndicator'
 import { useTemplate } from 'hooks/useTemplate'
 import TemplateServices from 'services/TemplateServices'
 import { formatToFormData, TEMPLATE_ACTIONS } from 'utils/templateUtils'
+import AuthenticationContext from 'context/AuthenticationContext'
+import NotFound404 from 'components/screens/NotFound404'
 
 const EditTemplatePage = () => {
   const { state, dispatch } = useTemplate()
+  const { user } = useContext(AuthenticationContext)
 
   const { templateId } = useParams()
 
@@ -31,13 +34,21 @@ const EditTemplatePage = () => {
       </header>
 
       <div className="main-content">
-        {isLoading && (
-          <div className="center-modal -translate-x-7/12 left-7/12">
-            <LoadingIndicator style="w-16 h-16" />
+        {!user.is_staff ? (
+          <div className="fixed transform top-38 left-44">
+            <NotFound404 />
           </div>
+        ) : (
+          <>
+            {isLoading && (
+              <div className="center-modal -translate-x-7/12 left-7/12">
+                <LoadingIndicator style="w-16 h-16" />
+              </div>
+            )}
+            {isError && <ErrorIndicator error={error} />}
+            {isSuccess && state.isFinish && <TemplateInput state={state} dispatch={dispatch} isEdit={true} />}
+          </>
         )}
-        {isError && <ErrorIndicator error={error} />}
-        {isSuccess && state.isFinish && <TemplateInput state={state} dispatch={dispatch} isEdit={true} />}
       </div>
     </>
   )

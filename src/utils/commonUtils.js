@@ -71,10 +71,6 @@ export const getNavigationItems = (isAdmin) => {
           name: 'all',
           route: TEMPLATE_ROUTES.LIST_TEMPLATE,
         },
-        {
-          name: 'new template',
-          route: TEMPLATE_ROUTES.CREATE_TEMPLATE,
-        },
       ],
     },
     {

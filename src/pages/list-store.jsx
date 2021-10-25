@@ -13,7 +13,7 @@ const ListStorePage = () => {
         <title>Product Uploader | Stores</title>
       </header>
       <div className="main-content">
-        {user.is_staff ? (
+        {!user.is_staff ? (
           <div className="fixed transform top-38 left-44">
             <NotFound404 />
           </div>
