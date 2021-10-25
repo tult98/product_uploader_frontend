@@ -10,51 +10,88 @@ export const LOCAL_STORAGE = {
   ME: '@me',
 }
 
-export const navigationItems = [
-  {
-    name: 'home',
-    route: GENERAL_ROUTES.HOME,
-  },
-  {
-    name: 'template',
-    child: [
+export const getNavigationItems = (isAdmin) => {
+  if (isAdmin) {
+    return [
       {
-        name: 'all',
-        route: TEMPLATE_ROUTES.LIST_TEMPLATE,
+        name: 'home',
+        route: GENERAL_ROUTES.HOME,
       },
       {
-        name: 'new template',
-        route: TEMPLATE_ROUTES.CREATE_TEMPLATE,
-      },
-    ],
-  },
-  {
-    name: 'product',
-    child: [
-      {
-        name: 'Update products',
-        route: PRODUCT_ROUTES.UPDATE,
-      },
-      {
-        name: 'upload products',
-        route: PRODUCT_ROUTES.UPLOAD_PRODUCT,
-      },
-    ],
-  },
-  {
-    name: 'store',
-    child: [
-      {
-        name: 'all store',
-        route: STORE_ROUTES.LIST_STORE,
+        name: 'template',
+        child: [
+          {
+            name: 'all',
+            route: TEMPLATE_ROUTES.LIST_TEMPLATE,
+          },
+          {
+            name: 'new template',
+            route: TEMPLATE_ROUTES.CREATE_TEMPLATE,
+          },
+        ],
       },
       {
-        name: 'new store',
-        route: STORE_ROUTES.CREATE_STORE,
+        name: 'product',
+        child: [
+          {
+            name: 'Update products',
+            route: PRODUCT_ROUTES.UPDATE,
+          },
+          {
+            name: 'upload products',
+            route: PRODUCT_ROUTES.UPLOAD_PRODUCT,
+          },
+        ],
       },
-    ],
-  },
-]
+      {
+        name: 'store',
+        child: [
+          {
+            name: 'all store',
+            route: STORE_ROUTES.LIST_STORE,
+          },
+          {
+            name: 'new store',
+            route: STORE_ROUTES.CREATE_STORE,
+          },
+        ],
+      },
+    ]
+  }
+
+  return [
+    {
+      name: 'home',
+      route: GENERAL_ROUTES.HOME,
+    },
+    {
+      name: 'template',
+      child: [
+        {
+          name: 'all',
+          route: TEMPLATE_ROUTES.LIST_TEMPLATE,
+        },
+        {
+          name: 'new template',
+          route: TEMPLATE_ROUTES.CREATE_TEMPLATE,
+        },
+      ],
+    },
+    {
+      name: 'product',
+      child: [
+        {
+          name: 'Update products',
+          route: PRODUCT_ROUTES.UPDATE,
+        },
+        {
+          name: 'upload products',
+          route: PRODUCT_ROUTES.UPLOAD_PRODUCT,
+        },
+      ],
+    },
+  ]
+}
 
 let timeoutId
 

@@ -39,6 +39,8 @@ module.exports = {
         '7/12': '58.3333333%',
         '-24rem': '-24rem',
         '24rem': '24rem',
+        38: '38%',
+        44: '44%',
       },
       boxShadow: {
         grayShadow: '0 3px 10px rgb(0 0 0 / 0.2)',
@@ -47,6 +49,8 @@ module.exports = {
       },
       translate: {
         '7/12': '58.3333333%',
+        38: '38%',
+        44: '44%',
       },
       width: {
         '9/20': '45%',
