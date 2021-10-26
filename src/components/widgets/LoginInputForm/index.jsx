@@ -45,6 +45,8 @@ const LoginInputForm = () => {
   const onSubmit = (e) => {
     e.preventDefault()
     if (Object.keys(errors).length > 0) {
+      // allows re-login with error returned from server
+      delete errors.detail
       return
     }
     mutation.mutate(authInput)
@@ -83,7 +85,6 @@ const LoginInputForm = () => {
                 className="w-full py-3 pl-16 border-b-2 border-gray-300 focus:outline-none"
                 placeholder="Type your user name"
                 name="username"
-                autoComplete={true}
                 onChange={onChangeInput}
                 onBlur={onValidateInputField}
               />
@@ -107,7 +108,6 @@ const LoginInputForm = () => {
                 className="w-full py-3 pl-16 border-b-2 border-gray-300 focus:outline-none"
                 placeholder="Type your password"
                 name="password"
-                autoComplete={true}
                 onChange={onChangeInput}
                 onBlur={onValidateInputField}
               />
