@@ -40,7 +40,7 @@ const CategoriesInput = ({ onSelect, style, labelStyle, label, isDisabled }) => 
         onChange={onChangeOptions}
         onInputChange={onInputChange}
       />
-      {!isLoading && isError && <p className="input-error">{error.errors.message}</p>}
+      {!isLoading && isError && <p className="input-error">{error.errors.detail}</p>}
     </div>
   )
 }

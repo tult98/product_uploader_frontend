@@ -5,6 +5,8 @@ import DeleteTemplateModal from 'modals/DeleteTemplateModal'
 import ModalContext from 'context/ModalContext'
 import NotificationContext from 'context/NotificationContext'
 import TemplateServices from 'services/TemplateServices'
+import { useAuthorization } from 'hooks/useAuthorization'
+import NotFound404 from 'components/screens/NotFound404'
 
 const ListTemplatePage = () => {
   const { modalState } = useContext(ModalContext)
@@ -32,6 +34,8 @@ const ListTemplatePage = () => {
     }
   }, [mutation.status])
 
+  const hasPermission = useAuthorization({ adminRequired: true })
+
   return (
     <>
       <header>
@@ -40,7 +44,13 @@ const ListTemplatePage = () => {
       <div
         className={`main-content ${modalState.isModalOpen && modalState.openDeleteTemplateModal ? 'opacity-20' : ''}`}
       >
-        <TemplateList />
+        {!hasPermission ? (
+          <div className="center-inside-main-content">
+            <NotFound404 />
+          </div>
+        ) : (
+          <TemplateList />
+        )}
       </div>
       {modalState.isModalOpen && modalState.openDeleteTemplateModal && <DeleteTemplateModal mutation={mutation} />}
     </>

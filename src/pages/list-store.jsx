@@ -1,11 +1,11 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import StoreList from 'components/screens/StoreList'
 import IntroducePage from 'components/widgets/IntroducePage'
-import AuthenticationContext from 'context/AuthenticationContext'
 import NotFound404 from 'components/screens/NotFound404'
+import { useAuthorization } from 'hooks/useAuthorization'
 
 const ListStorePage = () => {
-  const { user } = useContext(AuthenticationContext)
+  const hasPermission = useAuthorization({ adminRequired: true })
 
   return (
     <>
@@ -13,8 +13,8 @@ const ListStorePage = () => {
         <title>Product Uploader | Stores</title>
       </header>
       <div className="main-content">
-        {!user.is_staff ? (
-          <div className="fixed transform top-38 left-44">
+        {!hasPermission ? (
+          <div className="center-inside-main-content">
             <NotFound404 />
           </div>
         ) : (

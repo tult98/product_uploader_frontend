@@ -1,12 +1,12 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import TemplateInput from 'components/screens/TemplateInput'
 import NotFound404 from 'components/screens/NotFound404'
 import { useTemplate } from 'hooks/useTemplate'
-import AuthenticationContext from 'context/AuthenticationContext'
+import { useAuthorization } from 'hooks/useAuthorization'
 
 const CreateTemplatePage = () => {
   const { state, dispatch } = useTemplate()
-  const { user } = useContext(AuthenticationContext)
+  const hasPermission = useAuthorization({ adminRequired: true })
 
   return (
     <>
@@ -14,8 +14,8 @@ const CreateTemplatePage = () => {
         <title className="capitalize">Product Uploader | Create Template</title>
       </header>
       <div className="main-content">
-        {!user.is_staff ? (
-          <div className="fixed transform top-38 left-44">
+        {!hasPermission ? (
+          <div className="center-inside-main-content">
             <NotFound404 />
           </div>
         ) : (

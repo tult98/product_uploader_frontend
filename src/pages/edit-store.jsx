@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { useParams } from 'react-router-dom'
 import { useQuery } from 'react-query'
 import StoreInput from 'components/screens/StoreInput'
@@ -7,12 +7,12 @@ import NotFound404 from 'components/screens/NotFound404'
 import LoadingIndicator from 'components/elements/LoadingIndicator'
 import ErrorIndicator from 'components/widgets/ErrorIndicator'
 import StoreService from 'services/StoreService'
-import AuthenticationContext from 'context/AuthenticationContext'
+import { useAuthorization } from 'hooks/useAuthorization'
 
 const EditStorePage = () => {
   const { storeId } = useParams()
   const { isLoading, isError, isSuccess, error, data } = useQuery(['query-store', { storeId }], StoreService.queryStore)
-  const { user } = useContext(AuthenticationContext)
+  const hasPermission = useAuthorization({ adminRequired: true })
 
   return (
     <>
@@ -20,8 +20,8 @@ const EditStorePage = () => {
         <title>Product Uploader | Edit Store </title>
       </header>
       <div className="main-content">
-        {!user.is_staff ? (
-          <div className="fixed transform top-38 left-44">
+        {!hasPermission ? (
+          <div className="center-inside-main-content">
             <NotFound404 />
           </div>
         ) : (

@@ -11,7 +11,7 @@ import { debounce, DEFAULT_DELAY } from 'utils/commonUtils'
 import { STORE_ROUTES } from 'routes'
 import { arrayRequiredField, validateConsumerKey, validateConsumerSecret, validateDomainName } from 'utils/errorsUtils'
 
-const StoreInput = ({ store, isEdit = false }) => {
+const StoreInput = ({ store = {}, isEdit = false }) => {
   const history = useHistory()
   const [storeInput, setStoreInput] = useState({
     domain_name: store.domain_name || '',
@@ -174,7 +174,7 @@ const StoreInput = ({ store, isEdit = false }) => {
             {isEdit ? 'Edit' : 'Create'}
           </button>
         </div>
-        {isError && <p>{error.errors.message || 'Something went wrong, Please try later!'}</p>}
+        {isError && <p>{error.errors.detail || 'Something went wrong, Please try later!'}</p>}
       </form>
     </div>
   )

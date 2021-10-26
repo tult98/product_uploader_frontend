@@ -21,7 +21,7 @@ export const AuthenticationProvider = ({ children }) => {
   useEffect(() => {
     if (isError) {
       if (!NON_NAVIGATION_ROUTES.includes(location.pathname)) {
-        history.push(GENERAL_ROUTES.HOME)
+        history.push(GENERAL_ROUTES.LOGIN)
       }
     } else if (isSuccess) {
       setUser(data)
@@ -31,11 +31,9 @@ export const AuthenticationProvider = ({ children }) => {
 
   return (
     <>
-      {refreshToken && isLoading ? (
-        <LoadingIndicator style="w-12 h-12 center-content" />
-      ) : (
-        <AuthenticationContext.Provider value={{ user, setUser }}>{children}</AuthenticationContext.Provider>
-      )}
+      <AuthenticationContext.Provider value={{ user, setUser }}>
+        {isLoading && refreshToken ? <LoadingIndicator style="w-12 h-12 center-content" /> : <>{children}</>}
+      </AuthenticationContext.Provider>
     </>
   )
 }

@@ -65,15 +65,6 @@ export const getNavigationItems = (isAdmin) => {
       route: GENERAL_ROUTES.HOME,
     },
     {
-      name: 'template',
-      child: [
-        {
-          name: 'all',
-          route: TEMPLATE_ROUTES.LIST_TEMPLATE,
-        },
-      ],
-    },
-    {
       name: 'product',
       child: [
         {

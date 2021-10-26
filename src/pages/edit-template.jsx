@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useQuery } from 'react-query'
 import { useParams } from 'react-router-dom'
 import ErrorIndicator from 'components/widgets/ErrorIndicator'
@@ -7,12 +7,12 @@ import LoadingIndicator from 'components/elements/LoadingIndicator'
 import { useTemplate } from 'hooks/useTemplate'
 import TemplateServices from 'services/TemplateServices'
 import { formatToFormData, TEMPLATE_ACTIONS } from 'utils/templateUtils'
-import AuthenticationContext from 'context/AuthenticationContext'
 import NotFound404 from 'components/screens/NotFound404'
+import { useAuthorization } from 'hooks/useAuthorization'
 
 const EditTemplatePage = () => {
   const { state, dispatch } = useTemplate()
-  const { user } = useContext(AuthenticationContext)
+  const hasPermission = useAuthorization({ adminRequired: true })
 
   const { templateId } = useParams()
 
@@ -34,8 +34,8 @@ const EditTemplatePage = () => {
       </header>
 
       <div className="main-content">
-        {!user.is_staff ? (
-          <div className="fixed transform top-38 left-44">
+        {!hasPermission ? (
+          <div className="center-inside-main-content">
             <NotFound404 />
           </div>
         ) : (
