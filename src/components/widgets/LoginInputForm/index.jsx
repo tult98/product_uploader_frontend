@@ -19,7 +19,6 @@ const LoginInputForm = () => {
   const history = useHistory()
   const mutation = useMutation(AuthServices.login)
 
-  console.log(errors)
   useEffect(() => {
     if (mutation.isError) {
       setErrors(mutation.error.errors)
@@ -44,9 +43,9 @@ const LoginInputForm = () => {
 
   const onSubmit = (e) => {
     e.preventDefault()
+    delete errors.detail
     if (Object.keys(errors).length > 0) {
       // allows re-login with error returned from server
-      delete errors.detail
       return
     }
     mutation.mutate(authInput)
@@ -55,6 +54,7 @@ const LoginInputForm = () => {
   const onLoginByEnter = (event) => {
     if (event.key === 'Enter') {
       event.preventDefault()
+      delete errors.detail
       if (Object.keys(errors).length > 0) {
         return
       }
