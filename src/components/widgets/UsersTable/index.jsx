@@ -15,7 +15,7 @@ const UsersTable = () => {
       setUsers(listUser)
     }
   }, [status])
-
+  console.log('users', users)
   return (
     <div className="w-full">
       {isLoading && <LoadingIndicator style="w-12 h-12 center-content" />}
