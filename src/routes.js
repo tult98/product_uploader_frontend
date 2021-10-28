@@ -18,6 +18,12 @@ export const PRODUCT_ROUTES = {
   UPDATE: '/products/update',
 }
 
+export const USER_ROUTES = {
+  LIST_USERS: '/users',
+  CREATE_USER: '/users/create',
+  EDIT_USER: 'users/:usersId',
+}
+
 export const STORE_ROUTES = {
   LIST_STORE: '/stores',
   CREATE_STORE: '/stores/create',

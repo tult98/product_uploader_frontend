@@ -16,8 +16,10 @@ import Navigation from 'components/layouts/Navigation'
 import { ModalProvider } from 'context/ModalContext'
 import { NotificationProvider } from 'context/NotificationContext'
 import { AuthenticationProvider } from 'context/AuthenticationContext'
-import { GENERAL_ROUTES, PRODUCT_ROUTES, STORE_ROUTES, TEMPLATE_ROUTES } from 'routes'
+import { GENERAL_ROUTES, PRODUCT_ROUTES, STORE_ROUTES, TEMPLATE_ROUTES, USER_ROUTES } from 'routes'
 import EditStorePage from 'pages/edit-store'
+import ListUserPage from 'pages/list-users'
+import UserDetailPage from 'pages/user-detail'
 
 const queryClient = new QueryClient()
 
@@ -60,6 +62,12 @@ function App() {
                   </Route>
                   <Route path={GENERAL_ROUTES.LOGIN} exact>
                     <LoginPage />
+                  </Route>
+                  <Route path={USER_ROUTES.LIST_USERS} exact>
+                    <ListUserPage />
+                  </Route>
+                  <Route path={USER_ROUTES.CREATE_USER} exact>
+                    <UserDetailPage />
                   </Route>
                 </Switch>
                 <Navigation />

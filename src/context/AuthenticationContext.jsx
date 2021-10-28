@@ -14,13 +14,13 @@ export const AuthenticationProvider = ({ children }) => {
   const [user, setUser] = useState(getMe())
   const refreshToken = getRefreshToken()
 
-  const { status, isError, isSuccess, isLoading, data } = useQuery('get-me', AuthServices.getMe, {
+  const { status, isError, isSuccess, isLoading, error, data } = useQuery('get-me', AuthServices.getMe, {
     retry: 0,
   })
 
   useEffect(() => {
     if (isError) {
-      if (!NON_NAVIGATION_ROUTES.includes(location.pathname)) {
+      if (!NON_NAVIGATION_ROUTES.includes(location.pathname) && error.code === 401) {
         history.push(GENERAL_ROUTES.LOGIN)
       }
     } else if (isSuccess) {

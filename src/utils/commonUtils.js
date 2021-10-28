@@ -1,4 +1,4 @@
-import { GENERAL_ROUTES, PRODUCT_ROUTES, STORE_ROUTES, TEMPLATE_ROUTES } from 'routes'
+import { GENERAL_ROUTES, PRODUCT_ROUTES, STORE_ROUTES, TEMPLATE_ROUTES, USER_ROUTES } from 'routes'
 
 export const DEFAULT_DELAY = 300
 export const DEFAULT_SHOW_TIME = 3000
@@ -53,6 +53,19 @@ export const getNavigationItems = (isAdmin) => {
           {
             name: 'new store',
             route: STORE_ROUTES.CREATE_STORE,
+          },
+        ],
+      },
+      {
+        name: 'users',
+        child: [
+          {
+            name: 'All users',
+            route: USER_ROUTES.LIST_USERS,
+          },
+          {
+            name: 'new users',
+            route: USER_ROUTES.CREATE_USER,
           },
         ],
       },
