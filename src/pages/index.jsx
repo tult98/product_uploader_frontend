@@ -5,7 +5,14 @@ import NotificationContext from 'context/NotificationContext'
 const IndexPage = () => {
   const { notificationState } = useContext(NotificationContext)
 
-  return <>{notificationState.isShow && <NotificationPopup />}</>
+  return (
+    <>
+      <header>
+        <title>Product Uploader | Home</title>
+      </header>
+      {notificationState.isShow && <NotificationPopup />}
+    </>
+  )
 }
 
 export default IndexPage

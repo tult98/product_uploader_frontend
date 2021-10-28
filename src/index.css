@@ -44,3 +44,9 @@ html {
     @apply px-12 py-4 rounded-full bg-darkGray opacity-80 text-white100 hover:opacity-60 focus:outline-none;
   }
 }
+
+@layer utilities {
+  .center-inside-main-content {
+    @apply fixed top-38 left-44;
+  }
+}

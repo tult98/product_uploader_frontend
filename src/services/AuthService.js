@@ -10,4 +10,8 @@ export default class AuthServices {
   static async getMe() {
     return await BaseService.get(`${AUTH_URL}/users/me/`)
   }
+
+  static async queryUsers() {
+    return await BaseService.get(`${AUTH_URL}/users/`)
+  }
 }

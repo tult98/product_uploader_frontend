@@ -42,15 +42,18 @@ const TemplateList = () => {
                 {data.results.map((template) => (
                   <TemplateCard key={template.id} data={formatToFormData(template)} />
                 ))}
-                {data.next && (
-                  <Paginator
-                    currentPage={currentPage}
-                    setCurrentPage={setCurrentPage}
-                    count={data.count}
-                    next={data.next}
-                    previous={data.previous}
-                  />
-                )}
+                {data.next ||
+                  (data.previous && (
+                    <div className="w-full mt-20">
+                      <Paginator
+                        currentPage={currentPage}
+                        setCurrentPage={setCurrentPage}
+                        count={data.count}
+                        next={data.next}
+                        previous={data.previous}
+                      />
+                    </div>
+                  ))}
               </>
             ) : (
               <NoRecordFound />

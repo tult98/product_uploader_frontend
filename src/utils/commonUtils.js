@@ -1,4 +1,4 @@
-import { GENERAL_ROUTES, PRODUCT_ROUTES, TEMPLATE_ROUTES } from 'routes'
+import { GENERAL_ROUTES, PRODUCT_ROUTES, STORE_ROUTES, TEMPLATE_ROUTES, USER_ROUTES } from 'routes'
 
 export const DEFAULT_DELAY = 300
 export const DEFAULT_SHOW_TIME = 3000
@@ -10,38 +10,88 @@ export const LOCAL_STORAGE = {
   ME: '@me',
 }
 
-export const navigationItems = [
-  {
-    name: 'home',
-    route: GENERAL_ROUTES.HOME,
-  },
-  {
-    name: 'template',
-    child: [
+export const getNavigationItems = (isAdmin) => {
+  if (isAdmin) {
+    return [
       {
-        name: 'all',
-        route: TEMPLATE_ROUTES.LIST_TEMPLATE,
+        name: 'home',
+        route: GENERAL_ROUTES.HOME,
       },
       {
-        name: 'new template',
-        route: TEMPLATE_ROUTES.CREATE_TEMPLATE,
+        name: 'template',
+        child: [
+          {
+            name: 'all',
+            route: TEMPLATE_ROUTES.LIST_TEMPLATE,
+          },
+          {
+            name: 'new template',
+            route: TEMPLATE_ROUTES.CREATE_TEMPLATE,
+          },
+        ],
       },
-    ],
-  },
-  {
-    name: 'product',
-    child: [
       {
-        name: 'Update products',
-        route: PRODUCT_ROUTES.UPDATE,
+        name: 'product',
+        child: [
+          {
+            name: 'Update products',
+            route: PRODUCT_ROUTES.UPDATE,
+          },
+          {
+            name: 'upload products',
+            route: PRODUCT_ROUTES.UPLOAD_PRODUCT,
+          },
+        ],
       },
       {
-        name: 'upload products',
-        route: PRODUCT_ROUTES.UPLOAD_PRODUCT,
+        name: 'store',
+        child: [
+          {
+            name: 'all store',
+            route: STORE_ROUTES.LIST_STORE,
+          },
+          {
+            name: 'new store',
+            route: STORE_ROUTES.CREATE_STORE,
+          },
+        ],
       },
-    ],
-  },
-]
+      {
+        name: 'users',
+        child: [
+          {
+            name: 'All users',
+            route: USER_ROUTES.LIST_USERS,
+          },
+          {
+            name: 'new users',
+            route: USER_ROUTES.CREATE_USER,
+          },
+        ],
+      },
+    ]
+  }
+
+  return [
+    {
+      name: 'home',
+      route: GENERAL_ROUTES.HOME,
+    },
+    {
+      name: 'product',
+      child: [
+        {
+          name: 'Update products',
+          route: PRODUCT_ROUTES.UPDATE,
+        },
+        {
+          name: 'upload products',
+          route: PRODUCT_ROUTES.UPLOAD_PRODUCT,
+        },
+      ],
+    },
+  ]
+}
 
 let timeoutId
 
@@ -73,4 +123,11 @@ export const calculateAvailablePages = (currentPage, totalPage) => {
     availablePages.unshift(1)
   }
   return availablePages
+}
+
+export const truncateLongText = (text, expectedLength = 30) => {
+  if (text.length > expectedLength) {
+    return `${text.slice(0, expectedLength)}...`
+  }
+  return text
 }

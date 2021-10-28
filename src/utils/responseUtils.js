@@ -5,7 +5,8 @@ export const ERROR_CODES = {
 export const ERROR_UNKNOWN = {
   code: ERROR_CODES.GENERAL_ERROR,
   errors: {
-    message: 'Something went wrong, please re-try later!',
+    error_code: 'unknown_error',
+    detail: 'Something went wrong, please re-try later!',
   },
 }
 

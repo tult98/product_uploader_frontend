@@ -18,4 +18,16 @@ export const PRODUCT_ROUTES = {
   UPDATE: '/products/update',
 }
 
-export const NON_NAVIGATION_ROUTES = [GENERAL_ROUTES.LOGIN]
+export const USER_ROUTES = {
+  LIST_USERS: '/users',
+  CREATE_USER: '/users/create',
+  EDIT_USER: 'users/:usersId',
+}
+
+export const STORE_ROUTES = {
+  LIST_STORE: '/stores',
+  CREATE_STORE: '/stores/create',
+  EDIT_STORE: '/stores/:storeId',
+}
+
+export const NON_NAVIGATION_ROUTES = [GENERAL_ROUTES.LOGIN, GENERAL_ROUTES.HOME]

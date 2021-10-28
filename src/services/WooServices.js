@@ -15,6 +15,13 @@ const CONSUMER_KEY = 'ck_314aa3b442262eee58ab8eb25147e0e89e52a587'
 const CONSUMER_SECRET = 'cs_e17b1d2677df1b12e2ec54540bec0fe37bac5789'
 const authorizeValue = `consumer_key=${CONSUMER_KEY}&consumer_secret=${CONSUMER_SECRET}`
 
+const getAuthorizeValue = (store) => {
+  const url =
+    store.domain_name.slice(-1) === '/' ? `${store.domain_name}wp-json/wc/v3` : `${store.domain_name}/wp-json/wc/v3`
+  const authorizeValue = `consumer_key=${store.consumer_key}&consumer_secret=${store.secret_key}`
+  return { url, authorizeValue }
+}
+
 export default class WooServices {
   static async queryCategories({ queryKey }) {
     const searchPattern = queryKey[1].searchPattern
@@ -43,7 +50,7 @@ export default class WooServices {
     return BaseService.get(`/products?sku=${sku}&${authorizeValue}`, null, { baseURL: WOO_BASE_URL })
   }
 
-  static async uploadProduct({ data }) {
+  static async uploadProduct({ data, store }) {
     const { images, errors } = await WPServices.uploadImages({ data })
 
     if (errors && errors.length > 0) {
@@ -71,14 +78,17 @@ export default class WooServices {
     )
 
     try {
+      const { url, authorizeValue } = getAuthorizeValue(store)
       const product = await BaseService.post(`/products?${authorizeValue}`, productData, {
-        baseURL: WOO_BASE_URL,
+        baseURL: url,
       })
 
       const productVariations = handleProductVariationsData(data.template.variations, product)
       const variationLogs = await WooServices.uploadProductVariations({
         productId: product.id,
         data: productVariations,
+        url,
+        authorizeValue,
       })
 
       let productLog = {
@@ -104,10 +114,11 @@ export default class WooServices {
   }
 
   // update an existing product
-  static async updateProduct({ data }) {
+  static async updateProduct({ data, store }) {
     let products
+    const { url, authorizeValue } = getAuthorizeValue(store)
     try {
-      const result = await WooServices.getProductBySku(data.sku)
+      const result = await WooServices.getProductBySku(data.sku, url, authorizeValue)
       products = Object.values(result)
       if (!products || products.length !== 1) {
         return { sku: data.sku, status: UPLOAD_STATUS.ERROR, message: 'Cannot found any product with that SKU.' }
@@ -146,7 +157,7 @@ export default class WooServices {
 
     try {
       const product = await BaseService.put(`/products/${originalProduct.id}?${authorizeValue}`, productData, {
-        baseURL: WOO_BASE_URL,
+        baseURL: url,
       })
 
       const productVariations = handleProductVariationsData(data.template.variations, product)
@@ -158,6 +169,8 @@ export default class WooServices {
       const variationLogs = await WooServices.updateProductVariations({
         productId: product.id,
         data: productVariations,
+        url,
+        authorizeValue,
       })
 
       // TODO: only delete image after update product success
@@ -192,23 +205,23 @@ export default class WooServices {
     }
   }
 
-  static async uploadProducts({ data, isUpdate }) {
+  static async uploadProducts({ data, isUpdate, store }) {
     return await Promise.all(
       data.map(async (productData) => {
         return isUpdate
-          ? await WooServices.updateProduct({ data: productData })
-          : await WooServices.uploadProduct({ data: productData })
+          ? await WooServices.updateProduct({ data: productData, store })
+          : await WooServices.uploadProduct({ data: productData, store })
       }),
     )
   }
 
-  static async uploadProductVariations({ productId, data }) {
+  static async uploadProductVariations({ productId, data, url, authorizeValue }) {
     return await Promise.all(
       data.map(async (variation) => {
         let log = { sku: variation.sku }
         try {
           await BaseService.post(`/products/${productId}/variations?${authorizeValue}`, variation, {
-            baseURL: WOO_BASE_URL,
+            baseURL: url,
           })
           return { ...log, status: UPLOAD_STATUS.SUCCESS, message: UPLOAD_VARIATION_SUCCESS_MESSAGE }
         } catch (error) {
@@ -218,7 +231,7 @@ export default class WooServices {
     )
   }
 
-  static async updateProductVariations({ productId, data }) {
+  static async updateProductVariations({ productId, data, url, authorizeValue }) {
     return await Promise.all(
       data.map(async (variation) => {
         let log = { sku: variation.sku }
@@ -227,7 +240,7 @@ export default class WooServices {
         delete variation.sku
         try {
           await BaseService.put(`/products/${productId}/variations/${variationId}?${authorizeValue}`, variation, {
-            baseURL: WOO_BASE_URL,
+            baseURL: url,
           })
           return { ...log, status: UPLOAD_STATUS.SUCCESS, message: UPLOAD_VARIATION_SUCCESS_MESSAGE }
         } catch (error) {

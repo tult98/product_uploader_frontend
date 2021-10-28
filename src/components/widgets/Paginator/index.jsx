@@ -2,12 +2,12 @@ import React from 'react'
 import Icon from 'components/elements/Icon'
 import { calculateAvailablePages, DEFAULT_LIMIT } from 'utils/commonUtils'
 
-const Paginator = ({ count, currentPage, next, previous, setCurrentPage }) => {
+const Paginator = ({ count, currentPage, next, previous, setCurrentPage, limit = DEFAULT_LIMIT }) => {
   let totalPage
-  if (Number(count) % DEFAULT_LIMIT !== 0) {
-    totalPage = Math.floor(Number(count) / DEFAULT_LIMIT) + 1
+  if (Number(count) % limit !== 0) {
+    totalPage = Math.floor(Number(count) / limit) + 1
   } else {
-    totalPage = Math.floor(Number(count) / DEFAULT_LIMIT)
+    totalPage = Math.floor(Number(count) / limit)
   }
   const availablePages = calculateAvailablePages(currentPage, totalPage)
 
@@ -28,7 +28,7 @@ const Paginator = ({ count, currentPage, next, previous, setCurrentPage }) => {
   }
 
   return (
-    <div className="flex flex-row items-center justify-center w-full mb-20">
+    <div className="flex flex-row items-center justify-center">
       <button type="button" disabled={currentPage === 1} onClick={onGoToFirstPage}>
         <Icon
           name="doubleChevronLeft"

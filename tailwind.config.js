@@ -4,6 +4,12 @@ module.exports = {
   theme: {
     minHeight: {
       '30px': '3rem',
+      '400px': '40rem',
+    },
+    maxHeight: {
+      '400px': '40rem',
+      '500px': '50rem',
+      '600px': '60rem',
     },
     extend: {
       theme: {
@@ -33,6 +39,8 @@ module.exports = {
         '7/12': '58.3333333%',
         '-24rem': '-24rem',
         '24rem': '24rem',
+        38: '38%',
+        44: '44%',
       },
       boxShadow: {
         grayShadow: '0 3px 10px rgb(0 0 0 / 0.2)',
@@ -41,6 +49,8 @@ module.exports = {
       },
       translate: {
         '7/12': '58.3333333%',
+        38: '38%',
+        44: '44%',
       },
       width: {
         '9/20': '45%',
