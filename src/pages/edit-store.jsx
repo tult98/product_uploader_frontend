@@ -21,9 +21,7 @@ const EditStorePage = () => {
       </header>
       <div className="main-content">
         {!hasPermission ? (
-          <div className="center-inside-main-content">
-            <NotFound404 />
-          </div>
+          <NotFound404 />
         ) : (
           <div className="w-full">
             <IntroducePage
@@ -31,7 +29,7 @@ const EditStorePage = () => {
               title="Edit Store"
               description="Where you edit your existing stores and assign it for your desire employees."
             />
-            {isLoading && <LoadingIndicator style="w-16 h-16 center-modal -translate-x-7/12 left-7/12" />}
+            {isLoading && <LoadingIndicator style="w-16 h-16 center-with-sidebar" />}
             {isError && <ErrorIndicator error={error} />}
             {isSuccess && <StoreInput store={data} isEdit={true} />}
           </div>

@@ -12,9 +12,7 @@ const EditProductsPage = () => {
       </header>
       <div className="main-content">
         {!hasPermission ? (
-          <div className="center-inside-main-content">
-            <NotFound404 />
-          </div>
+          <NotFound404 />
         ) : (
           <div className="flex flex-col w-full">
             <UploadProduct isUpdateProduct={true} />

@@ -14,13 +14,7 @@ const CreateTemplatePage = () => {
         <title className="capitalize">Product Uploader | Create Template</title>
       </header>
       <div className="main-content">
-        {!hasPermission ? (
-          <div className="center-inside-main-content">
-            <NotFound404 />
-          </div>
-        ) : (
-          <TemplateInput state={state} dispatch={dispatch} />
-        )}
+        {!hasPermission ? <NotFound404 /> : <TemplateInput state={state} dispatch={dispatch} />}
       </div>
     </>
   )

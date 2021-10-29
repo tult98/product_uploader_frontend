@@ -13,9 +13,7 @@ const CreateStorePage = () => {
       </header>
       <div className="main-content">
         {!hasPermission ? (
-          <div className="center-inside-main-content">
-            <NotFound404 />
-          </div>
+          <NotFound404 />
         ) : (
           <div className="w-full">
             <IntroducePage

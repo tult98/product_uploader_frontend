@@ -44,13 +44,7 @@ const ListTemplatePage = () => {
       <div
         className={`main-content ${modalState.isModalOpen && modalState.openDeleteTemplateModal ? 'opacity-20' : ''}`}
       >
-        {!hasPermission ? (
-          <div className="center-inside-main-content">
-            <NotFound404 />
-          </div>
-        ) : (
-          <TemplateList />
-        )}
+        {!hasPermission ? <NotFound404 /> : <TemplateList />}
       </div>
       {modalState.isModalOpen && modalState.openDeleteTemplateModal && <DeleteTemplateModal mutation={mutation} />}
     </>

@@ -77,7 +77,7 @@ const UploadProduct = ({ isUpdateProduct = false }) => {
 
   return (
     <>
-      {mutation.isLoading && <LoadingIndicator style="w-16 h-16 center-modal -translate-x-7/12 left-7/12" />}
+      {mutation.isLoading && <LoadingIndicator style="w-16 h-16 center-with-sidebar" />}
       <div className={`flex flex-col w-full mt-20 ${mutation.isLoading ? 'opacity-20' : ''}`}>
         <IntroducePage
           name="product"

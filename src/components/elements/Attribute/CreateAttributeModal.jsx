@@ -38,7 +38,7 @@ const CreateAttributeModal = ({ attributes, actionType, dispatch }) => {
   }
 
   return (
-    <div className="bg-white border border-gray-400 center-modal">
+    <div className="bg-white border border-gray-400 center-content">
       <div className="flex flex-row justify-between px-4 py-8 bg-gradient-to-r from-gray-500 to-gray-600">
         <p className="text-white ">Set default attribute?</p>
         <div onClick={onCloseModal} className="cursor-pointer">

@@ -16,7 +16,7 @@ const DeleteTemplateModal = ({ mutation }) => {
 
   return (
     <>
-      <div className="bg-white border border-gray-400 center-modal -translate-x-7/12 left-7/12">
+      <div className="bg-white border border-gray-400 center-content">
         <div className="flex flex-row justify-between px-4 py-8 bg-gradient-to-r from-gray-500 to-gray-600">
           <p className="text-white ">Confirm delete template?</p>
           <div className="cursor-pointer" onClick={onCloseModal}>
