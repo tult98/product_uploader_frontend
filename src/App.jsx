@@ -69,6 +69,9 @@ function App() {
                   <Route path={USER_ROUTES.CREATE_USER} exact>
                     <UserDetailPage />
                   </Route>
+                  <Route path={USER_ROUTES.EDIT_USER} exact>
+                    <UserDetailPage />
+                  </Route>
                 </Switch>
                 <Navigation />
                 <IndexPage />
