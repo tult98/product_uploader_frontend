@@ -19,6 +19,7 @@ const UsersTable = () => {
   return (
     <div className="w-full">
       {isLoading && <LoadingIndicator style="w-12 h-12 center-content" />}
+      {/* TODO: display error inside data table */}
       {isError && <ErrorIndicator error={error} />}
       <div className="bg-lightGray">
         <div className="flex flex-row text-xl font-medium text-gray-600 uppercase">

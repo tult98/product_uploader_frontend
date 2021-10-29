@@ -30,11 +30,7 @@ const TemplateList = () => {
       <div className="flex justify-center w-full">
         <div className="w-3/5">
           <SearchBar searchPattern={searchPattern} setSearchPattern={setSearchPattern} />
-          {isLoading && (
-            <div className="flex flex-col items-center center-modal -translate-x-7/12 left-7/12">
-              <LoadingIndicator style="w-16 h-16" />
-            </div>
-          )}
+          {isLoading && <LoadingIndicator style="w-16 h-16 center-with-sidebar" />}
           {isError && <ErrorIndicator error={error} />}
           {isSuccess ? (
             data.results.length > 0 ? (

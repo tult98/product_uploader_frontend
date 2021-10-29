@@ -66,11 +66,8 @@ const StoreList = () => {
   return (
     <>
       <div className={`flex flex-col items-center w-full mt-20 ${modalState.isModalOpen ? 'opacity-20' : ''}`}>
-        {isLoading && (
-          <div className="flex flex-col items-center center-model -translate-x-7/12 left-7/12">
-            <LoadingIndicator style="w-16 h-16 " />
-          </div>
-        )}
+        {isLoading && <LoadingIndicator style="w-16 h-16 center-with-sidebar" />}
+        {/* TODO: display error inside data table */}
         {isError && <ErrorIndicator error={error} />}
         {isSuccess ? (
           <>

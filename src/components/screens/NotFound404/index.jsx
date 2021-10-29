@@ -2,7 +2,7 @@ import React from 'react'
 
 const NotFound404 = () => {
   return (
-    <div className="flex flex-row">
+    <div className="flex flex-row center-with-sidebar">
       <div className="flex flex-row">
         <p className="pr-6 text-6xl font-bold text-blue-600">404</p>
         <div className="w-px h-24 bg-gray-300"></div>
