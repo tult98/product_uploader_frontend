@@ -7,8 +7,7 @@ import AuthServices from 'services/AuthService'
 import AuthenticationContext from 'context/AuthenticationContext'
 import { colors } from 'theme/variables/platform'
 import { debounce } from 'utils/commonUtils'
-import { login } from 'utils/authUtils'
-import { UNKNOWN_ERROR_MESSAGE } from 'utils/errorsUtils'
+import { login, replaceAccountInfoIncorrect } from 'utils/authUtils'
 import { validateRequired } from 'utils/validators'
 import { GENERAL_ROUTES } from 'routes'
 
@@ -136,7 +135,7 @@ const LoginInputForm = () => {
             </button>
           </div>
         </form>
-        {errors && errors.detail && <p className="mt-4 input-error">* {errors.detail || UNKNOWN_ERROR_MESSAGE}</p>}
+        {errors && errors.detail && <p className="mt-4 input-error">* {replaceAccountInfoIncorrect(mutation.error)}</p>}
       </div>
     </>
   )

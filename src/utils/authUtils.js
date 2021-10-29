@@ -30,3 +30,11 @@ export const setMe = (me) => {
   const meInJSON = JSON.stringify(me)
   return window.localStorage.setItem(LOCAL_STORAGE.ME, meInJSON)
 }
+
+export const replaceAccountInfoIncorrect = (error) => {
+  if (error.code === 401 && error.errors.detail === 'No active account found with the given credentials') {
+    return 'Username or password is incorrect.'
+  }
+
+  return error.error.detail
+}
