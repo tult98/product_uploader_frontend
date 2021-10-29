@@ -44,7 +44,7 @@ const UsersTable = () => {
     if (mutation.isSuccess) {
       setNotificationState({
         type: 'success',
-        message: 'Store was delete successful.',
+        message: 'User was delete successful.',
         isShow: true,
       })
     } else if (mutation.isError) {
