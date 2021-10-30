@@ -3,13 +3,14 @@ import NavigationItem from './NavigationItem'
 import Logout from './Logout'
 import AuthenticationContext from 'context/AuthenticationContext'
 import { getNavigationItems } from 'utils/commonUtils'
+import { ADMIN_ROLE } from 'hooks/useAuthorization'
 
 const NavigationAuth = () => {
   const { user } = useContext(AuthenticationContext)
 
   const navigationItems = useMemo(() => {
-    return getNavigationItems(user.is_staff)
-  }, [user.is_staff])
+    return getNavigationItems(ADMIN_ROLE.includes(user.role))
+  }, [user.role])
 
   return (
     <div className="fixed flex flex-col w-1/6 h-full bg-gray-800 text-white100">

@@ -2,7 +2,7 @@ import BaseService from './BaseService'
 
 const AUTH_URL = 'auth'
 
-const DEFAULT_LIMIT = 10;
+const DEFAULT_LIMIT = 10
 export default class AuthServices {
   static async login(authInput) {
     return await BaseService.post(`${AUTH_URL}/jwt/create/`, authInput, {})

@@ -128,7 +128,8 @@ const UsersTable = () => {
                 />
               ))}
           </div>
-        </>)}
+        </>
+      )}
       {modalState.isModalOpen && modalState.openDeleteUserModal && <DeleteUserModal mutation={mutation} />}
     </div>
   )
