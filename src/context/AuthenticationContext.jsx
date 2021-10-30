@@ -4,7 +4,7 @@ import { useHistory, useLocation } from 'react-router-dom'
 import LoadingIndicator from 'components/elements/LoadingIndicator'
 import { GENERAL_ROUTES, NON_NAVIGATION_ROUTES } from 'routes'
 import AuthServices from 'services/AuthService'
-import { getMe, getRefreshToken, setMe } from 'utils/authUtils'
+import { getMe, getRefreshToken, logout, setMe } from 'utils/authUtils'
 
 const AuthenticationContext = createContext()
 
@@ -20,7 +20,8 @@ export const AuthenticationProvider = ({ children }) => {
 
   useEffect(() => {
     if (isError) {
-      if (!NON_NAVIGATION_ROUTES.includes(location.pathname) && error.code === 401) {
+      if ((!NON_NAVIGATION_ROUTES.includes(location.pathname) && error.code === 401) || error.code === 403) {
+        logout()
         history.push(GENERAL_ROUTES.LOGIN)
       }
     } else if (isSuccess) {
