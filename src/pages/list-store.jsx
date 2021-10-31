@@ -16,7 +16,7 @@ const ListStorePage = () => {
         {!hasPermission ? (
           <NotFound404 />
         ) : (
-          <div className="w-full">
+          <div className="w-full mt-20">
             <IntroducePage
               name="store"
               title="Store Dashboard"

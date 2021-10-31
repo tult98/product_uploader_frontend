@@ -7,14 +7,24 @@ import NotificationContext from 'context/NotificationContext'
 import { USER_ROUTES } from 'routes'
 import AuthServices from 'services/AuthService'
 import { colors } from 'theme/variables/platform'
-import { debounce, DEFAULT_DELAY } from 'utils/commonUtils'
 import { numberRequiredField, textRequiredField, validateEmail } from 'utils/errorsUtils'
+import ToolTip from 'components/elements/ToolTip'
 
 const optionRole = [
   { value: 1, label: 'User' },
   { value: 2, label: 'Admin' },
   { value: 3, label: 'Super Admin' },
 ]
+
+const generateRandomPassword = (length = 8) => {
+  let result = ''
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  const charactersLength = characters.length
+  for (var i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength))
+  }
+  return result
+}
 
 const UserInput = ({ user = {}, isEdit = false }) => {
   const history = useHistory()
@@ -26,6 +36,8 @@ const UserInput = ({ user = {}, isEdit = false }) => {
     username: user.username || '',
     role: user.role || '',
     password: '',
+    wp_username: user.wp_user_name || '',
+    wp_password: user.wp_password || '',
   })
 
   const [errors, setErrors] = useState({})
@@ -59,12 +71,10 @@ const UserInput = ({ user = {}, isEdit = false }) => {
   }, [mutation.status])
 
   const onChangeTextInput = ({ target: { name, value } }) => {
-    debounce(() => {
-      setUserInput({
-        ...userInput,
-        [name]: value,
-      })
-    }, DEFAULT_DELAY)()
+    setUserInput({
+      ...userInput,
+      [name]: value,
+    })
   }
 
   const onChangeUsers = (selectedUsers) => {
@@ -88,6 +98,11 @@ const UserInput = ({ user = {}, isEdit = false }) => {
     return Object.keys(errors).length === 0
   }
 
+  const onGeneratePassword = () => {
+    const randomPassword = generateRandomPassword()
+    setUserInput({ ...userInput, password: randomPassword })
+  }
+
   const onSubmit = (e) => {
     e.preventDefault()
     if (onValidateForm()) {
@@ -101,7 +116,7 @@ const UserInput = ({ user = {}, isEdit = false }) => {
   }
   return (
     <div className="flex justify-center w-full">
-      <form className="w-1/3 px-12 py-20 bg-white center-modal shadow-grayShadow rounded-2xl">
+      <form className="w-2/5 px-12 py-20 my-20 bg-white shadow-grayShadow rounded-2xl">
         <div className="flex flex-col">
           <label htmlFor="domain_name" className="font-base">
             Email
@@ -166,7 +181,6 @@ const UserInput = ({ user = {}, isEdit = false }) => {
             onChange={onChangeUsers}
           />
           {errors['role'] && <p className="input-error">{errors['role']}</p>}
-          {/* {isError && <p className="input-error">{error.errors.detail || error.errors.message}</p>} */}
         </div>
         <div className="flex flex-col mt-4">
           <label htmlFor="domain-name" className="font-base">
@@ -175,6 +189,42 @@ const UserInput = ({ user = {}, isEdit = false }) => {
           <input
             type="password"
             name="password"
+            value={userInput.password}
+            className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
+            onChange={onChangeTextInput}
+          />
+          {errors && errors['password'] && errors['password'] && <p className="input-error">{errors['password']}</p>}
+          <a type="button" className="mt-3 text-blue-600 cursor-pointer hover:underline" onClick={onGeneratePassword}>
+            Generate a random password
+          </a>
+        </div>
+        <div className="flex flex-col mt-4">
+          <div className="flex flex-row">
+            <label htmlFor="domain-name" className="mr-3 font-base">
+              WP Username
+            </label>
+            <ToolTip message="This information will use for uploading product's images." />
+          </div>
+          <input
+            type="text"
+            name="wp_username"
+            value={userInput.wp_username}
+            className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
+            onChange={onChangeTextInput}
+          />
+          {errors && errors['password'] && errors['password'] && <p className="input-error">{errors['password']}</p>}
+        </div>
+        <div className="flex flex-col mt-4">
+          <div className="flex flex-row">
+            <label htmlFor="domain-name" className="mr-3 font-base">
+              WP Password
+            </label>
+            <ToolTip message="This information will use for uploading product's images." />
+          </div>
+          <input
+            type="text"
+            name="wp_password"
+            value={userInput.wp_password}
             className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
             onChange={onChangeTextInput}
           />

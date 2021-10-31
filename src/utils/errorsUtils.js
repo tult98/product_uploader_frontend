@@ -242,7 +242,6 @@ export const validateEmail = (name, value) => {
   if (!value || value === '') {
     return { [name]: REQUIRED_FIELD_ERROR }
   } else if (!re.test(value)) {
-    console.log(!re.test(value))
     return { [name]: 'Invalid input' }
   }
 }

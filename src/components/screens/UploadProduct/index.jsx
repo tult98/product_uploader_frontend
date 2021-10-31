@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useMutation } from 'react-query'
 import { useHistory } from 'react-router-dom'
 import IntroducePage from 'components/widgets/IntroducePage'
@@ -9,12 +9,14 @@ import WooServices from 'services/WooServices'
 import { REQUIRED_FIELD_ERROR } from 'utils/errorsUtils'
 import { PRODUCT_ROUTES } from 'routes'
 import StoreInput from 'components/elements/Input/StoreInput'
+import AuthenticationContext from 'context/AuthenticationContext'
 
 const UploadProduct = ({ isUpdateProduct = false }) => {
   const history = useHistory()
   const [products, setProducts] = useState([])
   const [store, setStore] = useState()
   const mutation = useMutation(WooServices.uploadProducts)
+  const { user } = useContext(AuthenticationContext)
 
   useEffect(() => {
     if (mutation.isError) {
@@ -28,8 +30,17 @@ const UploadProduct = ({ isUpdateProduct = false }) => {
   }, [mutation.status])
 
   const onUploadProducts = () => {
-    if (onValidateTemplate()) {
-      mutation.mutate({ data: products, isUpdate: isUpdateProduct, store })
+    if (!user.wp_username || !user.wp_password || user.wp_username === '' || user.wp_password === '') {
+      alert('You dont have an wordpress account associate with your account yet. Please contact with admin to have it.')
+    } else {
+      if (onValidateTemplate()) {
+        mutation.mutate({
+          data: products,
+          isUpdate: isUpdateProduct,
+          store,
+          wpAccount: { username: user.wp_username, password: user.wp_password },
+        })
+      }
     }
   }
 
@@ -103,7 +114,7 @@ const UploadProduct = ({ isUpdateProduct = false }) => {
           {products && products.length > 0 && (
             <>
               <StoreInput
-                label="Targeted product"
+                label="Targeted store"
                 style="mt-10"
                 labelStyle="font-medium capitalize"
                 onSelect={onSelectStore}
