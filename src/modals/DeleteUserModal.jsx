@@ -10,7 +10,7 @@ const DeleteUserModal = ({ mutation }) => {
   }
 
   const onDelete = () => {
-    mutation.mutate({ id: modalState.userId })
+    mutation.mutate(modalState.userId)
     onCloseModal()
   }
 

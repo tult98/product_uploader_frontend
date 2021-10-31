@@ -17,6 +17,8 @@ const UsersTable = () => {
   const [searchPattern, setSearchPattern] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
 
+  const defaultLimit = 10
+  const indexPageSecond = (currentPage - 1) * defaultLimit
   const { user } = useContext(AuthenticationContext)
   const { modalState, setModalState } = useContext(ModalContext)
   const { setNotificationState } = useContext(NotificationContext)
@@ -27,7 +29,7 @@ const UsersTable = () => {
     AuthServices.queryUsers,
     { keepPreviousData: true },
   )
-  const mutation = useMutation(AuthServices.deleteStore, {
+  const mutation = useMutation(AuthServices.deleteUser, {
     onSuccess: () => {
       queryClient.invalidateQueries()
     },
@@ -39,7 +41,6 @@ const UsersTable = () => {
       setUsers(listUser)
     }
   }, [status])
-
   useEffect(() => {
     if (mutation.isSuccess) {
       setNotificationState({
@@ -79,10 +80,10 @@ const UsersTable = () => {
             </div>
           </div>
           <div className="w-full overflow-x-hidden overflow-y-auto bg-white max-h-500px">
-            {users.length > 0 ? (
-              users.map((user, index) => (
+            {data.results.length > 0 ? (
+              data.results.map((user, index) => (
                 <div key={user.id} className="flex border-b border-gray-200">
-                  <div className="w-1/12 px-6 py-6 ">{index + 1}</div>
+                  <div className="w-1/12 px-6 py-6 ">{currentPage === 1 ? index + 1 : indexPageSecond + index + 1}</div>
                   <div className="w-1/4 px-6 py-6">{user.username}</div>
                   <div className="w-1/4 px-6 py-6 ">{user.email}</div>
                   <div className="w-1/4 px-6 py-6 ">
@@ -114,19 +115,22 @@ const UsersTable = () => {
           </div>
           <div className="flex flex-row items-center justify-between w-full mt-10">
             <div className="text-2xl text-gray-700">
-              <p>{`Showing ${data.results.length - 1} of ${data.count - 1} records.`}</p>
+              <p>{`Showing ${currentPage === 1 ? data.results.length : indexPageSecond + 1} of ${
+                data.count
+              } records.`}</p>
             </div>
-            {data.next ||
-              (data.previous && (
+            {defaultLimit !== data.results.count ? (
+              !data.previous || !data.next || (data.next && data.previous) ? (
                 <Paginator
                   currentPage={currentPage}
                   setCurrentPage={setCurrentPage}
-                  count={data.count - 1}
+                  count={data.count}
                   next={data.next}
                   previous={data.previous}
-                  limit={10}
+                  limit={defaultLimit}
                 />
-              ))}
+              ) : null
+            ) : null}
           </div>
         </>
       )}
