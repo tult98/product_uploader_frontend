@@ -82,7 +82,9 @@ const UsersTable = () => {
             {data.results.length > 0 ? (
               data.results.map((user, index) => (
                 <div key={user.id} className="flex border-b border-gray-200">
-                  <div className="w-1/12 px-6 py-6 ">{index + 1}</div>
+                  <div className="w-1/12 px-6 py-6 ">
+                    {currentPage === 1 ? index + 1 : (currentPage - 1) * defaultLimit + index + 1}
+                  </div>
                   <div className="w-1/4 px-6 py-6">{user.username}</div>
                   <div className="w-1/4 px-6 py-6 ">{user.email}</div>
                   <div className="w-1/4 px-6 py-6 ">
