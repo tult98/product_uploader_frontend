@@ -12,8 +12,6 @@ import { arrayRequiredField, numberRequiredField, textRequiredField, validateEma
 
 const UserInput = ({ user = {}, isEdit = false }) => {
   const history = useHistory()
-
-  console.log('user', user)
   const optionRole = [
     { value: 1, label: 'User' },
     { value: 2, label: 'Admin' },
@@ -25,8 +23,6 @@ const UserInput = ({ user = {}, isEdit = false }) => {
     last_name: user.last_name || '',
     username: user.username || '',
     role: user.role || '',
-    password: '',
-    confirmpassword: '',
   })
   const [errors, setErrors] = useState({})
   const { setNotificationState } = useContext(NotificationContext)
@@ -100,9 +96,10 @@ const UserInput = ({ user = {}, isEdit = false }) => {
       } else {
         console.log('222222222222')
         const userData = { ...userInput }
-        mutation.mutate({ userId: user.id, userData })
+        mutation.mutate(userData)
         console.log('userInput', userInput)
       }
+      console.log('userInput', userInput)
     }
   }
   return (
@@ -174,29 +171,32 @@ const UserInput = ({ user = {}, isEdit = false }) => {
           {errors['role'] && <p className="input-error">{errors['role']}</p>}
           {/* {isError && <p className="input-error">{error.errors.detail || error.errors.message}</p>} */}
         </div>
-        <div className="flex flex-col mt-4">
-          <label htmlFor="domain-name" className="font-base">
-            Password
-          </label>
-          <input
-            type="password"
-            name="password"
-            className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
-            onChange={onChangeTextInput}
-          />
-        </div>
-
-        <div className="flex flex-col mt-4">
-          <label htmlFor="domain-name" className="font-base">
-            Confirm Password
-          </label>
-          <input
-            type="password"
-            name="confirmpassword"
-            className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
-            onChange={onChangeTextInput}
-          />
-        </div>
+        {!isEdit ? (
+          <>
+            <div className="flex flex-col mt-4">
+              <label htmlFor="domain-name" className="font-base">
+                Password
+              </label>
+              <input
+                type="password"
+                name="password"
+                className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
+                onChange={onChangeTextInput}
+              />
+            </div>
+            <div className="flex flex-col mt-4">
+              <label htmlFor="domain-name" className="font-base">
+                Confirm Password
+              </label>
+              <input
+                type="password"
+                name="confirmpassword"
+                className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
+                onChange={onChangeTextInput}
+              />
+            </div>
+          </>
+        ) : null}
         <div className="flex justify-end w-full mt-10">
           <button
             type="button"

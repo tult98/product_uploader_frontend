@@ -21,8 +21,8 @@ export default class AuthServices {
     return await BaseService.delete(`users/${userId}`)
   }
 
-  static async editUser({ userId, userData }) {
-    return await BaseService.put(`/users/${userId}`, userData, {})
+  static async editUser(userData) {
+    return await BaseService.post(`/users/`, userData, {})
   }
   static async queryUser({ queryKey }) {
     const [_key, { userId }] = queryKey /* eslint-disable-line */
