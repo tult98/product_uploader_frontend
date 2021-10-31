@@ -7,15 +7,11 @@ const DEFAULT_REQUEST_CONFIG = {
   withAuthorization: true,
   // TODO: get baseURL from environments variables
   baseURL:
-    process.env.NODE_ENV === 'production'
-      ? 'https://product-uploader-api.herokuapp.com/api/'
-      : 'http://127.0.0.1:8000/api/',
+    'https://product-uploader-api.herokuapp.com/api/'
 }
 
 axios.defaults.baseURL =
-  process.env.NODE_ENV === 'production'
-    ? 'https://product-uploader-api.herokuapp.com/api/'
-    : 'http://127.0.0.1:8000/api/'
+  'https://product-uploader-api.herokuapp.com/api/'
 
 const injectAuthorizationHeader = (config = {}) => {
   if (!config.withAuthorization) {

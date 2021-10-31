@@ -18,6 +18,7 @@ const UsersTable = () => {
   const [currentPage, setCurrentPage] = useState(1)
 
   const defaultLimit = 10
+  const indexPageSecond = (currentPage - 1) * defaultLimit
   const { user } = useContext(AuthenticationContext)
   const { modalState, setModalState } = useContext(ModalContext)
   const { setNotificationState } = useContext(NotificationContext)
@@ -82,9 +83,7 @@ const UsersTable = () => {
             {data.results.length > 0 ? (
               data.results.map((user, index) => (
                 <div key={user.id} className="flex border-b border-gray-200">
-                  <div className="w-1/12 px-6 py-6 ">
-                    {currentPage === 1 ? index + 1 : (currentPage - 1) * defaultLimit + index + 1}
-                  </div>
+                  <div className="w-1/12 px-6 py-6 ">{currentPage === 1 ? index + 1 : indexPageSecond + index + 1}</div>
                   <div className="w-1/4 px-6 py-6">{user.username}</div>
                   <div className="w-1/4 px-6 py-6 ">{user.email}</div>
                   <div className="w-1/4 px-6 py-6 ">
@@ -116,8 +115,9 @@ const UsersTable = () => {
           </div>
           <div className="flex flex-row items-center justify-between w-full mt-10">
             <div className="text-2xl text-gray-700">
-              <p>{`Showing ${currentPage === 1 ? data.results.length : (currentPage - 1) * defaultLimit + 1} of ${data.count
-                } records.`}</p>
+              <p>{`Showing ${currentPage === 1 ? data.results.length : indexPageSecond + 1} of ${
+                data.count
+              } records.`}</p>
             </div>
             {defaultLimit !== data.results.count ? (
               !data.previous || !data.next || (data.next && data.previous) ? (
@@ -129,7 +129,8 @@ const UsersTable = () => {
                   previous={data.previous}
                   limit={defaultLimit}
                 />
-              ) : null) : null}
+              ) : null
+            ) : null}
           </div>
         </>
       )}
