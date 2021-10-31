@@ -228,6 +228,23 @@ export const textRequiredField = (name, value) => {
   }
 }
 
+export const numberRequiredField = (name, value) => {
+  if (!value || value === '') {
+    return { [name]: REQUIRED_FIELD_ERROR }
+  } else if (isNaN(parseFloat(value)) || parseFloat(value) < 0) {
+    return { [name]: 'Invalid input' }
+  }
+}
+
+export const validateEmail = (name, value) => {
+  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  if (!value || value === '') {
+    return { [name]: REQUIRED_FIELD_ERROR }
+  } else if (!re.test(value)) {
+    console.log(!re.test(value))
+    return { [name]: 'Invalid input' }
+  }
+}
 export const validateConsumerKey = (value) => {
   const textRequired = textRequiredField('consumer_key', value)
   if (textRequired) {

@@ -2,7 +2,7 @@ import React from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { QueryClientProvider, QueryClient } from 'react-query'
 import { ReactQueryDevtools } from 'react-query/devtools'
-import IndexPage from 'pages'
+import IndexPage from 'pages/index'
 import ListTemplatePage from 'pages/list-template'
 import CreateTemplatePage from 'pages/create-template'
 import EditTemplatePage from 'pages/edit-template'
@@ -19,7 +19,7 @@ import { AuthenticationProvider } from 'context/AuthenticationContext'
 import { GENERAL_ROUTES, PRODUCT_ROUTES, STORE_ROUTES, TEMPLATE_ROUTES, USER_ROUTES } from 'routes'
 import EditStorePage from 'pages/edit-store'
 import ListUserPage from 'pages/list-users'
-import UserDetailPage from 'pages/user-detail'
+import DetailUserPage from 'pages/user-detail'
 
 const queryClient = new QueryClient()
 
@@ -66,11 +66,11 @@ function App() {
                   <Route path={USER_ROUTES.LIST_USERS} exact>
                     <ListUserPage />
                   </Route>
-                  <Route path={USER_ROUTES.CREATE_USER} exact>
+                  {/* <Route path={USER_ROUTES.CREATE_USER} exact>
                     <UserDetailPage />
-                  </Route>
+                  </Route> */}
                   <Route path={USER_ROUTES.EDIT_USER} exact>
-                    <UserDetailPage />
+                    <DetailUserPage />
                   </Route>
                 </Switch>
                 <Navigation />

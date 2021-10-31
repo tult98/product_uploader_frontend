@@ -27,7 +27,7 @@ const UsersTable = () => {
     AuthServices.queryUsers,
     { keepPreviousData: true },
   )
-  const mutation = useMutation(AuthServices.deleteStore, {
+  const mutation = useMutation(AuthServices.deleteUser, {
     onSuccess: () => {
       queryClient.invalidateQueries()
     },
@@ -37,9 +37,9 @@ const UsersTable = () => {
     if (isSuccess) {
       const listUser = data.results.filter((usr) => user.id !== usr.id)
       setUsers(listUser)
+      console.log('listUser', listUser)
     }
   }, [status])
-
   useEffect(() => {
     if (mutation.isSuccess) {
       setNotificationState({
@@ -79,8 +79,8 @@ const UsersTable = () => {
             </div>
           </div>
           <div className="w-full overflow-x-hidden overflow-y-auto bg-white max-h-500px">
-            {users.length > 0 ? (
-              users.map((user, index) => (
+            {data.results.length > 0 ? (
+              data.results.map((user, index) => (
                 <div key={user.id} className="flex border-b border-gray-200">
                   <div className="w-1/12 px-6 py-6 ">{index + 1}</div>
                   <div className="w-1/4 px-6 py-6">{user.username}</div>
@@ -114,7 +114,7 @@ const UsersTable = () => {
           </div>
           <div className="flex flex-row items-center justify-between w-full mt-10">
             <div className="text-2xl text-gray-700">
-              <p>{`Showing ${data.results.length - 1} of ${data.count - 1} records.`}</p>
+              <p>{`Showing ${data.results.length} of ${data.count} records.`}</p>
             </div>
             {data.next ||
               (data.previous && (

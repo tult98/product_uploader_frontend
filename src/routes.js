@@ -21,7 +21,7 @@ export const PRODUCT_ROUTES = {
 export const USER_ROUTES = {
   LIST_USERS: '/users',
   CREATE_USER: '/users/create',
-  EDIT_USER: 'users/:usersId',
+  EDIT_USER: '/users/:userId',
 }
 
 export const STORE_ROUTES = {
