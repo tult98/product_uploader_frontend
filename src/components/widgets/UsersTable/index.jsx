@@ -17,6 +17,7 @@ const UsersTable = () => {
   const [searchPattern, setSearchPattern] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
 
+  const defaultLimit = 10
   const { user } = useContext(AuthenticationContext)
   const { modalState, setModalState } = useContext(ModalContext)
   const { setNotificationState } = useContext(NotificationContext)
@@ -37,7 +38,6 @@ const UsersTable = () => {
     if (isSuccess) {
       const listUser = data.results.filter((usr) => user.id !== usr.id)
       setUsers(listUser)
-      console.log('listUser', listUser)
     }
   }, [status])
   useEffect(() => {
@@ -114,19 +114,20 @@ const UsersTable = () => {
           </div>
           <div className="flex flex-row items-center justify-between w-full mt-10">
             <div className="text-2xl text-gray-700">
-              <p>{`Showing ${data.results.length} of ${data.count} records.`}</p>
+              <p>{`Showing ${currentPage === 1 ? data.results.length : (currentPage - 1) * defaultLimit + 1} of ${data.count
+                } records.`}</p>
             </div>
-            {data.next ||
-              (data.previous && (
+            {defaultLimit !== data.results.count ? (
+              !data.previous || !data.next || (data.next && data.previous) ? (
                 <Paginator
                   currentPage={currentPage}
                   setCurrentPage={setCurrentPage}
-                  count={data.count - 1}
+                  count={data.count}
                   next={data.next}
                   previous={data.previous}
-                  limit={10}
+                  limit={defaultLimit}
                 />
-              ))}
+              ) : null) : null}
           </div>
         </>
       )}

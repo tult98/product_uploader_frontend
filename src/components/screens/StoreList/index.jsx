@@ -32,7 +32,7 @@ const StoreList = () => {
     StoreService.queryStores,
     { keepPreviousData: true },
   )
-
+  
   const mutation = useMutation(StoreService.deleteStore, {
     onSuccess: () => {
       queryClient.invalidateQueries()
