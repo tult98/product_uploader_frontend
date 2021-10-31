@@ -21,12 +21,13 @@ export default class AuthServices {
     return await BaseService.delete(`users/${userId}`)
   }
 
-  static async editUser(userData) {
-    return await BaseService.post(`/users/`, userData, {})
+  static async editUser({ id, data }) {
+    console.log('============useData', data)
+    return await BaseService.patch(`/users/${id}`, data, { withAuthorization: true })
   }
   static async queryUser({ queryKey }) {
     const [_key, { userId }] = queryKey /* eslint-disable-line */
-    return await BaseService.get(`/users/${userId}`, {})
+    return await BaseService.get(`/users/${userId}`, { withAuthorization: true })
   }
 
   static async createUser(userData) {

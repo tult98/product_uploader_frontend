@@ -7,11 +7,15 @@ const DEFAULT_REQUEST_CONFIG = {
   withAuthorization: true,
   // TODO: get baseURL from environments variables
   baseURL:
-    'https://product-uploader-api.herokuapp.com/api/'
+    process.env.NODE_ENV === 'production'
+      ? 'https://product-uploader-api.herokuapp.com/api/'
+      : 'http://127.0.0.1:8000/api/',
 }
 
 axios.defaults.baseURL =
-  'https://product-uploader-api.herokuapp.com/api/'
+  process.env.NODE_ENV === 'production'
+    ? 'https://product-uploader-api.herokuapp.com/api/'
+    : 'http://127.0.0.1:8000/api/'
 
 const injectAuthorizationHeader = (config = {}) => {
   if (!config.withAuthorization) {
@@ -175,6 +179,35 @@ const BaseService = {
     return new Promise((resolve, reject) => {
       axios
         .put(url, data, config)
+        .then((res) => {
+          const { data } = res
+          if (!SUCCESS_STATUS_CODE.includes(res.status)) {
+            reject({ ...data })
+          } else {
+            resolve({ ...data })
+          }
+        })
+        .catch((errors) => {
+          if (errors.response?.data && errors?.response?.status < 4000) {
+            reject({
+              code: errors.response.status,
+              errors: {
+                ...errors.response.data,
+              },
+            })
+          } else {
+            reject(ERROR_UNKNOWN)
+          }
+        })
+    })
+  },
+
+  patch(url, data = {}, config = DEFAULT_REQUEST_CONFIG) {
+    injectAuthorizationHeader(config)
+
+    return new Promise((resolve, reject) => {
+      axios
+        .patch(url, data, config)
         .then((res) => {
           const { data } = res
           if (!SUCCESS_STATUS_CODE.includes(res.status)) {

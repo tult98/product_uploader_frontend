@@ -22,11 +22,11 @@ const UserDetailPage = () => {
         {!hasPermission ? (
           <NotFound404 />
         ) : (
-          <div className="w-full">
+          <div className="w-full mt-20">
             <IntroducePage
               name="user"
               title="Edit User"
-              description="Where you edit your existing users and assign it for your desire employees."
+              description="Where you can edit your existing users account."
             />
             {isLoading && <LoadingIndicator style="w-16 h-16 center-with-sidebar" />}
             {isError && <ErrorIndicator error={error} />}
