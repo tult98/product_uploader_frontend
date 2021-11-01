@@ -1,5 +1,4 @@
 import LoadingIndicator from 'components/elements/LoadingIndicator'
-import AuthenticationContext from 'context/AuthenticationContext'
 import React, { useContext, useEffect, useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import AuthServices from 'services/AuthService'
@@ -13,7 +12,6 @@ import DeleteUserModal from 'modals/DeleteUserModal'
 import NotificationContext from 'context/NotificationContext'
 
 const UsersTable = () => {
-  const [users, setUsers] = useState([])
   const [searchPattern, setSearchPattern] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
 
@@ -23,7 +21,7 @@ const UsersTable = () => {
   const { setNotificationState } = useContext(NotificationContext)
 
   const queryClient = useQueryClient()
-  const { status, isLoading, isError, isSuccess, error, data } = useQuery(
+  const { isLoading, isError, isSuccess, error, data } = useQuery(
     ['query-users', { currentPage, searchPattern, limit: 10 }],
     AuthServices.queryUsers,
     { keepPreviousData: true },
@@ -34,12 +32,6 @@ const UsersTable = () => {
     },
   })
   const history = useHistory()
-  useEffect(() => {
-    if (isSuccess) {
-      const listUser = data.results.filter((usr) => user.id !== usr.id)
-      setUsers(listUser)
-    }
-  }, [status])
   useEffect(() => {
     if (mutation.isSuccess) {
       setNotificationState({
@@ -86,7 +78,7 @@ const UsersTable = () => {
                   <div className="w-1/4 px-6 py-6">{user.username}</div>
                   <div className="w-1/4 px-6 py-6 ">{user.email}</div>
                   <div className="w-1/4 px-6 py-6 ">
-                    {user.first_name || user.last_name ? user.first_name + user.last_name : 'Not Data'}
+                    {user.first_name || user.last_name ? user.first_name + user.last_name : 'No Data'}
                   </div>
                   <div className="w-1/6 px-6 py-6 ">
                     <button

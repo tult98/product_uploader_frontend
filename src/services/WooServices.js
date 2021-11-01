@@ -50,8 +50,8 @@ export default class WooServices {
     return BaseService.get(`/products?sku=${sku}&${authorizeValue}`, null, { baseURL: WOO_BASE_URL })
   }
 
-  static async uploadProduct({ data, store }) {
-    const { images, errors } = await WPServices.uploadImages({ data })
+  static async uploadProduct({ data, store, wpAccount }) {
+    const { images, errors } = await WPServices.uploadImages({ data, wpAccount })
 
     if (errors && errors.length > 0) {
       let message = 'Failed at uploading the following files: '
@@ -107,14 +107,14 @@ export default class WooServices {
       return productLog
     } catch (error) {
       images.map(async (item) => {
-        await WPServices.deleteImage(item.id)
+        await WPServices.deleteImage(item.id, wpAccount)
       })
       return { sku: data.sku, status: UPLOAD_STATUS.ERROR, message: error?.errors?.message || UPLOAD_UNKNOWN_MESSAGE }
     }
   }
 
   // update an existing product
-  static async updateProduct({ data, store }) {
+  static async updateProduct({ data, store, wpAccount }) {
     let products
     const { url, authorizeValue } = getAuthorizeValue(store)
     try {
@@ -129,7 +129,7 @@ export default class WooServices {
 
     const originalProduct = products[0]
 
-    const { images, errors } = await WPServices.uploadImages({ data })
+    const { images, errors } = await WPServices.uploadImages({ data, wpAccount })
 
     if (errors && errors.length > 0) {
       let message = 'Failed at uploading the following files: '
@@ -174,7 +174,7 @@ export default class WooServices {
       })
 
       // TODO: only delete image after update product success
-      const { errors } = await WPServices.deleteImages(originalProduct.images)
+      const { errors } = await WPServices.deleteImages(originalProduct.images, wpAccount)
 
       let productLog = {
         sku: data.sku,
@@ -199,18 +199,18 @@ export default class WooServices {
       return productLog
     } catch (error) {
       images.map(async (item) => {
-        await WPServices.deleteImage(item.id)
+        await WPServices.deleteImage(item.id, wpAccount)
       })
       return { sku: data.sku, status: UPLOAD_STATUS.ERROR, message: error?.errors?.message || UPLOAD_UNKNOWN_MESSAGE }
     }
   }
 
-  static async uploadProducts({ data, isUpdate, store }) {
+  static async uploadProducts({ data, isUpdate, store, wpAccount }) {
     return await Promise.all(
       data.map(async (productData) => {
         return isUpdate
-          ? await WooServices.updateProduct({ data: productData, store })
-          : await WooServices.uploadProduct({ data: productData, store })
+          ? await WooServices.updateProduct({ data: productData, store, wpAccount })
+          : await WooServices.uploadProduct({ data: productData, store, wpAccount })
       }),
     )
   }
@@ -250,8 +250,8 @@ export default class WooServices {
     )
   }
 
-  static async queryProducts({ queryKey }) {
-    const sku = queryKey[1].sku
-    return BaseService.get(`/products?search=${sku}&${authorizeValue}`, null, { baseURL: WOO_BASE_URL })
-  }
+  // static async queryProducts({ queryKey }) {
+  //   const sku = queryKey[1].sku
+  //   return BaseService.get(`/products?search=${sku}&${authorizeValue}`, null, { baseURL: WOO_BASE_URL })
+  // }
 }

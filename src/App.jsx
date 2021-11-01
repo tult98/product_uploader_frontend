@@ -12,14 +12,15 @@ import EditProductsPage from 'pages/edit-products'
 import LoginPage from 'pages/login'
 import ListStorePage from 'pages/list-store'
 import CreateStorePage from 'pages/create-store'
+import EditStorePage from 'pages/edit-store'
+import ListUserPage from 'pages/list-users'
+import DetailUserPage from 'pages/user-detail'
+import UserCreatePage from 'pages/user-create'
 import Navigation from 'components/layouts/Navigation'
 import { ModalProvider } from 'context/ModalContext'
 import { NotificationProvider } from 'context/NotificationContext'
 import { AuthenticationProvider } from 'context/AuthenticationContext'
 import { GENERAL_ROUTES, PRODUCT_ROUTES, STORE_ROUTES, TEMPLATE_ROUTES, USER_ROUTES } from 'routes'
-import EditStorePage from 'pages/edit-store'
-import ListUserPage from 'pages/list-users'
-import DetailUserPage from 'pages/user-detail'
 
 const queryClient = new QueryClient()
 
@@ -66,9 +67,9 @@ function App() {
                   <Route path={USER_ROUTES.LIST_USERS} exact>
                     <ListUserPage />
                   </Route>
-                  {/* <Route path={USER_ROUTES.CREATE_USER} exact>
-                    <UserDetailPage />
-                  </Route> */}
+                  <Route path={USER_ROUTES.CREATE_USER} exact>
+                    <UserCreatePage />
+                  </Route>
                   <Route path={USER_ROUTES.EDIT_USER} exact>
                     <DetailUserPage />
                   </Route>

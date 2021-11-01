@@ -9,8 +9,8 @@ const ListUserPage = () => {
         <title>Product Uploader | All Users</title>
       </header>
       <div className="main-content">
-        <div className="w-full">
-          <IntroducePage name="user" title="User Dashboard" description="This is where you control all your User." />
+        <div className="w-full mt-20">
+          <IntroducePage name="user" title="User Dashboard" description="This is where you control all your users." />
           <UsersTable />
         </div>
       </div>
