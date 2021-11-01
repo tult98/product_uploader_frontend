@@ -34,12 +34,12 @@ export const getNavigationItems = (isAdmin) => {
         name: 'product',
         child: [
           {
-            name: 'Update products',
-            route: PRODUCT_ROUTES.UPDATE,
+            name: 'Create products',
+            route: PRODUCT_ROUTES.UPLOAD_PRODUCT,
           },
           {
-            name: 'upload products',
-            route: PRODUCT_ROUTES.UPLOAD_PRODUCT,
+            name: 'Update products',
+            route: PRODUCT_ROUTES.UPDATE,
           },
         ],
       },
@@ -81,12 +81,12 @@ export const getNavigationItems = (isAdmin) => {
       name: 'product',
       child: [
         {
-          name: 'Update products',
-          route: PRODUCT_ROUTES.UPDATE,
+          name: 'Create products',
+          route: PRODUCT_ROUTES.UPLOAD_PRODUCT,
         },
         {
-          name: 'upload products',
-          route: PRODUCT_ROUTES.UPLOAD_PRODUCT,
+          name: 'Update products',
+          route: PRODUCT_ROUTES.UPDATE,
         },
       ],
     },

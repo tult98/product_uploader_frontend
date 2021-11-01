@@ -36,5 +36,5 @@ export const replaceAccountInfoIncorrect = (error) => {
     return 'Username or password is incorrect.'
   }
 
-  return error.error.detail
+  return error.errors.detail
 }

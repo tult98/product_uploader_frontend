@@ -1,27 +1,23 @@
 import React from 'react'
-import StoreInput from 'components/screens/StoreInput'
+import NotFound404 from 'components/screens/NotFound404'
+import UserInput from 'components/screens/UserInput'
 import IntroducePage from 'components/widgets/IntroducePage'
 import { useAuthorization } from 'hooks/useAuthorization'
-import NotFound404 from 'components/screens/NotFound404'
 
-const CreateStorePage = () => {
+const UserCreatePage = () => {
   const hasPermission = useAuthorization({ adminRequired: true })
   return (
     <>
       <header>
-        <title>Product Uploader | Create Store </title>
+        <title>Product Uploader | New User</title>
       </header>
       <div className="main-content">
         {!hasPermission ? (
           <NotFound404 />
         ) : (
           <div className="w-full mt-20">
-            <IntroducePage
-              name="store"
-              title="Create Store"
-              description="Where you create your stores and assign it for your employees."
-            />
-            <StoreInput />
+            <IntroducePage name="user" title="Create user" description="This is where you create a new user." />
+            <UserInput />
           </div>
         )}
       </div>
@@ -29,4 +25,4 @@ const CreateStorePage = () => {
   )
 }
 
-export default CreateStorePage
+export default UserCreatePage

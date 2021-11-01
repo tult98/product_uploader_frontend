@@ -9,7 +9,13 @@ import StoreService from 'services/StoreService'
 import { colors } from 'theme/variables/platform'
 import { debounce, DEFAULT_DELAY } from 'utils/commonUtils'
 import { STORE_ROUTES } from 'routes'
-import { arrayRequiredField, validateConsumerKey, validateConsumerSecret, validateDomainName } from 'utils/errorsUtils'
+import {
+  arrayRequiredField,
+  UNKNOWN_ERROR_MESSAGE,
+  validateConsumerKey,
+  validateConsumerSecret,
+  validateDomainName,
+} from 'utils/errorsUtils'
 
 const StoreInput = ({ store = {}, isEdit = false }) => {
   const history = useHistory()
@@ -19,11 +25,15 @@ const StoreInput = ({ store = {}, isEdit = false }) => {
     secret_key: store.secret_key || '',
     users: store.users || [],
   })
+  const [searchPattern, setSearchPatter] = useState('')
   const [errors, setErrors] = useState({})
   const { setNotificationState } = useContext(NotificationContext)
 
   const mutation = isEdit ? useMutation(StoreService.editStore) : useMutation(StoreService.createStore)
-  const { isLoading, isError, isSuccess, error, data } = useQuery('query-users', AuthServices.queryUsers)
+  const { isLoading, isError, isSuccess, error, data } = useQuery(
+    ['query-users', { searchPattern, currentPage: 1 }],
+    AuthServices.queryUsers,
+  )
 
   useEffect(() => {
     if (mutation.isSuccess) {
@@ -89,8 +99,7 @@ const StoreInput = ({ store = {}, isEdit = false }) => {
       if (!isEdit) {
         mutation.mutate(storeInput)
       } else {
-        const selectedUserIds = store.users.map((user) => user.id)
-        const storeData = { ...storeInput, users: selectedUserIds }
+        const storeData = { ...storeInput }
         mutation.mutate({ storeId: store.id, storeData })
       }
     }
@@ -98,6 +107,11 @@ const StoreInput = ({ store = {}, isEdit = false }) => {
 
   const onCancel = () => {
     history.push(`${STORE_ROUTES.LIST_STORE}`)
+  }
+  const onSearchUsers = (newInputValue) => {
+    debounce(() => {
+      setSearchPatter(newInputValue)
+    }, DEFAULT_DELAY)()
   }
   return (
     <div className="flex justify-center w-full">
@@ -157,9 +171,10 @@ const StoreInput = ({ store = {}, isEdit = false }) => {
             getOptionLabel={(option) => option.username}
             getOptionValue={(option) => option.id}
             onChange={onChangeUsers}
+            onInputChange={onSearchUsers}
           />
           {errors['users'] && <p className="input-error">{errors['users']}</p>}
-          {isError && <p className="input-error">{error.errors.detail || error.errors.message}</p>}
+          {isError && <p className="input-error">{error.errors?.detail || UNKNOWN_ERROR_MESSAGE}</p>}
         </div>
         <div className="flex justify-end w-full mt-10">
           <button
@@ -178,7 +193,7 @@ const StoreInput = ({ store = {}, isEdit = false }) => {
             {isEdit ? 'Edit' : 'Create'}
           </button>
         </div>
-        {isError && <p>{error.errors.detail || 'Something went wrong, Please try later!'}</p>}
+        {errors.detail && <p>{errors?.detail || UNKNOWN_ERROR_MESSAGE}</p>}
       </form>
     </div>
   )
