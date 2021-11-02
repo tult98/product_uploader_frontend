@@ -9,6 +9,7 @@ import AuthServices from 'services/AuthService'
 import { colors } from 'theme/variables/platform'
 import { numberRequiredField, textRequiredField, validateEmail } from 'utils/errorsUtils'
 import ToolTip from 'components/elements/ToolTip'
+import PasswordInput from 'components/elements/Input/PasswordInput'
 
 const optionRole = [
   { value: 1, label: 'User' },
@@ -114,56 +115,60 @@ const UserInput = ({ user = {}, isEdit = false }) => {
       }
     }
   }
+
   return (
     <div className="flex justify-center w-full">
       <form className="w-2/5 px-12 py-20 my-20 bg-white shadow-grayShadow rounded-2xl">
         <div className="flex flex-col">
-          <label htmlFor="domain_name" className="font-base">
+          <label htmlFor="email" className="font-base">
             Email
           </label>
           <input
             type="email"
             name="email"
+            id="email"
             defaultValue={user?.email || ''}
-            className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
+            className="px-4 py-3 border border-gray-400 rounded-lg focus:outline-none"
             onChange={onChangeTextInput}
           />
           {errors['email'] && <p className="input-error">{errors['email']}</p>}
         </div>
         <div className="flex flex-col mt-4">
-          <label htmlFor="domain-name" className="font-base">
+          <label htmlFor="first_name" className="font-base">
             First Name
           </label>
           <input
             type="text"
             name="first_name"
+            id="first_name"
             defaultValue={user?.first_name || ''}
-            className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
+            className="px-4 py-3 border border-gray-400 rounded-lg focus:outline-none"
             onChange={onChangeTextInput}
           />
           {errors['first_name'] && <p className="input-error">{errors['first_name']}</p>}
         </div>
         <div className="flex flex-col mt-4">
-          <label htmlFor="domain-name" className="font-base">
+          <label htmlFor="last_name" className="font-base">
             Last Name
           </label>
           <input
             type="text"
             name="last_name"
+            id="last_name"
             defaultValue={user?.last_name || ''}
-            className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
+            className="px-4 py-3 border border-gray-400 rounded-lg focus:outline-none"
             onChange={onChangeTextInput}
           />
           {errors['last_name'] && <p className="input-error">{errors['last_name']}</p>}
           <div className="flex flex-col mt-4">
-            <label htmlFor="domain-name" className="font-base">
-              User Name
+            <label htmlFor="username" className="font-base">
+              Username
             </label>
             <input
               type="text"
               name="username"
               defaultValue={user?.username || ''}
-              className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
+              className="px-4 py-3 border border-gray-400 rounded-lg focus:outline-none"
               onChange={onChangeTextInput}
             />
             {errors['username'] && <p className="input-error">{errors['username']}</p>}
@@ -183,16 +188,23 @@ const UserInput = ({ user = {}, isEdit = false }) => {
           {errors['role'] && <p className="input-error">{errors['role']}</p>}
         </div>
         <div className="flex flex-col mt-4">
-          <label htmlFor="domain-name" className="font-base">
+          <label htmlFor="password" className="font-base">
             Password
           </label>
-          <input
-            type="password"
-            name="password"
-            value={userInput.password}
-            className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
-            onChange={onChangeTextInput}
-          />
+          {/* <div className="relative flex flex-row items-center w-full">
+            <input
+              type={isShowPassword ? 'text' : 'password'}
+              id="password"
+              name="password"
+              value={userInput.password}
+              className="w-full px-4 py-3 border border-gray-400 rounded-lg focus:outline-none"
+              onChange={onChangeTextInput}
+            />
+            <div className="absolute cursor-pointer right-4" onClick={onToggleShowPassword}>
+              <Icon name={!isShowPassword ? 'eye' : 'eyeOff'} style="w-10 h-10" fill={colors.darkGray} />
+            </div>
+          </div> */}
+          <PasswordInput name="password" value={userInput.password} onChange={onChangeTextInput} />
           {errors && errors['password'] && errors['password'] && <p className="input-error">{errors['password']}</p>}
           <a type="button" className="mt-3 text-blue-600 cursor-pointer hover:underline" onClick={onGeneratePassword}>
             Generate a random password
@@ -205,29 +217,26 @@ const UserInput = ({ user = {}, isEdit = false }) => {
             </label>
             <ToolTip message="This information will use for uploading product's images." />
           </div>
-          <input
-            type="text"
-            name="wp_username"
-            value={userInput.wp_username}
-            className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
-            onChange={onChangeTextInput}
-          />
+          <div className="relative flex flex-row items-center w-full">
+            <input
+              type="text"
+              name="wp_username"
+              value={userInput.wp_username}
+              className="w-full px-4 py-3 border border-gray-400 rounded-lg focus:outline-none"
+              onChange={onChangeTextInput}
+            />
+          </div>
           {errors && errors['password'] && errors['password'] && <p className="input-error">{errors['password']}</p>}
         </div>
         <div className="flex flex-col mt-4">
           <div className="flex flex-row">
-            <label htmlFor="domain-name" className="mr-3 font-base">
+            <label htmlFor="wp_password" className="mr-3 font-base">
               WP Password
             </label>
             <ToolTip message="This information will use for uploading product's images." />
           </div>
-          <input
-            type="text"
-            name="wp_password"
-            value={userInput.wp_password}
-            className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
-            onChange={onChangeTextInput}
-          />
+          <PasswordInput name="wp_password" value={userInput.wp_password} onChange={onChangeTextInput} />
+
           {errors && errors['password'] && errors['password'] && <p className="input-error">{errors['password']}</p>}
         </div>
         <div className="flex justify-end w-full mt-10">

@@ -13,6 +13,7 @@ import { GENERAL_ROUTES } from 'routes'
 const LoginInputForm = () => {
   const [authInput, setAuthInput] = useState({ username: '', password: '' })
   const [errors, setErrors] = useState({})
+  const [isShowPassword, setIsShowPassword] = useState(false)
   const { setUser } = useContext(AuthenticationContext)
   const history = useHistory()
   const mutation = useMutation(AuthServices.login)
@@ -53,6 +54,10 @@ const LoginInputForm = () => {
     }
   }
 
+  const onToggleShowPassword = () => {
+    setIsShowPassword(!isShowPassword)
+  }
+
   return (
     <>
       <div className="w-1/2 max-w-screen-sm px-16 py-20 bg-white shadow-grayShadow center-content rounded-3xl">
@@ -88,16 +93,19 @@ const LoginInputForm = () => {
             <label name="password" className="mb-4 font-medium">
               Password
             </label>
-            <div className="relative w-full">
+            <div className="relative flex flex-row items-center w-full">
               <Icon name="password" fill={colors.lightGray} style="w-12 h-12 absolute bottom-4" />
               <input
-                type="password"
+                type={isShowPassword ? 'text' : 'password'}
                 name="password"
                 className="w-full py-3 pl-16 border-b-2 border-gray-300 focus:outline-none"
                 placeholder="Type your password"
                 onChange={onChangeInput}
                 onBlur={onValidateInputField}
               />
+              <div className="absolute cursor-pointer right-4" onClick={onToggleShowPassword}>
+                <Icon name={!isShowPassword ? 'eye' : 'eyeOff'} style="w-10 h-10" fill={colors.darkGray} />
+              </div>
             </div>
             {!!errors.password && (
               <>
