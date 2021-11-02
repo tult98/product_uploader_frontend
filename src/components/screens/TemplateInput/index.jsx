@@ -227,7 +227,7 @@ const TemplateInput = ({ state, dispatch, isEdit = false }) => {
                 onClick={!isEdit ? onCreateTemplate : onEditTemplate}
               >
                 {mutation.isLoading && <LoadingIndicator style="w-8 h-8 mr-2" />}
-                {isEdit ? 'Edit Template' : 'Create Template'}
+                {isEdit ? 'Save' : 'Create Template'}
               </button>
             </div>
             {errors && (errors.attributes || errors.variations) && (
