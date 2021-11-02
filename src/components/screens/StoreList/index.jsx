@@ -15,7 +15,7 @@ import { STORE_ROUTES } from 'routes'
 
 const getAssignedUsers = (users) => {
   const assignedUsers = users.reduce((assignedUser, user, index) => {
-    return index === users.length - 1 ? assignedUser + user.username : assignedUsers + user.user.username + ', '
+    return index === users.length - 1 ? assignedUser + user.username : assignedUser + user.username + ', '
   }, '')
   return truncateLongText(assignedUsers)
 }
