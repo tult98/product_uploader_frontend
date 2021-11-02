@@ -6,7 +6,6 @@ import LoadingIndicator from 'components/elements/LoadingIndicator'
 import AuthServices from 'services/AuthService'
 import AuthenticationContext from 'context/AuthenticationContext'
 import { colors } from 'theme/variables/platform'
-import { debounce } from 'utils/commonUtils'
 import { login, replaceAccountInfoIncorrect } from 'utils/authUtils'
 import { validateRequired } from 'utils/validators'
 import { GENERAL_ROUTES } from 'routes'
@@ -20,7 +19,7 @@ const LoginInputForm = () => {
 
   useEffect(() => {
     if (mutation.isError) {
-      setErrors(mutation.error.errors)
+      !mutation.error.errors.detail && setErrors(mutation.error.errors)
     }
     // prettier-ignore
     (async () => {
@@ -35,30 +34,15 @@ const LoginInputForm = () => {
   }, [mutation.status])
 
   const onChangeInput = ({ target: { name, value } }) => {
-    debounce(() => {
-      setAuthInput({ ...authInput, [name]: value })
-    }, 50)()
+    setAuthInput({ ...authInput, [name]: value })
   }
 
   const onSubmit = (e) => {
     e.preventDefault()
-    delete errors.detail
     if (Object.keys(errors).length > 0) {
-      // allows re-login with error returned from server
       return
     }
     mutation.mutate(authInput)
-  }
-
-  const onLoginByEnter = (event) => {
-    if (event.key === 'Enter') {
-      event.preventDefault()
-      delete errors.detail
-      if (Object.keys(errors).length > 0) {
-        return
-      }
-      mutation.mutate(authInput)
-    }
   }
 
   const onValidateInputField = ({ target }) => {
@@ -71,12 +55,13 @@ const LoginInputForm = () => {
 
   return (
     <>
-      {mutation.isLoading && <LoadingIndicator style="w-16 h-16 center-content" />}
       <div className="w-1/2 max-w-screen-sm px-16 py-20 bg-white shadow-grayShadow center-content rounded-3xl">
         <p className="mb-20 text-5xl font-semibold text-center uppercase">Login</p>
-        <form className="text-gray-700" onKeyDown={onLoginByEnter}>
+        <form className="text-gray-700" onSubmit={onSubmit}>
           <div className="flex flex-col">
-            <label className="mb-4 ">User name</label>
+            <label name="username" className="mb-4 font-medium">
+              Username
+            </label>
             <div className="relative w-full">
               <Icon name="user" fill={colors.lightGray} style="w-12 h-12 absolute bottom-4" />
               <input
@@ -84,6 +69,7 @@ const LoginInputForm = () => {
                 className="w-full py-3 pl-16 border-b-2 border-gray-300 focus:outline-none"
                 placeholder="Type your user name"
                 name="username"
+                id="username"
                 onChange={onChangeInput}
                 onBlur={onValidateInputField}
               />
@@ -99,14 +85,16 @@ const LoginInputForm = () => {
             )}
           </div>
           <div className="flex flex-col mt-8">
-            <label className="mb-4">Password</label>
+            <label name="password" className="mb-4 font-medium">
+              Password
+            </label>
             <div className="relative w-full">
               <Icon name="password" fill={colors.lightGray} style="w-12 h-12 absolute bottom-4" />
               <input
                 type="password"
+                name="password"
                 className="w-full py-3 pl-16 border-b-2 border-gray-300 focus:outline-none"
                 placeholder="Type your password"
-                name="password"
                 onChange={onChangeInput}
                 onBlur={onValidateInputField}
               />
@@ -127,15 +115,17 @@ const LoginInputForm = () => {
           </p>
           <div className="flex items-center justify-center mt-20 text-white100 ">
             <button
-              className="flex justify-center w-2/3 py-8 text-3xl font-bold rounded-full bg-primaryBlue hover:opacity-75 focus:outline-none"
-              onClick={onSubmit}
+              type="submit"
+              className="flex justify-center w-2/3 py-8 text-3xl font-bold bg-blue-600 rounded-full hover:bg-blue-500 focus:outline-none"
             >
               {mutation.isLoading && <LoadingIndicator style="w-8 h-8" color={colors.white100} />}
               <p className="ml-2">Login</p>
             </button>
           </div>
         </form>
-        {errors && errors.detail && <p className="mt-4 input-error">* {replaceAccountInfoIncorrect(mutation.error)}</p>}
+        {mutation.error && mutation.error.errors.detail && (
+          <p className="mt-4 input-error">* {replaceAccountInfoIncorrect(mutation.error)}</p>
+        )}
       </div>
     </>
   )
