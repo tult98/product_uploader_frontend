@@ -23,7 +23,8 @@ export const getRefreshToken = () => {
 }
 
 export const getMe = () => {
-  return window.localStorage.getItem(LOCAL_STORAGE.ME)
+  const me = JSON.parse(window.localStorage.getItem(LOCAL_STORAGE.ME))
+  return me
 }
 
 export const setMe = (me) => {

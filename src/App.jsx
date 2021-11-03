@@ -21,6 +21,7 @@ import { ModalProvider } from 'context/ModalContext'
 import { NotificationProvider } from 'context/NotificationContext'
 import { AuthenticationProvider } from 'context/AuthenticationContext'
 import { GENERAL_ROUTES, PRODUCT_ROUTES, STORE_ROUTES, TEMPLATE_ROUTES, USER_ROUTES } from 'routes'
+import NotFound404 from 'components/screens/NotFound404'
 
 const queryClient = new QueryClient()
 
@@ -72,6 +73,9 @@ function App() {
                   </Route>
                   <Route path={USER_ROUTES.EDIT_USER} exact>
                     <DetailUserPage />
+                  </Route>
+                  <Route path="*">
+                    <NotFound404 />
                   </Route>
                 </Switch>
                 <Navigation />

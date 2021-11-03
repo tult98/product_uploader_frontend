@@ -7,7 +7,7 @@ import NotificationContext from 'context/NotificationContext'
 import AuthServices from 'services/AuthService'
 import StoreService from 'services/StoreService'
 import { colors } from 'theme/variables/platform'
-import { debounce, DEFAULT_DELAY } from 'utils/commonUtils'
+import { customStyles, debounce, DEFAULT_DELAY } from 'utils/commonUtils'
 import { STORE_ROUTES } from 'routes'
 import {
   arrayRequiredField,
@@ -122,7 +122,7 @@ const StoreInput = ({ store = {}, isEdit = false }) => {
             type="text"
             name="domain_name"
             defaultValue={store?.domain_name || ''}
-            className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
+            className="px-4 py-3 border border-gray-400 rounded-lg focus:outline-none"
             onChange={onChangeTextInput}
           />
           {errors['domain_name'] && <p className="input-error">{errors['domain_name']}</p>}
@@ -135,7 +135,7 @@ const StoreInput = ({ store = {}, isEdit = false }) => {
             type="text"
             name="consumer_key"
             defaultValue={store?.consumer_key || ''}
-            className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
+            className="px-4 py-3 border border-gray-400 rounded-lg focus:outline-none"
             onChange={onChangeTextInput}
           />
           {errors['consumer_key'] && <p className="input-error">{errors['consumer_key']}</p>}
@@ -149,7 +149,7 @@ const StoreInput = ({ store = {}, isEdit = false }) => {
             type="text"
             name="secret_key"
             defaultValue={store?.secret_key || ''}
-            className="px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
+            className="px-4 py-3 border border-gray-400 rounded-lg focus:outline-none"
             onChange={onChangeTextInput}
           />
           {errors['secret_key'] && <p className="input-error">{errors['secret_key']}</p>}
@@ -166,6 +166,7 @@ const StoreInput = ({ store = {}, isEdit = false }) => {
             isLoading={isLoading}
             options={isSuccess ? data.results : []}
             defaultValue={store.users}
+            styles={customStyles}
             getOptionLabel={(option) => option.username}
             getOptionValue={(option) => option.id}
             onChange={onChangeUsers}
