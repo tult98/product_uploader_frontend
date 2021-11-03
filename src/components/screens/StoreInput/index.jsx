@@ -111,6 +111,10 @@ const StoreInput = ({ store = {}, isEdit = false }) => {
     }, DEFAULT_DELAY)()
   }
 
+  const onCancel = () => {
+    history.push(STORE_ROUTES.LIST_STORE)
+  }
+
   return (
     <div className="flex justify-center w-full">
       <form className="w-1/3 px-12 py-20 bg-white center-modal shadow-grayShadow rounded-2xl">
@@ -179,6 +183,7 @@ const StoreInput = ({ store = {}, isEdit = false }) => {
           <button
             type="button"
             className="px-12 py-4 mr-4 text-white rounded-full bg-darkGray opacity-80 hover:opacity-70"
+            onClick={onCancel}
           >
             Cancel
           </button>

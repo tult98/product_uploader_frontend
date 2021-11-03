@@ -134,6 +134,10 @@ const TemplateInput = ({ state, dispatch, isEdit = false }) => {
     setErrors({ ...errors, description: validateRequired(state.description) })
   }
 
+  const onCancel = () => {
+    history.push(TEMPLATE_ROUTES.LIST_TEMPLATE)
+  }
+
   return (
     <>
       <div className={`w-full flex flex-col mb-44 ${modalState.isModalOpen ? 'opacity-20' : ''}`}>
@@ -218,7 +222,7 @@ const TemplateInput = ({ state, dispatch, isEdit = false }) => {
               </button>
             </div>
             <div className="flex justify-center mt-20">
-              <button type="button" className="secondary-btn">
+              <button type="button" className="secondary-btn" onClick={onCancel}>
                 Back
               </button>
               <button
