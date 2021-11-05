@@ -22,6 +22,7 @@ import { NotificationProvider } from 'context/NotificationContext'
 import { AuthenticationProvider } from 'context/AuthenticationContext'
 import { GENERAL_ROUTES, PRODUCT_ROUTES, STORE_ROUTES, TEMPLATE_ROUTES, USER_ROUTES } from 'routes'
 import NotFound404 from 'components/screens/NotFound404'
+import LandingPage from 'pages/landing-page'
 
 const queryClient = new QueryClient()
 
@@ -34,6 +35,9 @@ function App() {
             <AuthenticationProvider>
               <div className="flex flex-col">
                 <Switch>
+                  <Route path={GENERAL_ROUTES.HOME}>
+                    <LandingPage />
+                  </Route>
                   <Route path={TEMPLATE_ROUTES.LIST_TEMPLATE} exact>
                     <ListTemplatePage />
                   </Route>
