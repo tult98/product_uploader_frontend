@@ -4,11 +4,13 @@ import ProductLogCard from './ProductLogCard'
 
 const ProductLogsTable = ({ productLogs }) => {
   return (
-    <div className="grid w-full grid-cols-12 bg-lightGray rounded-2xl shadow-grayShadow">
-      <LogsTableHeader />
-      {productLogs.map((productLog, index) => (
-        <ProductLogCard key={productLog.sku} index={index} productLog={productLog} />
-      ))}
+    <div className="mt-20 w-full">
+      <div className="grid w-full grid-cols-12 bg-lightGray shadow-grayShadow">
+        <LogsTableHeader />
+        {productLogs.map((productLog, index) => (
+          <ProductLogCard key={productLog.sku} index={index} productLog={productLog} />
+        ))}
+      </div>
     </div>
   )
 }
