@@ -1,10 +1,21 @@
-import Icon from 'components/elements/Icon'
+import React, { useState, useEffect } from 'react'
 import ImagePreview from 'components/elements/ImagePreview'
-import React, { useState } from 'react'
-import { colors } from 'theme/variables/platform'
 
 const ImageItem = ({ file }) => {
+  const [imageData, setImageData] = useState(null)
   const [isShow, setIsShow] = useState(false)
+  const reader = new FileReader()
+
+  useEffect(() => {
+    reader.readAsDataURL(file)
+    setImageData(reader.result)
+    reader.addEventListener('load', onPreviewImage)
+    return () => reader.removeEventListener('load', onPreviewImage)
+  }, [])
+
+  const onPreviewImage = () => {
+    setImageData(reader.result)
+  }
 
   const onShowPreview = () => {
     setIsShow(true)
@@ -16,9 +27,9 @@ const ImageItem = ({ file }) => {
 
   return (
     <>
-      <div className="flex flex-row">
+      <div className="flex flex-row items-center">
         <div onMouseEnter={onShowPreview} onMouseLeave={onHidePreview} className="cursor-pointer">
-          <Icon name="image" style="w-10 h-10" fill={colors.font3} />
+          <img src={imageData} alt="thumbnail-image" className="w-10 h-10 object-contain border border-gray-300 mr-2" />
         </div>
         <p>{file.name}</p>
       </div>
