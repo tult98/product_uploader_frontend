@@ -1,17 +1,26 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import Icon from 'components/elements/Icon'
 import ModalContext from 'context/ModalContext'
+import { UNKNOWN_ERROR_MESSAGE } from 'utils/errorsUtils'
 
 const DeleteTemplateModal = ({ mutation }) => {
   const { modalState, setModalState } = useContext(ModalContext)
+  const [error, setError] = useState(null)
 
   const onCloseModal = () => {
     setModalState({ ...modalState, isModalOpen: null, openDeleteTemplateModal: true, templateId: null })
   }
 
+  useEffect(() => {
+    if (mutation.isError) {
+      setError(mutation.error)
+    } else if (mutation.isSuccess) {
+      onCloseModal()
+    }
+  }, [mutation.status])
+
   const onDeleteTemplate = () => {
     mutation.mutate({ id: modalState.templateId })
-    onCloseModal()
   }
 
   return (
@@ -43,6 +52,11 @@ const DeleteTemplateModal = ({ mutation }) => {
             OK
           </button>
         </div>
+        {!!error && !!error.errors ? (
+          <div className="pl-4">
+            <p className="input-error text-xl">{error.errors.detail || UNKNOWN_ERROR_MESSAGE}</p>
+          </div>
+        ) : null}
       </div>
     </>
   )
