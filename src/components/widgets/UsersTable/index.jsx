@@ -54,8 +54,6 @@ const UsersTable = () => {
     history.push(`${USER_ROUTES.LIST_USERS}/${userId}`)
   }
 
-  console.log('=============', currentPage)
-
   return (
     <div className="w-full">
       {isLoading && <LoadingIndicator style="w-12 h-12 center-content" />}

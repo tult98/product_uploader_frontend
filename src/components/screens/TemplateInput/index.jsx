@@ -140,7 +140,7 @@ const TemplateInput = ({ state, dispatch, isEdit = false }) => {
 
   return (
     <>
-      <div className={`w-full flex flex-col mb-44 ${modalState.isModalOpen ? 'opacity-20' : ''}`}>
+      <div className={`w-full flex flex-col mb-44 mt-20 ${modalState.isModalOpen ? 'opacity-20' : ''}`}>
         <IntroducePage
           name="template"
           title={isEdit ? 'Edit a template' : 'Create a template'}
