@@ -53,6 +53,9 @@ const UsersTable = () => {
   const onEditUser = (userId) => {
     history.push(`${USER_ROUTES.LIST_USERS}/${userId}`)
   }
+
+  console.log('=============', currentPage)
+
   return (
     <div className="w-full">
       {isLoading && <LoadingIndicator style="w-12 h-12 center-content" />}
@@ -99,7 +102,7 @@ const UsersTable = () => {
                 </div>
               ))
             ) : (
-              <div className="flex flex-row items-center justify-center text-3xl text-red-500 min-h-400px">
+              <div className="flex flex-row items-center justify-center text-3xl text-red-500 h-400px">
                 <p className="text-red-600 ">No record found</p>
               </div>
             )}

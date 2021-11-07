@@ -111,6 +111,9 @@ export const removeSpace = (str) => {
 }
 
 export const calculateAvailablePages = (currentPage, totalPage) => {
+  if (currentPage > totalPage) {
+    return [currentPage]
+  }
   const smallestPage = currentPage - 1 >= 1 ? currentPage - 1 : currentPage
   const largestPage = currentPage + 1 <= totalPage ? currentPage + 1 : totalPage
   const availablePages = []

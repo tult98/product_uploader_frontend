@@ -52,11 +52,11 @@ const Paginator = ({ count, currentPage, next, previous, setCurrentPage, limit =
       <button type="button" disabled={currentPage === totalPage} onClick={onGoToNextPage}>
         <Icon name="chevronRight" style="w-12 h12 cursor-pointer" fill={`${next ? '#404040' : '#b0b0b0'}`} />
       </button>
-      <button type="button" onClick={onGoToLastPage} disabled={currentPage === totalPage}>
+      <button type="button" onClick={onGoToLastPage} disabled={currentPage >= totalPage}>
         <Icon
           name="doubleChevronRight"
           style="w-12 h12 cursor-pointer"
-          fill={`${currentPage === totalPage ? '#b0b0b0' : '#404040'}`}
+          fill={`${currentPage >= totalPage ? '#b0b0b0' : '#404040'}`}
         />
       </button>
     </div>
