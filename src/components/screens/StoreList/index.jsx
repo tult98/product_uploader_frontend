@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import LoadingIndicator from 'components/elements/LoadingIndicator'
 import ErrorIndicator from 'components/widgets/ErrorIndicator'
-import NoRecordFound from 'components/widgets/NoRecordFound'
 import Paginator from 'components/widgets/Paginator'
 import SearchBar from 'components/widgets/SearchBar'
 import DeleteStoreModal from 'modals/DeleteStoreModal'
@@ -113,8 +112,8 @@ const StoreList = () => {
                     </div>
                   ))
                 ) : (
-                  <div className="flex flex-row items-center justify-center text-3xl text-red-500 min-h-400px">
-                    <NoRecordFound />
+                  <div className="flex flex-row items-center justify-center text-3xl text-red-500 h-400px bg-white">
+                    No record found.
                   </div>
                 )}
               </div>

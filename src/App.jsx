@@ -35,7 +35,7 @@ function App() {
             <AuthenticationProvider>
               <div className="flex flex-col">
                 <Switch>
-                  <Route path={GENERAL_ROUTES.HOME}>
+                  <Route path={GENERAL_ROUTES.HOME} exact>
                     <LandingPage />
                   </Route>
                   <Route path={TEMPLATE_ROUTES.LIST_TEMPLATE} exact>
