@@ -49,7 +49,7 @@ const ProductInput = ({ product, onChangeProducts }) => {
         const attribute = variation.attributes.find((attribute) => attribute.name === primaryAttribute.name)
         return option.name === attribute.value
       })
-      groupedVariations.push({ sku: `${product.sku}-${option.name}`, variations: variations })
+      groupedVariations.push({ sku: option.name, variations: variations })
     })
     return groupedVariations
   }, [product.template])
