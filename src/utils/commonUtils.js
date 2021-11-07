@@ -138,7 +138,7 @@ export const truncateLongText = (text, expectedLength = 30) => {
 export const customStyles = {
   valueContainer: (provided) => ({
     ...provided,
-    paddingTop: 5,
-    paddingBottom: 5,
+    paddingTop: 4,
+    paddingBottom: 4,
   }),
 }
