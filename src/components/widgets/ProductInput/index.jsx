@@ -10,13 +10,15 @@ import TemplateServices from 'services/TemplateServices'
 import { debounce, DEFAULT_DELAY } from 'utils/commonUtils'
 import { AlertError } from 'utils/AlertUtils'
 
-const ProductInput = ({ product, onChangeProducts }) => {
+const ProductInput = ({ product, onChangeProducts, store }) => {
   const [selectedTemplate, setSelectedTemplate] = useState()
   const { isLoading, isError, isSuccess, data } = useQuery(
     ['templates', { currentPage: 1, searchPattern: '' }],
     TemplateServices.queryTemplates,
     { keepPreviousData: true },
   )
+
+  console.log('============', store)
 
   const onSelectTemplate = (selectedTemplate) => {
     setSelectedTemplate(selectedTemplate)
@@ -82,6 +84,7 @@ const ProductInput = ({ product, onChangeProducts }) => {
 
           <div className="w-47.5%">
             <CategoriesInput
+              store={store}
               style="w-full"
               labelStyle="font-medium capitalize"
               label="Category"

@@ -4,12 +4,16 @@ import { useQuery } from 'react-query'
 import WooServices from 'services/WooServices'
 import ToolTip from 'components/elements/ToolTip'
 import { debounce, DEFAULT_DELAY } from 'utils/commonUtils'
+import { UNKNOWN_ERROR_MESSAGE } from 'utils/errorsUtils'
 
-const CategoriesInput = ({ onSelect, style, labelStyle, label, isDisabled }) => {
+const CategoriesInput = ({ onSelect, style, labelStyle, label, isDisabled, store }) => {
   const [inputValue, setInputValue] = useState('')
   const { isLoading, isError, isSuccess, data, error } = useQuery(
-    ['fetching-categories', { searchPattern: inputValue }],
+    ['fetching-categories', { searchPattern: inputValue, store }],
     WooServices.queryCategories,
+    {
+      enabled: !!store,
+    },
   )
 
   const onChangeOptions = (selectedOptions) => {
@@ -40,7 +44,7 @@ const CategoriesInput = ({ onSelect, style, labelStyle, label, isDisabled }) => 
         onChange={onChangeOptions}
         onInputChange={onInputChange}
       />
-      {!isLoading && isError && <p className="input-error">{error.errors.detail}</p>}
+      {!isLoading && isError && <p className="input-error">{error?.errors?.detail || UNKNOWN_ERROR_MESSAGE}</p>}
     </div>
   )
 }

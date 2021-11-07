@@ -101,6 +101,14 @@ const UploadProduct = ({ isUpdateProduct = false }) => {
         />
         <div className="self-center w-4/5">
           <FileUploadInput setProducts={setProducts} />
+          {products && products.length > 0 && (
+            <StoreInput
+              label="Targeted store"
+              style="mt-10"
+              labelStyle="font-medium capitalize"
+              onSelect={onSelectStore}
+            />
+          )}
           {products &&
             products.length > 0 &&
             products.map((product) => (
@@ -109,16 +117,11 @@ const UploadProduct = ({ isUpdateProduct = false }) => {
                 product={product}
                 onChangeProducts={onChangeProducts}
                 isUpdate={isUpdateProduct}
+                store={store}
               />
             ))}
           {products && products.length > 0 && (
             <>
-              <StoreInput
-                label="Targeted store"
-                style="mt-10"
-                labelStyle="font-medium capitalize"
-                onSelect={onSelectStore}
-              />
               <div className="flex justify-center mt-6 mb-12">
                 <button className="primary-btn" type="button" onClick={onUploadProducts}>
                   {isUpdateProduct ? 'Update products' : 'Upload products'}

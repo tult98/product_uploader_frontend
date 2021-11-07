@@ -9,11 +9,11 @@ import {
 } from 'utils/productUtils'
 import WPServices from './WPServices'
 
-const WOO_BASE_URL = 'https://yourgears.net/wp-json/wc/v3'
+// const WOO_BASE_URL = 'https://yourgears.net/wp-json/wc/v3'
 export const HOST_IMAGE_SERVER = 'https://yourgears.net/wp-content/uploads'
-const CONSUMER_KEY = 'ck_314aa3b442262eee58ab8eb25147e0e89e52a587'
-const CONSUMER_SECRET = 'cs_e17b1d2677df1b12e2ec54540bec0fe37bac5789'
-const authorizeValue = `consumer_key=${CONSUMER_KEY}&consumer_secret=${CONSUMER_SECRET}`
+// const CONSUMER_KEY = 'ck_314aa3b442262eee58ab8eb25147e0e89e52a587'
+// const CONSUMER_SECRET = 'cs_e17b1d2677df1b12e2ec54540bec0fe37bac5789'
+// const authorizeValue = `consumer_key=${CONSUMER_KEY}&consumer_secret=${CONSUMER_SECRET}`
 
 const getAuthorizeValue = (store) => {
   const url =
@@ -23,31 +23,34 @@ const getAuthorizeValue = (store) => {
 }
 
 export default class WooServices {
+  // TODO: get authorize from selected store
   static async queryCategories({ queryKey }) {
-    const searchPattern = queryKey[1].searchPattern
+    console.log(queryKey)
+    const [_, { searchPattern, store }] = queryKey /* eslint-disable-line */
+    const { url, authorizeValue } = getAuthorizeValue(store)
     return await BaseService.get(`/products/categories?search=${searchPattern}&${authorizeValue}`, null, {
-      baseURL: WOO_BASE_URL,
+      baseURL: url,
     })
   }
 
-  static async batchCreateAttributes(attributes) {
-    let globalAttributes, error
-    const data = {
-      create: attributes,
-    }
-    try {
-      const result = await BaseService.post(`/products/attributes/batch?${authorizeValue}`, data, {
-        baseURL: WOO_BASE_URL,
-      })
-      globalAttributes = result.create
-    } catch (e) {
-      error = e
-    }
-    return { globalAttributes, error }
-  }
+  // static async batchCreateAttributes(attributes) {
+  //   let globalAttributes, error
+  //   const data = {
+  //     create: attributes,
+  //   }
+  //   try {
+  //     const result = await BaseService.post(`/products/attributes/batch?${authorizeValue}`, data, {
+  //       baseURL: WOO_BASE_URL,
+  //     })
+  //     globalAttributes = result.create
+  //   } catch (e) {
+  //     error = e
+  //   }
+  //   return { globalAttributes, error }
+  // }
 
-  static async getProductBySku(sku) {
-    return BaseService.get(`/products?sku=${sku}&${authorizeValue}`, null, { baseURL: WOO_BASE_URL })
+  static async getProductBySku(sku, authorizeValue, url) {
+    return BaseService.get(`/products?sku=${sku}&${authorizeValue}`, null, { baseURL: url })
   }
 
   static async uploadProduct({ data, store, wpAccount }) {
@@ -118,7 +121,7 @@ export default class WooServices {
     let products
     const { url, authorizeValue } = getAuthorizeValue(store)
     try {
-      const result = await WooServices.getProductBySku(data.sku, url, authorizeValue)
+      const result = await WooServices.getProductBySku(data.sku, authorizeValue, url)
       products = Object.values(result)
       if (!products || products.length !== 1) {
         return { sku: data.sku, status: UPLOAD_STATUS.ERROR, message: 'Cannot found any product with that SKU.' }
