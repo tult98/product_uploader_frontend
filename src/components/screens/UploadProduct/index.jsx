@@ -92,12 +92,8 @@ const UploadProduct = ({ isUpdateProduct = false }) => {
       <div className={`flex flex-col w-full mt-20 ${mutation.isLoading ? 'opacity-20' : ''}`}>
         <IntroducePage
           name="product"
-          title={isUpdateProduct ? 'Update products' : 'Upload products'}
-          description={
-            isUpdateProduct
-              ? 'This is where you update your existing products.'
-              : 'This is where you upload your products with a desire template.'
-          }
+          title={isUpdateProduct ? 'Update existed products' : 'Upload products'}
+          description={isUpdateProduct ? '' : 'This is where you upload your products with a desire template.'}
         />
         <div className="self-center w-4/5">
           <FileUploadInput setProducts={setProducts} />
