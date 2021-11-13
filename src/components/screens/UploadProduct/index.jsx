@@ -90,11 +90,7 @@ const UploadProduct = ({ isUpdateProduct = false }) => {
     <>
       {mutation.isLoading && <LoadingIndicator style="w-16 h-16 center-with-sidebar" />}
       <div className={`flex flex-col w-full mt-20 ${mutation.isLoading ? 'opacity-20' : ''}`}>
-        <IntroducePage
-          name="product"
-          title={isUpdateProduct ? 'Update existed products' : 'Upload products'}
-          description={isUpdateProduct ? '' : 'This is where you upload your products with a desire template.'}
-        />
+        <IntroducePage name="product" title={isUpdateProduct ? 'Update existed products' : 'Create new products'} />
         <div className="self-center w-4/5">
           <FileUploadInput setProducts={setProducts} />
           {products && products.length > 0 && (

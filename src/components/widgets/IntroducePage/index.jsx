@@ -9,7 +9,7 @@ const IntroducePage = ({ name, title, description }) => {
         <Icon name={name} style="w-12 h-12" fill={colors.font1} />
       </div>
       <div className="ml-8">
-        <p className="text-5xl font-bold text-font1">{title}</p>
+        <p className="text-5xl font-bold capitalize text-font1">{title}</p>
         <p className="text-font2">{description}</p>
       </div>
     </div>
