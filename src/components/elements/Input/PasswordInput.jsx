@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { colors } from 'theme/variables/platform'
 import Icon from '../Icon'
 
-const PasswordInput = ({ name, value, onChange }) => {
+const PasswordInput = ({ name, value, onChange, onBlur }) => {
   const [isShowPassword, setIsShowPassword] = useState(false)
 
   const onToggleShowPassword = () => {
@@ -16,6 +16,7 @@ const PasswordInput = ({ name, value, onChange }) => {
         name={name}
         value={value}
         className="w-full px-4 py-3 border border-gray-400 rounded-lg focus:outline-none"
+        onBlur={onBlur}
         onChange={onChange}
       />
       <div className="absolute cursor-pointer right-4" onClick={onToggleShowPassword}>

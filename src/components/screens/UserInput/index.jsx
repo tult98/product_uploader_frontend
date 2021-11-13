@@ -41,6 +41,8 @@ const UserInput = ({ user = {}, isEdit = false }) => {
     wp_password: user.wp_password || '',
   })
 
+  console.log(user)
+
   const [errors, setErrors] = useState({})
   const { setNotificationState } = useContext(NotificationContext)
   const mutation = isEdit ? useMutation(AuthServices.editUser) : useMutation(AuthServices.createUser)
@@ -99,6 +101,18 @@ const UserInput = ({ user = {}, isEdit = false }) => {
     return Object.keys(errors).length === 0
   }
 
+  const onValidateField = (event) => {
+    if (event.target.name === 'email') {
+      setErrors({ ...errors, ...validateEmail(event.target.name, event.target.value) })
+    } else if (event.target.name === 'role') {
+      setErrors({ ...errors, ...numberRequiredField(event.target.name, event.target.value) })
+    } else if (event.target.name === 'password') {
+      !isEdit && setErrors({ ...errors, ...textRequiredField(event.target.name, event.target.value) })
+    } else {
+      setErrors({ ...errors, ...textRequiredField(event.target.name, event.target.value) })
+    }
+  }
+
   const onGeneratePassword = () => {
     const randomPassword = generateRandomPassword()
     setUserInput({ ...userInput, password: randomPassword })
@@ -133,6 +147,7 @@ const UserInput = ({ user = {}, isEdit = false }) => {
             id="email"
             defaultValue={user?.email || ''}
             className="px-4 py-3 border border-gray-400 rounded-lg focus:outline-none"
+            onBlur={onValidateField}
             onChange={onChangeTextInput}
           />
           {errors['email'] && <p className="input-error">{errors['email']}</p>}
@@ -147,6 +162,7 @@ const UserInput = ({ user = {}, isEdit = false }) => {
             id="first_name"
             defaultValue={user?.first_name || ''}
             className="px-4 py-3 border border-gray-400 rounded-lg focus:outline-none"
+            onBlur={onValidateField}
             onChange={onChangeTextInput}
           />
           {errors['first_name'] && <p className="input-error">{errors['first_name']}</p>}
@@ -161,6 +177,7 @@ const UserInput = ({ user = {}, isEdit = false }) => {
             id="last_name"
             defaultValue={user?.last_name || ''}
             className="px-4 py-3 border border-gray-400 rounded-lg focus:outline-none"
+            onBlur={onValidateField}
             onChange={onChangeTextInput}
           />
           {errors['last_name'] && <p className="input-error">{errors['last_name']}</p>}
@@ -173,6 +190,7 @@ const UserInput = ({ user = {}, isEdit = false }) => {
               name="username"
               defaultValue={user?.username || ''}
               className="px-4 py-3 border border-gray-400 rounded-lg focus:outline-none"
+              onBlur={onValidateField}
               onChange={onChangeTextInput}
             />
             {errors['username'] && <p className="input-error">{errors['username']}</p>}
@@ -187,6 +205,7 @@ const UserInput = ({ user = {}, isEdit = false }) => {
             name="role"
             defaultValue={optionRole.find((role) => role.value === user.role)}
             options={optionRole}
+            onBlur={onValidateField}
             onChange={onChangeUsers}
           />
           {errors['role'] && <p className="input-error">{errors['role']}</p>}
@@ -195,21 +214,13 @@ const UserInput = ({ user = {}, isEdit = false }) => {
           <label htmlFor="password" className="font-base">
             Password
           </label>
-          {/* <div className="relative flex flex-row items-center w-full">
-            <input
-              type={isShowPassword ? 'text' : 'password'}
-              id="password"
-              name="password"
-              value={userInput.password}
-              className="w-full px-4 py-3 border border-gray-400 rounded-lg focus:outline-none"
-              onChange={onChangeTextInput}
-            />
-            <div className="absolute cursor-pointer right-4" onClick={onToggleShowPassword}>
-              <Icon name={!isShowPassword ? 'eye' : 'eyeOff'} style="w-10 h-10" fill={colors.darkGray} />
-            </div>
-          </div> */}
-          <PasswordInput name="password" value={userInput.password} onChange={onChangeTextInput} />
-          {errors && errors['password'] && errors['password'] && <p className="input-error">{errors['password']}</p>}
+          <PasswordInput
+            name="password"
+            value={userInput.password}
+            onChange={onChangeTextInput}
+            onBlur={onValidateField}
+          />
+          {errors && errors['password'] && <p className="input-error">{errors['password']}</p>}
           <a type="button" className="mt-3 text-blue-600 cursor-pointer hover:underline" onClick={onGeneratePassword}>
             Generate a random password
           </a>
@@ -228,10 +239,11 @@ const UserInput = ({ user = {}, isEdit = false }) => {
               defaultValue={userInput.wp_username}
               value={userInput.wp_username}
               className="w-full px-4 py-3 border border-gray-400 rounded-lg focus:outline-none"
+              onBlur={onValidateField}
               onChange={onChangeTextInput}
             />
           </div>
-          {errors && errors['password'] && errors['password'] && <p className="input-error">{errors['password']}</p>}
+          {errors && errors['wp_username'] && <p className="input-error">{errors['password']}</p>}
         </div>
         <div className="flex flex-col mt-4">
           <div className="flex flex-row">
@@ -240,9 +252,14 @@ const UserInput = ({ user = {}, isEdit = false }) => {
             </label>
             <ToolTip message="This information will use for uploading product's images." />
           </div>
-          <PasswordInput name="wp_password" value={userInput.wp_password} onChange={onChangeTextInput} />
+          <PasswordInput
+            name="wp_password"
+            value={userInput.wp_password}
+            onChange={onChangeTextInput}
+            onBlur={onValidateField}
+          />
 
-          {errors && errors['password'] && errors['password'] && <p className="input-error">{errors['password']}</p>}
+          {errors && errors['wp_password'] && <p className="input-error">{errors['password']}</p>}
         </div>
         <div className="flex justify-end w-full mt-10">
           <button
