@@ -37,7 +37,7 @@ const UserInput = ({ user = {}, isEdit = false }) => {
     username: user.username || '',
     role: user.role || '',
     password: '',
-    wp_username: user.wp_user_name || '',
+    wp_username: user.wp_username || '',
     wp_password: user.wp_password || '',
   })
 
@@ -225,6 +225,7 @@ const UserInput = ({ user = {}, isEdit = false }) => {
             <input
               type="text"
               name="wp_username"
+              defaultValue={userInput.wp_username}
               value={userInput.wp_username}
               className="w-full px-4 py-3 border border-gray-400 rounded-lg focus:outline-none"
               onChange={onChangeTextInput}
