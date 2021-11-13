@@ -116,6 +116,10 @@ const UserInput = ({ user = {}, isEdit = false }) => {
     }
   }
 
+  const onCancel = () => {
+    history.push(USER_ROUTES.LIST_USERS)
+  }
+
   return (
     <div className="flex justify-center w-full">
       <form className="w-2/5 px-12 py-20 my-20 bg-white shadow-grayShadow rounded-2xl">
@@ -243,6 +247,7 @@ const UserInput = ({ user = {}, isEdit = false }) => {
           <button
             type="button"
             className="px-12 py-4 mr-4 text-white rounded-full bg-darkGray opacity-80 hover:opacity-70"
+            onClick={onCancel}
           >
             Cancel
           </button>
@@ -252,7 +257,7 @@ const UserInput = ({ user = {}, isEdit = false }) => {
             onClick={onSubmit}
           >
             {mutation.isLoading && <LoadingIndicator style="w-8 h-8 mr-2" color={colors.white100} />}
-            {isEdit ? 'Edit' : 'Create'}
+            {isEdit ? 'Save' : 'Create'}
           </button>
         </div>
         {/* {isError && <p>{error.errors.detail || 'Something went wrong, Please try later!'}</p>} */}
