@@ -41,8 +41,6 @@ const UserInput = ({ user = {}, isEdit = false }) => {
     wp_password: user.wp_password || '',
   })
 
-  console.log(user)
-
   const [errors, setErrors] = useState({})
   const { setNotificationState } = useContext(NotificationContext)
   const mutation = isEdit ? useMutation(AuthServices.editUser) : useMutation(AuthServices.createUser)
@@ -124,6 +122,7 @@ const UserInput = ({ user = {}, isEdit = false }) => {
       if (!isEdit) {
         mutation.mutate(userInput)
       } else {
+        delete userInput.password
         const userData = { ...userInput }
         mutation.mutate({ id: user.id, data: userData })
       }
