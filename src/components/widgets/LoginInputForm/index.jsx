@@ -58,6 +58,10 @@ const LoginInputForm = () => {
     setIsShowPassword(!isShowPassword)
   }
 
+  const onForgetPassword = () => {
+    alert('Please contact admin to reset password')
+  }
+
   return (
     <>
       <div className="w-1/2 max-w-screen-sm px-16 py-20 bg-white shadow-grayShadow center-content rounded-3xl">
@@ -117,9 +121,8 @@ const LoginInputForm = () => {
               </>
             )}
           </div>
-          <p className="mt-8 italic text-right">
-            Do not have an account? Leave a message to admin{' '}
-            <span className="text-blue-700 cursor-pointer hover:underline">here</span>
+          <p className="mt-8 italic text-right text-blue-600 cursor-pointer hover:underline" onClick={onForgetPassword}>
+            Forget your password?
           </p>
           <div className="flex items-center justify-center mt-20 text-white100 ">
             <button
