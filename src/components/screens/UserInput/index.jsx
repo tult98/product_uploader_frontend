@@ -243,7 +243,7 @@ const UserInput = ({ user = {}, isEdit = false }) => {
               onChange={onChangeTextInput}
             />
           </div>
-          {errors && errors['wp_username'] && <p className="input-error">{errors['password']}</p>}
+          {errors && errors['wp_username'] && <p className="input-error">{errors['wp_username']}</p>}
         </div>
         <div className="flex flex-col mt-4">
           <div className="flex flex-row">
@@ -259,7 +259,7 @@ const UserInput = ({ user = {}, isEdit = false }) => {
             onBlur={onValidateField}
           />
 
-          {errors && errors['wp_password'] && <p className="input-error">{errors['password']}</p>}
+          {errors && errors['wp_password'] && <p className="input-error">{errors['wp_password']}</p>}
         </div>
         <div className="flex justify-end w-full mt-10">
           <button
