@@ -1,4 +1,4 @@
-import { GENERAL_ROUTES, PRODUCT_ROUTES, STORE_ROUTES, TEMPLATE_ROUTES, USER_ROUTES } from 'routes'
+import { PRODUCT_ROUTES, STORE_ROUTES, TEMPLATE_ROUTES, USER_ROUTES } from 'routes'
 
 export const DEFAULT_DELAY = 300
 export const DEFAULT_SHOW_TIME = 3000
@@ -13,10 +13,6 @@ export const LOCAL_STORAGE = {
 export const getNavigationItems = (isAdmin) => {
   if (isAdmin) {
     return [
-      {
-        name: 'home',
-        route: GENERAL_ROUTES.HOME,
-      },
       {
         name: 'template',
         child: [
@@ -73,10 +69,6 @@ export const getNavigationItems = (isAdmin) => {
   }
 
   return [
-    {
-      name: 'home',
-      route: GENERAL_ROUTES.HOME,
-    },
     {
       name: 'product',
       child: [
