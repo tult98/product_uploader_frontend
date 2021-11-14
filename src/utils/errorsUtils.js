@@ -55,10 +55,10 @@ export const validateTemplateInput = (data, errors, setErrors) => {
       numberVariations = numberVariations ? numberVariations * attribute?.options.length : attribute?.options.length
     }
   }
-  if (data.variations.length < numberVariations) {
-    isValidInput = false
-    newErrors = { ...newErrors, variations: `Please enter enough ${numberVariations} variations` }
-  }
+  // if (data.variations.length < numberVariations) {
+  //   isValidInput = false
+  //   newErrors = { ...newErrors, variations: `Please enter enough ${numberVariations} variations` }
+  // }
 
   // TODO: validate for each attribute
   const attributeErrors = []
