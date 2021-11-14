@@ -48,7 +48,7 @@ const UserInput = ({ user = {}, isEdit = false }) => {
     if (mutation.isSuccess) {
       setNotificationState({
         type: 'success',
-        message: isEdit ? 'Edit the store successful.' : 'Create a new store successful.',
+        message: isEdit ? 'Edit the user successful.' : 'Create a new user successful.',
         isShow: true,
       })
       if (!isEdit) {
