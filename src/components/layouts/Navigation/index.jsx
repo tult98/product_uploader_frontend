@@ -9,7 +9,7 @@ const Navigation = () => {
   const location = useLocation()
   const { user } = useContext(AuthenticationContext)
 
-  return user ? <NavigationAuth /> : !location.pathname === GENERAL_ROUTES.LOGIN ? <NavigationNonAuth /> : ''
+  return user ? <NavigationAuth /> : location.pathname !== GENERAL_ROUTES.LOGIN ? <NavigationNonAuth /> : ''
 }
 
 export default Navigation
