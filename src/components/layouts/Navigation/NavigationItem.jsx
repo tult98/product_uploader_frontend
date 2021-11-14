@@ -4,7 +4,7 @@ import Icon from 'components/elements/Icon'
 import { colors } from 'theme/variables/platform'
 
 const NavigationItem = ({ name, route, child }) => {
-  const [isExpand, setIsExpand] = useState(false)
+  const [isExpand, setIsExpand] = useState(true)
 
   const onToggleNavigation = () => {
     setIsExpand(!isExpand)

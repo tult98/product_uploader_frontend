@@ -8,7 +8,7 @@ import AuthenticationContext from 'context/AuthenticationContext'
 import { colors } from 'theme/variables/platform'
 import { login, replaceAccountInfoIncorrect } from 'utils/authUtils'
 import { validateRequired } from 'utils/validators'
-import { GENERAL_ROUTES } from 'routes'
+import { PRODUCT_ROUTES } from 'routes'
 
 const LoginInputForm = () => {
   const [authInput, setAuthInput] = useState({ username: '', password: '' })
@@ -29,7 +29,7 @@ const LoginInputForm = () => {
         login({ access_token: token.access, refresh_token: token.refresh })
         const me = await AuthServices.getMe()
         setUser(me)
-        history.push(GENERAL_ROUTES.HOME)
+        history.push(PRODUCT_ROUTES.UPLOAD_PRODUCT)
       }
     })()
   }, [mutation.status])
