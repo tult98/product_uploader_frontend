@@ -122,7 +122,9 @@ const UserInput = ({ user = {}, isEdit = false }) => {
       if (!isEdit) {
         mutation.mutate(userInput)
       } else {
-        delete userInput.password
+        if (userInput.password === '') {
+          delete userInput.password
+        }
         const userData = { ...userInput }
         mutation.mutate({ id: user.id, data: userData })
       }
