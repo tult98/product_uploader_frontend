@@ -137,7 +137,7 @@ const UserInput = ({ user = {}, isEdit = false }) => {
 
   return (
     <div className="flex justify-center w-full">
-      <form className="w-2/5 px-12 py-20 my-20 bg-white shadow-grayShadow rounded-2xl">
+      <form className="w-2/5 px-12 py-20 my-20 bg-white shadow-grayShadow rounded-2xl" autoComplete="off">
         <div className="flex flex-col">
           <label htmlFor="email" className="font-base">
             Email
