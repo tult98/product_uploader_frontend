@@ -25,10 +25,10 @@ const LogCard = ({ index, log, isParent, isShowChild, onToggleShowChildren }) =>
           <Icon name="chevronRight" style="w-10 h-10" fill={colors.darkGray} />
         </div>
       )}
-      <div className={`flex justify-center py-4 ${textStyle}`}>{isParent ? index : ''}</div>
-      <div className={`flex justify-center col-span-1 py-4 ${textStyle}`}>{log.status}</div>
-      <div className={`flex justify-center col-span-4 py-4 ${textStyle}`}>{log.sku}</div>
-      <div className={`flex justify-center col-span-6 py-4 ${textStyle}`}>{log.message}</div>
+      <div className={`flex px-4 py-4 ${textStyle}`}>{isParent ? index : ''}</div>
+      <div className={`flex px-4 col-span-1 py-4 ${textStyle}`}>{log.status}</div>
+      <div className={`flex px-4 col-span-4 py-4 ${textStyle}`}>{log.sku}</div>
+      <div className={`flex px-4 col-span-6 py-4 ${textStyle}`}>{log.message}</div>
     </div>
   )
 }
