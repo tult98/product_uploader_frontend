@@ -189,7 +189,7 @@ export default class WooServices {
         productLog = {
           ...productLog,
           status: UPLOAD_STATUS.WARN,
-          message: `${UPLOAD_SUCCESS_MESSAGE}. But delete the old images is failed. Please do it manually.`,
+          message: 'Delete old images is failed',
         }
       }
       for (const variationLog of variationLogs) {
