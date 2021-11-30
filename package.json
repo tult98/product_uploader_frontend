@@ -44,7 +44,8 @@
     ]
   },
   "devDependencies": {
-    "autoprefixer": "^9",
+    "@tailwindcss/postcss7-compat": "^2.2.7",
+    "autoprefixer": "^10.4.0",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
@@ -52,9 +53,9 @@
     "eslint-plugin-react": "^7.25.1",
     "husky": ">=6",
     "lint-staged": ">=10",
-    "postcss": "^7",
+    "postcss": "^8.4.4",
     "prettier": "^2.3.2",
-    "@tailwindcss/postcss7-compat": "^2.2.7"
+    "tailwindcss": "^2.2.19"
   },
   "husky": {
     "hooks": {
