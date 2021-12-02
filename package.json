@@ -15,7 +15,6 @@
     "react-router-dom": "^5.2.1",
     "react-scripts": "^4.0.3",
     "react-select": "^4.3.1",
-    "tailwindcss": "^2.2.19",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
@@ -46,7 +45,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss7-compat": "^2.2.7",
-    "autoprefixer": "^10.4.0",
+    "autoprefixer": "9",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
@@ -54,8 +53,9 @@
     "eslint-plugin-react": "^7.25.1",
     "husky": ">=6",
     "lint-staged": ">=10",
-    "postcss": "^8.4.4",
-    "prettier": "^2.3.2"
+    "postcss": "7",
+    "prettier": "^2.3.2",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat"
   },
   "husky": {
     "hooks": {
