@@ -17,16 +17,6 @@ export default class WPServices {
     })
   }
 
-  // static async updateImage(data, productSku, wpAccount) {
-  //   return await BaseService.put(`/media/${data.id}`, null, {
-  //     baseURL: WP_BASE_URL,
-  //     auth: wpAccount,
-  //     headers: {
-  //       'Content-Disposition': `attachment; filename=${productSku}-${data.name}`,
-  //     },
-  //   })
-  // }
-
   static async uploadImages({ data, wpAccount }) {
     // 1. call api to upload images
     const images = []
@@ -52,14 +42,10 @@ export default class WPServices {
   }
 
   static async deleteImage(id, wpAccount) {
-    return await BaseService.delete(
-      `/media/${id}?force=true`,
-      {},
-      {
-        baseURL: WP_BASE_URL,
-        auth: wpAccount,
-      },
-    )
+    return await BaseService.delete(`/media/${id}?force=true`, {
+      baseURL: WP_BASE_URL,
+      auth: wpAccount,
+    })
   }
 
   static async deleteImages(images, wpAccount) {
