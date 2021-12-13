@@ -18,8 +18,6 @@ const ProductInput = ({ product, onChangeProducts, store }) => {
     { keepPreviousData: true },
   )
 
-  console.log('============', store)
-
   const onSelectTemplate = (selectedTemplate) => {
     setSelectedTemplate(selectedTemplate)
 

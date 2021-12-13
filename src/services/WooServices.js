@@ -10,7 +10,7 @@ import {
 import WPServices from './WPServices'
 
 // const WOO_BASE_URL = 'https://yourgears.net/wp-json/wc/v3'
-export const HOST_IMAGE_SERVER = 'https://yourgears.net/wp-content/uploads'
+// export const HOST_IMAGE_SERVER = 'https://yourgears.net/wp-content/uploads'
 // const CONSUMER_KEY = 'ck_314aa3b442262eee58ab8eb25147e0e89e52a587'
 // const CONSUMER_SECRET = 'cs_e17b1d2677df1b12e2ec54540bec0fe37bac5789'
 // const authorizeValue = `consumer_key=${CONSUMER_KEY}&consumer_secret=${CONSUMER_SECRET}`
@@ -25,7 +25,6 @@ const getAuthorizeValue = (store) => {
 export default class WooServices {
   // TODO: get authorize from selected store
   static async queryCategories({ queryKey }) {
-    console.log(queryKey)
     const [_, { searchPattern, store }] = queryKey /* eslint-disable-line */
     const { url, authorizeValue } = getAuthorizeValue(store)
     return await BaseService.get(`/products/categories?search=${searchPattern}&${authorizeValue}`, null, {
@@ -54,7 +53,7 @@ export default class WooServices {
   }
 
   static async uploadProduct({ data, store, wpAccount }) {
-    const { images, errors } = await WPServices.uploadImages({ data, wpAccount })
+    const { images, errors } = await WPServices.uploadImages({ data, domainName: store.domain_name, wpAccount })
 
     if (errors && errors.length > 0) {
       let message = 'Failed at uploading the following files: '
