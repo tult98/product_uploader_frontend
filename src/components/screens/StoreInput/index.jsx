@@ -72,8 +72,7 @@ const StoreInput = ({ store = {}, isEdit = false }) => {
   }
 
   const onChangeUsers = (selectedUsers) => {
-    const selectedUserIds = selectedUsers.map((user) => user.id)
-    setStoreInput({ ...storeInput, users: selectedUserIds })
+    setStoreInput({ ...storeInput, users: selectedUsers })
   }
 
   const onValidateForm = () => {
@@ -99,7 +98,7 @@ const StoreInput = ({ store = {}, isEdit = false }) => {
       if (!isEdit) {
         mutation.mutate(storeInput)
       } else {
-        const storeData = { ...storeInput }
+        const storeData = { ...storeInput, users: storeInput.users.map((user) => user.id) }
         mutation.mutate({ storeId: store.id, storeData })
       }
     }
