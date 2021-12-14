@@ -136,8 +136,8 @@ const VariationInput = ({
           )}
         </div>
 
-        <div className="flex flex-row justify-between">
-          <div className="flex flex-col w-5/12 ">
+        <div className="grid grid-cols-2 gap-4">
+          <div className="flex flex-col">
             <label className="font-semibold uppercase">Regular price</label>
             <div className="relative">
               <input
@@ -155,7 +155,7 @@ const VariationInput = ({
             )}
           </div>
 
-          <div className="flex flex-col w-5/12 ">
+          <div className="flex flex-col">
             <label className="font-semibold uppercase">Sale price</label>
             <div className="relative">
               <input
@@ -178,7 +178,7 @@ const VariationInput = ({
         {!(errors && errors.price) && variationErrors && variationErrors.price && (
           <p className="input-error">{variationErrors.price}</p>
         )}
-        {renderAttributes(variation.attributes.length)}
+        <div className="grid grid-cols-2 gap-4">{renderAttributes(variation.attributes.length)}</div>
       </div>
     </div>
   )
