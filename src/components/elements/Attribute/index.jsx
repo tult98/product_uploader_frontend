@@ -24,6 +24,7 @@ const Attribute = ({
   templateErrors,
   setTemplateErrors,
   isDefaultVariation = false,
+  customStyle,
 }) => {
   const { modalState, setModalState } = useContext(ModalContext)
   const [availableOptions, setAvailableOptions] = useState([])
@@ -172,7 +173,9 @@ const Attribute = ({
 
   return (
     <div
-      className={`w-full mt-8 ${!isVariationAttribute ? 'bg-white100 rounded-3xl shadow-grayShadow p-8 relative' : ''}`}
+      className={`w-full mt-8 ${customStyle} ${
+        !isVariationAttribute ? 'bg-white100 rounded-3xl shadow-grayShadow p-8 relative' : ''
+      }`}
     >
       {isVariationAttribute ? (
         <div>

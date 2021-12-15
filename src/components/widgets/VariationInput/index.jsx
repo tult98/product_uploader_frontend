@@ -98,6 +98,7 @@ const VariationInput = ({
           templateErrors={templateErrors}
           setTemplateErrors={setTemplateErrors}
           isDefaultVariation={isDefaultVariation}
+          customStyle="mr-3 min-w-200px"
         />,
       )
     }
@@ -105,7 +106,7 @@ const VariationInput = ({
   }, [variation.attributes, variationErrors.attributeErrors])
 
   return (
-    <div className="my-8 rounded-lg">
+    <div className="w-full my-8 rounded-lg">
       <div className="flex flex-row">
         <div className="mb-4 mr-1 font-semibold uppercase">{name}</div>
         {isDefaultVariation && (
@@ -115,7 +116,7 @@ const VariationInput = ({
           />
         )}
       </div>
-      <div className="relative p-8 shadow-grayShadow bg-white100 rounded-3xl">
+      <div className="relative p-8 overflow-x-auto shadow-grayShadow bg-white100 rounded-3xl">
         {!isDefaultVariation && (
           <div className="cursor-pointer hover:opacity-80" onClick={onDeleteVariation}>
             <Icon name="close" style="w-8 h-8 absolute top-4 right-4" fill={colors.darkGray} />
@@ -178,7 +179,7 @@ const VariationInput = ({
         {!(errors && errors.price) && variationErrors && variationErrors.price && (
           <p className="input-error">{variationErrors.price}</p>
         )}
-        <div className="grid grid-cols-2 gap-4">{renderAttributes(variation.attributes.length)}</div>
+        <div className="flex flex-row w-auto">{renderAttributes(variation.attributes.length)}</div>
       </div>
     </div>
   )

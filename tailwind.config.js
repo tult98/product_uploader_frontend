@@ -1,24 +1,22 @@
 module.exports = {
+  mode: 'jit',
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
-      theme: {
-        inset: {
-          '7/12': '58.333333%',
-        },
-        minWidth: {
-          '80px': '8rem',
-        },
-        minHeight: {
-          '30px': '3rem',
-          '400px': '40rem',
-        },
-        maxHeight: {
-          '400px': '40rem',
-          '500px': '50rem',
-          '600px': '60rem',
-        },
+      minWidth: {
+        '80px': '8rem',
+        '150px': '150px',
+        '200px': '20rem',
+      },
+      minHeight: {
+        '30px': '3rem',
+        '400px': '40rem',
+      },
+      maxHeight: {
+        '400px': '40rem',
+        '500px': '50rem',
+        '600px': '60rem',
       },
       spacing: {
         '400px': '40rem',

@@ -150,34 +150,34 @@ const TemplateInput = ({ state, dispatch, isEdit = false }) => {
               : 'Defining the best template for your future products.'
           }
         />
-        <div className="flex justify-center w-4/5 mt-20">
-          <form className="flex flex-col w-3/5">
+        <div className="flex justify-center w-full mt-20">
+          <form className="flex flex-col items-center w-full">
             {/* <div className="self-center my-20 text-5xl font-bold uppercase">
               {isEdit ? 'Edit a template' : 'Create a new template'}
             </div> */}
-            <TextInput
-              label="name"
-              isRequired={true}
-              type="text"
-              style="mb-10"
-              value={state.name}
-              dispatch={dispatch}
-              error={errors.name}
-              actionType={TEMPLATE_ACTIONS.SET_NAME}
-              onBlur={onValidateTemplateName}
-            />
+            <div className="grid w-full grid-cols-2 gap-4">
+              <TextInput
+                label="name"
+                isRequired={true}
+                type="text"
+                value={state.name}
+                dispatch={dispatch}
+                error={errors.name}
+                actionType={TEMPLATE_ACTIONS.SET_NAME}
+                onBlur={onValidateTemplateName}
+              />
 
-            <TextInput
-              label="product title"
-              isRequired={true}
-              type="text"
-              style="mb-10"
-              value={state.productTitle}
-              dispatch={dispatch}
-              error={errors.productTitle}
-              actionType={TEMPLATE_ACTIONS.SET_PRODUCT_TITLE}
-              onBlur={onValidateProductTitle}
-            />
+              <TextInput
+                label="product title"
+                isRequired={true}
+                type="text"
+                value={state.productTitle}
+                dispatch={dispatch}
+                error={errors.productTitle}
+                actionType={TEMPLATE_ACTIONS.SET_PRODUCT_TITLE}
+                onBlur={onValidateProductTitle}
+              />
+            </div>
             <TextAreaInput
               label="description"
               isRequired={true}
@@ -190,8 +190,12 @@ const TemplateInput = ({ state, dispatch, isEdit = false }) => {
               actionType={TEMPLATE_ACTIONS.SET_DESCRIPTION}
               onBlur={onValidateTemplateDescription}
             />
-
-            {renderAttributes}
+            <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2">
+              {state.attributes.length % 2 !== 0
+                ? renderAttributes.slice(0, state.attributes.length - 1)
+                : renderAttributes}
+            </div>
+            {state.attributes.length % 2 !== 0 && renderAttributes[state.attributes.length - 1]}
             <button
               type="button"
               className="self-start mt-10 text-blue-600 hover:text-blue-700 hover:underline focus:outline-none"
@@ -199,27 +203,29 @@ const TemplateInput = ({ state, dispatch, isEdit = false }) => {
             >
               Add new attribute
             </button>
-            <VariationInput
-              isDefaultVariation={true}
-              key="default-variation"
-              index={0}
-              name="Default variation"
-              variations={state.variations}
-              variation={state.variations[0]}
-              dispatch={dispatch}
-              variationErrors={errors.variationErrors?.length > 0 ? errors.variationErrors[0] : {}}
-              templateErrors={errors}
-              setTemplateErrors={setErrors}
-            />
-            {renderVariations}
-            <div className="mt-10">
-              <button
-                type="button"
-                className="text-blue-600 hover:text-blue-700 hover:underline focus:outline-none"
-                onClick={onCreateVariation}
-              >
-                Add new variation
-              </button>
+            <div className="w-full">
+              <VariationInput
+                isDefaultVariation={true}
+                key="default-variation"
+                index={0}
+                name="Default variation"
+                variations={state.variations}
+                variation={state.variations[0]}
+                dispatch={dispatch}
+                variationErrors={errors.variationErrors?.length > 0 ? errors.variationErrors[0] : {}}
+                templateErrors={errors}
+                setTemplateErrors={setErrors}
+              />
+              {renderVariations}
+              <div className="mt-10">
+                <button
+                  type="button"
+                  className="text-blue-600 hover:text-blue-700 hover:underline focus:outline-none"
+                  onClick={onCreateVariation}
+                >
+                  Add new variation
+                </button>
+              </div>
             </div>
             <div className="flex justify-center mt-20">
               <button type="button" className="secondary-btn" onClick={onCancel}>
