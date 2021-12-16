@@ -7,7 +7,7 @@ import BaseService from 'services/BaseService'
 // }
 
 const getWPBaseURLFromDomainName = (domainName) => {
-  domainName.slice(-1) === '/' ? `${domainName}wp-json/wp/v2` : `${domainName}/wp-json/wp/v2`
+  return domainName.slice(-1) === '/' ? `${domainName}wp-json/wp/v2` : `${domainName}/wp-json/wp/v2`
 }
 
 export default class WPServices {
@@ -52,12 +52,12 @@ export default class WPServices {
     })
   }
 
-  static async deleteImages(images, wpAccount) {
+  static async deleteImages(images, domainName, wpAccount) {
     const errors = []
     await Promise.all(
       images.map(async (file) => {
         try {
-          await WPServices.deleteImage(file.id, wpAccount)
+          await WPServices.deleteImage(file.id, domainName, wpAccount)
         } catch (error) {
           errors.push({ ...error, file: file.name })
         }

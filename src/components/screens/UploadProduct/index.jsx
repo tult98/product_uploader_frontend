@@ -32,6 +32,8 @@ const UploadProduct = ({ isUpdateProduct = false }) => {
   const onUploadProducts = () => {
     if (!user.wp_username || !user.wp_password || user.wp_username === '' || user.wp_password === '') {
       alert('You dont have an wordpress account associate with your account yet. Please contact with admin to have it.')
+    } else if (!store || !store.domain_name) {
+      alert('You dont have any store associate with your account.')
     } else {
       if (onValidateTemplate()) {
         mutation.mutate({

@@ -109,7 +109,7 @@ export default class WooServices {
       return productLog
     } catch (error) {
       images.map(async (item) => {
-        await WPServices.deleteImage(item.id, wpAccount)
+        await WPServices.deleteImage(item.id, store.domain_name, wpAccount)
       })
       return { sku: data.sku, status: UPLOAD_STATUS.ERROR, message: error?.errors?.message || UPLOAD_UNKNOWN_MESSAGE }
     }
@@ -131,7 +131,7 @@ export default class WooServices {
 
     const originalProduct = products[0]
 
-    const { images, errors } = await WPServices.uploadImages({ data, wpAccount })
+    const { images, errors } = await WPServices.uploadImages({ data, domainName: store.domain_name, wpAccount })
 
     if (errors && errors.length > 0) {
       let message = 'Failed at uploading the following files: '
@@ -176,7 +176,7 @@ export default class WooServices {
       })
 
       // TODO: only delete image after update product success
-      const { errors } = await WPServices.deleteImages(originalProduct.images, wpAccount)
+      const { errors } = await WPServices.deleteImages(originalProduct.images, store.domain_name, wpAccount)
 
       let productLog = {
         sku: data.sku,
@@ -201,7 +201,7 @@ export default class WooServices {
       return productLog
     } catch (error) {
       images.map(async (item) => {
-        await WPServices.deleteImage(item.id, wpAccount)
+        await WPServices.deleteImage(item.id, store.domain_name, wpAccount)
       })
       return { sku: data.sku, status: UPLOAD_STATUS.ERROR, message: error?.errors?.message || UPLOAD_UNKNOWN_MESSAGE }
     }
