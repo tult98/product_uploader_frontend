@@ -95,10 +95,10 @@ const StoreInput = ({ store = {}, isEdit = false }) => {
   const onSubmit = (e) => {
     e.preventDefault()
     if (onValidateForm()) {
+      const storeData = { ...storeInput, users: storeInput.users.map((user) => user.id) }
       if (!isEdit) {
-        mutation.mutate(storeInput)
+        mutation.mutate(storeData)
       } else {
-        const storeData = { ...storeInput, users: storeInput.users.map((user) => user.id) }
         mutation.mutate({ storeId: store.id, storeData })
       }
     }
