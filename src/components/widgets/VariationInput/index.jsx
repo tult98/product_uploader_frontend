@@ -123,63 +123,63 @@ const VariationInput = ({
           </div>
         )}
 
-        <div className="flex flex-col mb-10">
-          <div className="flex flex-row items-center">
+        <div className="flex flex-row w-auto">
+          <div className="flex flex-col mt-8 mr-3">
             <label className="font-semibold uppercase">SKU</label>
-            <span className="px-8 py-2 ml-8 text-center uppercase bg-gray-200 border border-gray-400 rounded-lg min-h-30px min-w-80px">
+            <span className="py-2 text-center uppercase bg-gray-200 border border-gray-400 rounded-lg min-h-30px min-w-200px">
               {variation.sku}
             </span>
-          </div>
 
-          {errors && errors.sku && <p className="input-error">{errors.sku}</p>}
-          {!(errors && errors.sku) && variationErrors && variationErrors.sku && (
-            <p className="input-error">{variationErrors.sku}</p>
+            {errors && errors.sku && <p className="input-error">{errors.sku}</p>}
+            {!(errors && errors.sku) && variationErrors && variationErrors.sku && (
+              <p className="input-error">{variationErrors.sku}</p>
+            )}
+          </div>
+          <div className="flex flex-row mt-8">
+            <div className="flex flex-col mr-3 min-w-200px">
+              <label className="font-semibold uppercase">Sale price</label>
+              <div className="relative">
+                <input
+                  type="text"
+                  className="w-full px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
+                  value={salePrice || ''}
+                  onChange={onChangeSalePrice}
+                  onBlur={onValidateSalePrice}
+                />
+                <span className="absolute text-gray-600 bottom-3 right-4">$</span>
+              </div>
+
+              {errors && errors.salePrice && <p className="input-error">{errors?.salePrice?.message}</p>}
+              {!(errors && errors.salePrice) && variationErrors && variationErrors.salePrice && (
+                <p className="input-error">{variationErrors.salePrice}</p>
+              )}
+            </div>
+
+            <div className="flex flex-col mr-3 min-w-200px">
+              <label className="font-semibold uppercase">Regular price</label>
+              <div className="relative">
+                <input
+                  type="text"
+                  className="w-full px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
+                  value={regularPrice || ''}
+                  onChange={onChangeRegularPrice}
+                  onBlur={onValidateRegularPrice}
+                />
+                <span className="absolute text-gray-600 bottom-3 right-4">$</span>
+              </div>
+              {errors && errors.regularPrice && <p className="input-error">{errors?.regularPrice?.message}</p>}
+              {!(errors && errors.regularPrice) && variationErrors && variationErrors.regularPrice && (
+                <p className="input-error">{variationErrors.regularPrice}</p>
+              )}
+            </div>
+          </div>
+          {errors && errors.price && <p className="input-error">{errors.price.message}</p>}
+          {!(errors && errors.price) && variationErrors && variationErrors.price && (
+            <p className="input-error">{variationErrors.price}</p>
           )}
+
+          {renderAttributes(variation.attributes.length)}
         </div>
-
-        <div className="grid grid-cols-2 gap-4">
-          <div className="flex flex-col">
-            <label className="font-semibold uppercase">Regular price</label>
-            <div className="relative">
-              <input
-                type="text"
-                className="w-full px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
-                value={regularPrice || ''}
-                onChange={onChangeRegularPrice}
-                onBlur={onValidateRegularPrice}
-              />
-              <span className="absolute text-gray-600 bottom-3 right-4">$</span>
-            </div>
-            {errors && errors.regularPrice && <p className="input-error">{errors?.regularPrice?.message}</p>}
-            {!(errors && errors.regularPrice) && variationErrors && variationErrors.regularPrice && (
-              <p className="input-error">{variationErrors.regularPrice}</p>
-            )}
-          </div>
-
-          <div className="flex flex-col">
-            <label className="font-semibold uppercase">Sale price</label>
-            <div className="relative">
-              <input
-                type="text"
-                className="w-full px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
-                value={salePrice || ''}
-                onChange={onChangeSalePrice}
-                onBlur={onValidateSalePrice}
-              />
-              <span className="absolute text-gray-600 bottom-3 right-4">$</span>
-            </div>
-
-            {errors && errors.salePrice && <p className="input-error">{errors?.salePrice?.message}</p>}
-            {!(errors && errors.salePrice) && variationErrors && variationErrors.salePrice && (
-              <p className="input-error">{variationErrors.salePrice}</p>
-            )}
-          </div>
-        </div>
-        {errors && errors.price && <p className="input-error">{errors.price.message}</p>}
-        {!(errors && errors.price) && variationErrors && variationErrors.price && (
-          <p className="input-error">{variationErrors.price}</p>
-        )}
-        <div className="flex flex-row w-auto">{renderAttributes(variation.attributes.length)}</div>
       </div>
     </div>
   )

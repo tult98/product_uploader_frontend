@@ -190,12 +190,7 @@ const TemplateInput = ({ state, dispatch, isEdit = false }) => {
               actionType={TEMPLATE_ACTIONS.SET_DESCRIPTION}
               onBlur={onValidateTemplateDescription}
             />
-            <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2">
-              {state.attributes.length % 2 !== 0
-                ? renderAttributes.slice(0, state.attributes.length - 1)
-                : renderAttributes}
-            </div>
-            {state.attributes.length % 2 !== 0 && renderAttributes[state.attributes.length - 1]}
+            {renderAttributes}
             <button
               type="button"
               className="self-start mt-10 text-blue-600 hover:text-blue-700 hover:underline focus:outline-none"
