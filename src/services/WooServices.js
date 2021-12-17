@@ -208,48 +208,60 @@ export default class WooServices {
   }
 
   static async uploadProducts({ data, isUpdate, store, wpAccount }) {
-    return await Promise.all(
-      data.map(async (productData) => {
-        return isUpdate
-          ? await WooServices.updateProduct({ data: productData, store, wpAccount })
-          : await WooServices.uploadProduct({ data: productData, store, wpAccount })
-      }),
-    )
+    const logs = []
+    for (const productData of data) {
+      let result
+      if (isUpdate) {
+        result = await WooServices.updateProduct({ data: productData, store, wpAccount })
+      } else {
+        result = await WooServices.uploadProduct({ data: productData, store, wpAccount })
+      }
+      logs.push(result)
+    }
+    return logs
   }
 
   static async uploadProductVariations({ productId, data, url, authorizeValue }) {
-    return await Promise.all(
-      data.map(async (variation) => {
-        let log = { sku: variation.sku }
-        try {
-          await BaseService.post(`/products/${productId}/variations?${authorizeValue}`, variation, {
-            baseURL: url,
-          })
-          return { ...log, status: UPLOAD_STATUS.SUCCESS, message: UPLOAD_VARIATION_SUCCESS_MESSAGE }
-        } catch (error) {
-          return { ...log, status: UPLOAD_STATUS.ERROR, message: error?.errors?.message || UPLOAD_UNKNOWN_MESSAGE }
-        }
-      }),
-    )
+    const uploadVariationLogs = []
+    for (const variation of data) {
+      let log = { sku: variation.sku }
+      try {
+        await BaseService.post(`/products/${productId}/variations?${authorizeValue}`, variation, {
+          baseURL: url,
+        })
+        uploadVariationLogs.push({ ...log, status: UPLOAD_STATUS.SUCCESS, message: UPLOAD_VARIATION_SUCCESS_MESSAGE })
+      } catch (error) {
+        uploadVariationLogs.push({
+          ...log,
+          status: UPLOAD_STATUS.ERROR,
+          message: error?.errors?.message || UPLOAD_UNKNOWN_MESSAGE,
+        })
+      }
+    }
+    return uploadVariationLogs
   }
 
   static async updateProductVariations({ productId, data, url, authorizeValue }) {
-    return await Promise.all(
-      data.map(async (variation) => {
-        let log = { sku: variation.sku }
-        const variationId = variation.id
-        delete variation.id
-        delete variation.sku
-        try {
-          await BaseService.put(`/products/${productId}/variations/${variationId}?${authorizeValue}`, variation, {
-            baseURL: url,
-          })
-          return { ...log, status: UPLOAD_STATUS.SUCCESS, message: UPLOAD_VARIATION_SUCCESS_MESSAGE }
-        } catch (error) {
-          return { ...log, status: UPLOAD_STATUS.ERROR, message: error?.errors?.message || UPLOAD_UNKNOWN_MESSAGE }
-        }
-      }),
-    )
+    const updateVariationLogs = []
+    for (const variation of data) {
+      let log = { sku: variation.sku }
+      const variationId = variation.id
+      delete variation.id
+      delete variation.sku
+      try {
+        await BaseService.put(`/products/${productId}/variations/${variationId}?${authorizeValue}`, variation, {
+          baseURL: url,
+        })
+        updateVariationLogs.push({ ...log, status: UPLOAD_STATUS.SUCCESS, message: UPLOAD_VARIATION_SUCCESS_MESSAGE })
+      } catch (error) {
+        updateVariationLogs.push({
+          ...log,
+          status: UPLOAD_STATUS.ERROR,
+          message: error?.errors?.message || UPLOAD_UNKNOWN_MESSAGE,
+        })
+      }
+    }
+    return updateVariationLogs
   }
 
   // static async queryProducts({ queryKey }) {
