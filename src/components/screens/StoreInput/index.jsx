@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useQuery, useMutation } from 'react-query'
+import { useQuery, useMutation, useQueryClient } from 'react-query'
 import Select from 'react-select'
 import { useHistory } from 'react-router-dom'
 import LoadingIndicator from 'components/elements/LoadingIndicator'
@@ -28,8 +28,19 @@ const StoreInput = ({ store = {}, isEdit = false }) => {
   const [searchPattern, setSearchPatter] = useState('')
   const [errors, setErrors] = useState({})
   const { setNotificationState } = useContext(NotificationContext)
+  const queryClient = useQueryClient()
 
-  const mutation = isEdit ? useMutation(StoreService.editStore) : useMutation(StoreService.createStore)
+  const mutation = isEdit
+    ? useMutation(StoreService.editStore, {
+        onSuccess: () => {
+          queryClient.invalidateQueries()
+        },
+      })
+    : useMutation(StoreService.createStore, {
+        onSuccess: () => {
+          queryClient.invalidateQueries()
+        },
+      })
   const { isLoading, isError, isSuccess, error, data } = useQuery(
     ['query-users', { searchPattern, currentPage: 1 }],
     AuthServices.queryUsers,
