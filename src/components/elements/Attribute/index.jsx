@@ -173,7 +173,7 @@ const Attribute = ({
 
   return (
     <div
-      className={`w-full mt-8 ${customStyle} ${
+      className={`w-full ${customStyle} ${
         !isVariationAttribute ? 'bg-white100 rounded-3xl shadow-grayShadow p-8 relative' : ''
       }`}
     >

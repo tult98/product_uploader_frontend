@@ -91,6 +91,7 @@ const TemplateInput = ({ state, dispatch, isEdit = false }) => {
           attributeErrors={errors?.attributeErrors?.length > i ? errors.attributeErrors[i] : {}}
           templateErrors={errors}
           setTemplateErrors={setErrors}
+          customStyle="mt-8"
         />,
       )
     }

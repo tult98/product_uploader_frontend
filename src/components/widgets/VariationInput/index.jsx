@@ -106,7 +106,7 @@ const VariationInput = ({
   }, [variation.attributes, variationErrors.attributeErrors])
 
   return (
-    <div className="w-full my-8 rounded-lg">
+    <div className="relative p-8 mt-4 overflow-x-auto shadow-grayShadow bg-white100 rounded-3xl">
       <div className="flex flex-row">
         <div className="mb-4 mr-1 font-semibold uppercase">{name}</div>
         {isDefaultVariation && (
@@ -116,70 +116,68 @@ const VariationInput = ({
           />
         )}
       </div>
-      <div className="relative p-8 overflow-x-auto shadow-grayShadow bg-white100 rounded-3xl">
-        {!isDefaultVariation && (
-          <div className="cursor-pointer hover:opacity-80" onClick={onDeleteVariation}>
-            <Icon name="close" style="w-8 h-8 absolute top-4 right-4" fill={colors.darkGray} />
-          </div>
-        )}
+      {!isDefaultVariation && (
+        <div className="cursor-pointer hover:opacity-80" onClick={onDeleteVariation}>
+          <Icon name="close" style="w-8 h-8 absolute top-4 right-4" fill={colors.darkGray} />
+        </div>
+      )}
 
-        <div className="flex flex-row w-auto">
-          <div className="flex flex-col mt-8 mr-3">
-            <label className="font-semibold uppercase">SKU</label>
-            <span className="py-2 text-center uppercase bg-gray-200 border border-gray-400 rounded-lg min-h-30px min-w-200px">
-              {variation.sku}
-            </span>
+      <div className="flex flex-row w-auto">
+        <div className="flex flex-col mr-3">
+          <label className="font-semibold uppercase">SKU</label>
+          <span className="py-2 text-center uppercase bg-gray-200 border border-gray-400 rounded-lg min-h-30px min-w-200px">
+            {variation.sku}
+          </span>
 
-            {errors && errors.sku && <p className="input-error">{errors.sku}</p>}
-            {!(errors && errors.sku) && variationErrors && variationErrors.sku && (
-              <p className="input-error">{variationErrors.sku}</p>
+          {errors && errors.sku && <p className="input-error">{errors.sku}</p>}
+          {!(errors && errors.sku) && variationErrors && variationErrors.sku && (
+            <p className="input-error">{variationErrors.sku}</p>
+          )}
+        </div>
+        <div className="flex flex-row">
+          <div className="flex flex-col mr-3 min-w-200px">
+            <label className="font-semibold uppercase">Sale price</label>
+            <div className="relative">
+              <input
+                type="text"
+                className="w-full px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
+                value={salePrice || ''}
+                onChange={onChangeSalePrice}
+                onBlur={onValidateSalePrice}
+              />
+              <span className="absolute text-gray-600 bottom-3 right-4">$</span>
+            </div>
+
+            {errors && errors.salePrice && <p className="input-error">{errors?.salePrice?.message}</p>}
+            {!(errors && errors.salePrice) && variationErrors && variationErrors.salePrice && (
+              <p className="input-error">{variationErrors.salePrice}</p>
+            )}
+            {errors && errors.price && <p className="input-error">{errors.price.message}</p>}
+            {!(errors && errors.price) && variationErrors && variationErrors.price && (
+              <p className="input-error">{variationErrors.price}</p>
             )}
           </div>
-          <div className="flex flex-row mt-8">
-            <div className="flex flex-col mr-3 min-w-200px">
-              <label className="font-semibold uppercase">Sale price</label>
-              <div className="relative">
-                <input
-                  type="text"
-                  className="w-full px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
-                  value={salePrice || ''}
-                  onChange={onChangeSalePrice}
-                  onBlur={onValidateSalePrice}
-                />
-                <span className="absolute text-gray-600 bottom-3 right-4">$</span>
-              </div>
 
-              {errors && errors.salePrice && <p className="input-error">{errors?.salePrice?.message}</p>}
-              {!(errors && errors.salePrice) && variationErrors && variationErrors.salePrice && (
-                <p className="input-error">{variationErrors.salePrice}</p>
-              )}
-              {errors && errors.price && <p className="input-error">{errors.price.message}</p>}
-              {!(errors && errors.price) && variationErrors && variationErrors.price && (
-                <p className="input-error">{variationErrors.price}</p>
-              )}
+          <div className="flex flex-col mr-3 min-w-200px">
+            <label className="font-semibold uppercase">Regular price</label>
+            <div className="relative">
+              <input
+                type="text"
+                className="w-full px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
+                value={regularPrice || ''}
+                onChange={onChangeRegularPrice}
+                onBlur={onValidateRegularPrice}
+              />
+              <span className="absolute text-gray-600 bottom-3 right-4">$</span>
             </div>
-
-            <div className="flex flex-col mr-3 min-w-200px">
-              <label className="font-semibold uppercase">Regular price</label>
-              <div className="relative">
-                <input
-                  type="text"
-                  className="w-full px-4 py-2 border border-gray-400 rounded-lg focus:outline-none"
-                  value={regularPrice || ''}
-                  onChange={onChangeRegularPrice}
-                  onBlur={onValidateRegularPrice}
-                />
-                <span className="absolute text-gray-600 bottom-3 right-4">$</span>
-              </div>
-              {errors && errors.regularPrice && <p className="input-error">{errors?.regularPrice?.message}</p>}
-              {!(errors && errors.regularPrice) && variationErrors && variationErrors.regularPrice && (
-                <p className="input-error">{variationErrors.regularPrice}</p>
-              )}
-            </div>
+            {errors && errors.regularPrice && <p className="input-error">{errors?.regularPrice?.message}</p>}
+            {!(errors && errors.regularPrice) && variationErrors && variationErrors.regularPrice && (
+              <p className="input-error">{variationErrors.regularPrice}</p>
+            )}
           </div>
-
-          {renderAttributes(variation.attributes.length)}
         </div>
+
+        {renderAttributes(variation.attributes.length)}
       </div>
     </div>
   )
