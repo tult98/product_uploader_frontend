@@ -26,7 +26,7 @@ export const validateFileType = (files) => {
   let error = ''
   Object.values(files).every((file) => {
     if (file.webkitRelativePath.split('/').length !== 3) {
-      error = 'The uploading folder must only contain others subfolder which is your product images.'
+      error = 'The uploading folder MUST ONLY contain others subfolder which is your product images.'
       return false
     }
     return true

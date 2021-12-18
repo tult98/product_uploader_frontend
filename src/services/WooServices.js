@@ -53,6 +53,17 @@ export default class WooServices {
   }
 
   static async uploadProduct({ data, store, wpAccount }) {
+    const { url, authorizeValue } = getAuthorizeValue(store)
+    try {
+      const result = await WooServices.getProductBySku(data.sku, authorizeValue, url)
+      const products = Object.values(result)
+      if (products || products.length > 0) {
+        return { sku: data.sku, status: UPLOAD_STATUS.ERROR, message: 'Invalid or duplicated SKU' }
+      }
+    } catch (error) {
+      // Cannot check for existing product -> just keep going
+      console.error('Failed at checking product existance by SKU')
+    }
     const { images, errors } = await WPServices.uploadImages({ data, domainName: store.domain_name, wpAccount })
 
     if (errors && errors.length > 0) {
