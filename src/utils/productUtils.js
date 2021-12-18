@@ -12,7 +12,7 @@ export const UPLOAD_STATUS = {
 export const handleFileUploadData = (selectedFiles) => {
   // TODO: group multiple files have the same Relative path
   const groupRelativePaths = []
-  Object.values(selectedFiles).forEach((file) => {
+  selectedFiles.forEach((file) => {
     const relativePath = file.webkitRelativePath.split('/').slice(1, 2)[0]
     if (!groupRelativePaths.includes(relativePath)) {
       groupRelativePaths.push(relativePath)
@@ -25,7 +25,7 @@ export const handleFileUploadData = (selectedFiles) => {
       files: [],
     }
 
-    Object.values(selectedFiles).map((file) => {
+    selectedFiles.map((file) => {
       if (file.webkitRelativePath.includes(relativePath)) {
         productData.files = [...productData.files, file]
       }

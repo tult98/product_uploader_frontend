@@ -25,20 +25,11 @@ export const validateRequired = (value) => {
 export const validateFileType = (files) => {
   let error = ''
   Object.values(files).every((file) => {
-    if (!file.type.includes('image')) {
-      error = 'Please only upload image files'
+    if (file.webkitRelativePath.split('/').length !== 3) {
+      error = 'The uploading folder must only contain others subfolder which is your product images.'
       return false
     }
     return true
   })
-  if (error === '') {
-    Object.values(files).every((file) => {
-      if (file.webkitRelativePath.split('/').length !== 3) {
-        error = 'Please upload the correct folder structure'
-        return false
-      }
-      return true
-    })
-  }
   return error
 }

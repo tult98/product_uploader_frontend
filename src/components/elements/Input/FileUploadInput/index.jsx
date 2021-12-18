@@ -5,6 +5,8 @@ import { handleFileUploadData } from 'utils/productUtils'
 import { validateFileType } from 'utils/validators'
 import { AlertError } from 'utils/AlertUtils'
 
+const ALLOW_IMAGE_TYPES = ['image/jpeg', 'image/gif']
+
 const FileUploadInput = ({ setProducts }) => {
   const inputFile = useRef(null)
   // const inputArea = useRef(null)
@@ -53,7 +55,8 @@ const FileUploadInput = ({ setProducts }) => {
     }
     if (!AlertError(validateFileType(event.target.files))) {
       // TODO: handle all the files into different product data
-      const products = handleFileUploadData(event.target.files)
+      const filteredFiles = Object.values(event.target.files).filter((file) => ALLOW_IMAGE_TYPES.includes(file.type))
+      const products = handleFileUploadData(filteredFiles)
       setProducts(products)
     }
   }
