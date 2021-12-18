@@ -108,9 +108,12 @@ export default class WooServices {
 
       return productLog
     } catch (error) {
-      images.map(async (item) => {
-        await WPServices.deleteImage(item.id, store.domain_name, wpAccount)
-      })
+      await Promise.all(
+        images.map(async (item) => {
+          await WPServices.deleteImage(item.id, store.domain_name, wpAccount)
+        }),
+      )
+
       return { sku: data.sku, status: UPLOAD_STATUS.ERROR, message: error?.errors?.message || UPLOAD_UNKNOWN_MESSAGE }
     }
   }
