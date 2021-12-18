@@ -153,6 +153,10 @@ const VariationInput = ({
               {!(errors && errors.salePrice) && variationErrors && variationErrors.salePrice && (
                 <p className="input-error">{variationErrors.salePrice}</p>
               )}
+              {errors && errors.price && <p className="input-error">{errors.price.message}</p>}
+              {!(errors && errors.price) && variationErrors && variationErrors.price && (
+                <p className="input-error">{variationErrors.price}</p>
+              )}
             </div>
 
             <div className="flex flex-col mr-3 min-w-200px">
@@ -173,10 +177,6 @@ const VariationInput = ({
               )}
             </div>
           </div>
-          {errors && errors.price && <p className="input-error">{errors.price.message}</p>}
-          {!(errors && errors.price) && variationErrors && variationErrors.price && (
-            <p className="input-error">{variationErrors.price}</p>
-          )}
 
           {renderAttributes(variation.attributes.length)}
         </div>
