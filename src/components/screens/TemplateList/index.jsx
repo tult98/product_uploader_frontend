@@ -17,7 +17,7 @@ const TemplateList = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const { modalState, setModalState } = useContext(ModalContext)
   const { isLoading, isError, isSuccess, data, error } = useQuery(
-    ['templates', { currentPage, searchPattern }],
+    ['templates', { currentPage, searchPattern, limit: 20 }],
     TemplateServices.queryTemplates,
     { keepPreviousData: true },
   )
@@ -43,7 +43,7 @@ const TemplateList = () => {
         {isSuccess && (
           <>
             <SearchBar searchPattern={searchPattern} setSearchPattern={setSearchPattern} />
-            <div className="bg-lightGray w-full">
+            <div className="w-full bg-lightGray">
               <div className="flex flex-row text-xl font-medium text-gray-600 uppercase">
                 <div className="w-1/12 px-6 py-6">Index</div>
                 <div className="w-1/4 px-6 py-6">Name</div>
@@ -62,7 +62,7 @@ const TemplateList = () => {
                     <div className="w-4/12 px-6 py-6 ">{truncateLongText(template.product_title)}</div>
                     <div className="w-1/12 px-6 py-6 ">{template.attributes.length || 0}</div>
                     <div className="w-1/12 px-6 py-6 ">{template.variations.length || 0}</div>
-                    <div className="w-1/ px-6 py-6 ">
+                    <div className="px-6 py-6 w-1/ ">
                       <button
                         type="button"
                         className="font-medium text-red-500 uppercase hover:underline hover:text-red-400"
