@@ -250,7 +250,7 @@ export const validateConsumerKey = (value) => {
   if (textRequired) {
     return textRequired
   }
-  if (!value.startsWith('ck') || value.length !== 43) {
+  if (!value.startsWith('ck')) {
     return { consumer_key: 'Invalid input' }
   }
 }
@@ -260,7 +260,7 @@ export const validateConsumerSecret = (value) => {
   if (textRequired) {
     return textRequired
   }
-  if (!value.startsWith('cs') || value.length !== 43) {
+  if (!value.startsWith('cs')) {
     return { consumer_key: 'Invalid input' }
   }
 }
