@@ -57,7 +57,7 @@ export default class WooServices {
     try {
       const result = await WooServices.getProductBySku(data.sku, authorizeValue, url)
       const products = Object.values(result)
-      if (products || products.length > 0) {
+      if (products && products.length > 0) {
         return { sku: data.sku, status: UPLOAD_STATUS.ERROR, message: 'Invalid or duplicated SKU' }
       }
     } catch (error) {
