@@ -213,7 +213,6 @@ const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
         </button>
         <button
           type="button"
-          disabled={errors && (errors.isDefault || errors.optionName || errors.optionCode)}
           className="px-12 py-2 text-white bg-blue-600 rounded-full hover:bg-blue-300 hover:text-gray-800"
           onClick={onSubmit}
         >
