@@ -98,7 +98,7 @@ const UploadProduct = ({ isUpdateProduct = false }) => {
           {products && products.length > 0 && (
             <StoreInput
               label="Targeted store"
-              style="mt-10"
+              style="mt-6"
               labelStyle="font-medium capitalize"
               onSelect={onSelectStore}
             />

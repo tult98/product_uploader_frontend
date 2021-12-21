@@ -59,13 +59,13 @@ const ProductInput = ({ product, onChangeProducts, store }) => {
   }
 
   return (
-    <div className="relative flex flex-col p-8 mt-10 bg-white100 rounded-3xl shadow-grayShadow">
+    <div className="relative flex flex-col p-8 mt-4 bg-white100 rounded-3xl shadow-grayShadow">
       <div className="absolute cursor-pointer right-4 top-4" onClick={onDeleteProduct}>
         <Icon name="close" style="w-8 h-8 " />
       </div>
-      <div className="flex flex-col justify-center mb-10">
+      <div className="flex flex-col justify-center mb-4">
         <p className="mb-4 text-3xl font-medium uppercase">{product.sku}</p>
-        <div className="flex justify-between w-full my-8">
+        <div className="flex justify-between w-full my-4 ">
           <div className="w-47.5%">
             <label className="font-medium capitalize">Template</label>
             <Select
