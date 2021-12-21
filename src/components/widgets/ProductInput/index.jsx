@@ -12,8 +12,9 @@ import { AlertError } from 'utils/AlertUtils'
 
 const ProductInput = ({ product, onChangeProducts, store }) => {
   const [selectedTemplate, setSelectedTemplate] = useState()
+  const [templateSearchPattern, setTemplateSearchPattern] = useState('')
   const { isLoading, isError, isSuccess, data } = useQuery(
-    ['templates', { currentPage: 1, searchPattern: '' }],
+    ['templates', { currentPage: 1, searchPattern: templateSearchPattern }],
     TemplateServices.queryTemplates,
     { keepPreviousData: true },
   )
@@ -35,6 +36,12 @@ const ProductInput = ({ product, onChangeProducts, store }) => {
   const onChangeProductName = (event) => {
     debounce(() => {
       onChangeProducts({ ...product, name: event.target.value })
+    }, DEFAULT_DELAY)()
+  }
+
+  const onInputChange = (newInputValue) => {
+    debounce(() => {
+      setTemplateSearchPattern(newInputValue)
     }, DEFAULT_DELAY)()
   }
 
@@ -73,9 +80,10 @@ const ProductInput = ({ product, onChangeProducts, store }) => {
               options={isSuccess && data.results}
               placeholder="Select template..."
               isLoading={isLoading}
-              onChange={onSelectTemplate}
               getOptionLabel={(option) => option.name}
               getOptionValue={(option) => option.id}
+              onChange={onSelectTemplate}
+              onInputChange={onInputChange}
             />
             {product.errors && product.errors.template && <p className="input-error">{product.errors.template}</p>}
           </div>
