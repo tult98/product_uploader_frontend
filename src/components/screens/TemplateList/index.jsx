@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useQuery } from 'react-query'
 import SearchBar from 'components/widgets/SearchBar'
@@ -11,16 +11,24 @@ import { truncateLongText } from 'utils/commonUtils'
 import ModalContext from 'context/ModalContext'
 import { TEMPLATE_ROUTES } from 'routes'
 
+const RECORD_PER_PAGE = 20
+
 const TemplateList = () => {
   const history = useHistory()
   const [searchPattern, setSearchPattern] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const { modalState, setModalState } = useContext(ModalContext)
   const { isLoading, isError, isSuccess, data, error } = useQuery(
-    ['templates', { currentPage, searchPattern, limit: 20 }],
+    ['templates', { currentPage, searchPattern, limit: RECORD_PER_PAGE }],
     TemplateServices.queryTemplates,
     { keepPreviousData: true },
   )
+
+  useEffect(() => {
+    if (currentPage !== 1) {
+      window.history.replaceState(null, null, `?page=${currentPage}&search=${searchPattern}`)
+    }
+  }, [currentPage, searchPattern])
 
   const onDeleteTemplate = (templateId) => {
     setModalState({ ...modalState, openDeleteTemplateModal: true, isModalOpen: true, templateId })
@@ -97,7 +105,7 @@ const TemplateList = () => {
                   count={data.count}
                   next={data.next}
                   previous={data.previous}
-                  limit={10}
+                  limit={RECORD_PER_PAGE}
                 />
               ) : null}
             </div>
