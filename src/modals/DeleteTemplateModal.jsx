@@ -8,13 +8,14 @@ const DeleteTemplateModal = ({ mutation }) => {
   const [error, setError] = useState(null)
 
   const onCloseModal = () => {
-    setModalState({ ...modalState, isModalOpen: null, openDeleteTemplateModal: true, templateId: null })
+    setModalState({ ...modalState, isModalOpen: null, openDeleteTemplateModal: false, templateId: null })
   }
 
   useEffect(() => {
     if (mutation.isError) {
       setError(mutation.error)
     } else if (mutation.isSuccess) {
+      mutation.reset()
       onCloseModal()
     }
   }, [mutation.status])
@@ -54,7 +55,7 @@ const DeleteTemplateModal = ({ mutation }) => {
         </div>
         {!!error && !!error.errors ? (
           <div className="pl-4">
-            <p className="input-error text-xl">{error.errors.detail || UNKNOWN_ERROR_MESSAGE}</p>
+            <p className="text-xl input-error">{error.errors.detail || UNKNOWN_ERROR_MESSAGE}</p>
           </div>
         ) : null}
       </div>

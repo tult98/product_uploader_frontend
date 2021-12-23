@@ -19,7 +19,6 @@ const Paginator = ({ count, currentPage, next, previous, setCurrentPage, limit =
     setCurrentPage(totalPage)
   }
 
-  console.log('==========', currentPage, totalPage, count)
   const onGoToNextPage = () => {
     setCurrentPage(currentPage + 1)
   }
