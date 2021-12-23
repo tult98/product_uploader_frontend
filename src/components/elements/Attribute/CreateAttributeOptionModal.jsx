@@ -199,8 +199,10 @@ const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
           {errors && errors.optionCode && <p className="input-error">{errors.optionCode.message}</p>}
         </div>
         <div className="flex flex-row items-center self-start mt-4">
-          <input type="checkbox" checked={isDefault} onChange={onToggleDefault} />
-          <label className="ml-2">Select as default option</label>
+          <input type="checkbox" id="default_option" checked={isDefault} onChange={onToggleDefault} />
+          <label htmlFor="default_option" className="ml-2">
+            Select as default option
+          </label>
         </div>
         {errors && errors.isDefault && <p className="input-error">{errors.isDefault.message}</p>}
       </div>
