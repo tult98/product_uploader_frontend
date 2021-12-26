@@ -10,7 +10,7 @@ import { colors } from 'theme/variables/platform'
 import { customStyles, debounce, DEFAULT_DELAY } from 'utils/commonUtils'
 import { STORE_ROUTES } from 'routes'
 import {
-  arrayRequiredField,
+  // arrayRequiredField,
   UNKNOWN_ERROR_MESSAGE,
   validateConsumerKey,
   validateConsumerSecret,
