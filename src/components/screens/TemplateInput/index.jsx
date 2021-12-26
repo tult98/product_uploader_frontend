@@ -199,7 +199,7 @@ const TemplateInput = ({ state, dispatch, isEdit = false }) => {
             >
               Add new attribute
             </button>
-            <div className="self-start">
+            <div className="self-start min-width-100">
               <VariationInput
                 isDefaultVariation={true}
                 key="default-variation"
