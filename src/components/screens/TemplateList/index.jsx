@@ -61,7 +61,7 @@ const TemplateList = () => {
                 <div className="w-1/6 px-6 py-6">Actions</div>
               </div>
             </div>
-            <div className="w-full overflow-x-hidden overflow-y-auto bg-white max-h-500px">
+            <div className="w-full overflow-x-hidden bg-white max-h-500px">
               {data.results.length > 0 ? (
                 data.results.map((template, index) => (
                   <div key={template.id} className="flex border-b border-gray-200">
