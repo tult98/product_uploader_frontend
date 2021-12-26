@@ -22,7 +22,7 @@ const LogCard = ({ index, log, isParent, isShowChild, onToggleShowChildren }) =>
           }`}
           onClick={onToggleShowChildren}
         >
-          <Icon name="chevronRight" style="w-10 h-10" fill={colors.darkGray} />
+          <Icon name="chevronRight" style="w-10 h-10 ml-4" fill={colors.darkGray} />
         </div>
       )}
       <div className={`flex px-4 py-4 ${textStyle}`}>{isParent ? index : ''}</div>
