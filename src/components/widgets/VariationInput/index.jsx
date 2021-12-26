@@ -106,7 +106,7 @@ const VariationInput = ({
   }, [variation.attributes, variationErrors.attributeErrors])
 
   return (
-    <div className="relative p-8 mt-4 overflow-x-auto shadow-grayShadow bg-white100 rounded-3xl">
+    <div className="relative p-8 mt-4 shadow-grayShadow bg-white100 rounded-3xl">
       <div className="flex flex-row">
         <div className="mb-4 mr-1 font-semibold uppercase">{name}</div>
         {isDefaultVariation && (
