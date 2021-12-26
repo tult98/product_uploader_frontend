@@ -95,8 +95,6 @@ const StoreInput = ({ store = {}, isEdit = false }) => {
         errors = { ...errors, ...validateConsumerKey(storeInput[key]) }
       } else if (key === 'secret_key') {
         errors = { ...errors, ...validateConsumerSecret(storeInput[key]) }
-      } else {
-        errors = { ...errors, ...arrayRequiredField(key, storeInput[key]) }
       }
     })
     setErrors(errors)
@@ -107,6 +105,9 @@ const StoreInput = ({ store = {}, isEdit = false }) => {
     e.preventDefault()
     if (onValidateForm()) {
       const storeData = { ...storeInput, users: storeInput.users.map((user) => user.id) }
+      if (storeData.users.length === 0) {
+        delete storeData.users
+      }
       if (!isEdit) {
         mutation.mutate(storeData)
       } else {
