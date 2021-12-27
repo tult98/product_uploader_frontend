@@ -4,11 +4,8 @@ import Icon from 'components/elements/Icon'
 import { colors } from 'theme/variables/platform'
 
 const NavigationItem = ({ name, route, child }) => {
-  const [isExpand, setIsExpand] = useState(true)
-
-  const onToggleNavigation = () => {
-    setIsExpand(!isExpand)
-  }
+  /* eslint-disable-next-line */
+  const [isExpand, _] = useState(true)
 
   return (
     <>
@@ -19,14 +16,9 @@ const NavigationItem = ({ name, route, child }) => {
         </Link>
       ) : (
         <>
-          <div className="relative navigation-item " onClick={onToggleNavigation}>
+          <div className="relative navigation-item ">
             <Icon name={name} style="w-12 h-12 mr-4" fill={colors.white100} />
             {name}
-            <Icon
-              name="chevronRight"
-              style={`w-8 h-8 absolute right-4 transform duration-300 ${isExpand ? 'rotate-90 ' : ''}`}
-              fill={colors.white100}
-            />
           </div>
           {isExpand && (
             <>

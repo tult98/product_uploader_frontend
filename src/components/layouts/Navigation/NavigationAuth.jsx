@@ -13,7 +13,7 @@ const NavigationAuth = () => {
   }, [user.role])
 
   return (
-    <div className="fixed flex flex-col w-1/6 h-full bg-gray-800 text-white100">
+    <div className="fixed flex flex-col w-1/6 h-full overflow-y-auto bg-gray-800 text-white100">
       {navigationItems.map((navigationItem, index) => (
         <NavigationItem
           key={index}
