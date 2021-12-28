@@ -51,11 +51,11 @@ const TemplateList = () => {
         {isSuccess && (
           <>
             <SearchBar searchPattern={searchPattern} setSearchPattern={setSearchPattern} />
-            <div className="w-full bg-lightGray">
-              <div className="flex flex-row text-xl font-medium text-gray-600 uppercase">
+            <div className="w-full text-xl font-medium text-gray-600 uppercase bg-lightGray">
+              <div className="flex flex-row w-full">
                 <div className="w-1/12 px-6 py-6">Index</div>
-                <div className="w-1/4 px-6 py-6">Name</div>
-                <div className="w-4/12 px-6 py-6">Product title</div>
+                <div className="w-1/6 px-6 py-6">Name</div>
+                <div className="w-5/12 px-6 py-6">Product title</div>
                 <div className="w-1/12 px-6 py-6">Attributes</div>
                 <div className="w-1/12 px-6 py-6">Variations</div>
                 <div className="w-1/6 px-6 py-6">Actions</div>
@@ -66,11 +66,11 @@ const TemplateList = () => {
                 data.results.map((template, index) => (
                   <div key={template.id} className="flex border-b border-gray-200">
                     <div className="w-1/12 px-6 py-6 ">{index + 1}</div>
-                    <div className="w-1/4 px-6 py-6">{truncateLongText(template.name)}</div>
-                    <div className="w-4/12 px-6 py-6 ">{truncateLongText(template.product_title)}</div>
+                    <div className="w-1/6 px-6 py-6">{truncateLongText(template.name)}</div>
+                    <div className="w-5/12 px-6 py-6 ">{template.product_title}</div>
                     <div className="w-1/12 px-6 py-6 ">{template.attributes.length || 0}</div>
                     <div className="w-1/12 px-6 py-6 ">{template.variations.length || 0}</div>
-                    <div className="px-6 py-6 w-1/ ">
+                    <div className="w-1/6 px-6 py-6 ">
                       <button
                         type="button"
                         className="font-medium text-red-500 uppercase hover:underline hover:text-red-400"

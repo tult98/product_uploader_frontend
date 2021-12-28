@@ -4,6 +4,10 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      width: {
+        '9/20': '45%',
+        '47.5%': '47.5%',
+      },
       minWidth: {
         '80px': '8rem',
         '150px': '150px',
@@ -53,10 +57,6 @@ module.exports = {
         '7/12': '58.3333333%',
         38: '38%',
         44: '44%',
-      },
-      width: {
-        '9/20': '45%',
-        '47.5%': '47.5%',
       },
     },
   },
