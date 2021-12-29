@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from 'react'
-import { useHistory } from 'react-router-dom'
 import { useMutation } from 'react-query'
 import Icon from 'components/elements/Icon'
 import LoadingIndicator from 'components/elements/LoadingIndicator'
@@ -15,7 +14,6 @@ const LoginInputForm = () => {
   const [errors, setErrors] = useState({})
   const [isShowPassword, setIsShowPassword] = useState(false)
   const { setUser } = useContext(AuthenticationContext)
-  const history = useHistory()
   const mutation = useMutation(AuthServices.login)
 
   useEffect(() => {
@@ -29,7 +27,7 @@ const LoginInputForm = () => {
         login({ access_token: token.access, refresh_token: token.refresh })
         const me = await AuthServices.getMe()
         setUser(me)
-        history.push(PRODUCT_ROUTES.UPLOAD_PRODUCT)
+        window.location.replace(PRODUCT_ROUTES.UPLOAD_PRODUCT)
       }
     })()
   }, [mutation.status])

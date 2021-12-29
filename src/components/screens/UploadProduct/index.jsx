@@ -14,9 +14,24 @@ import AuthenticationContext from 'context/AuthenticationContext'
 const UploadProduct = ({ isUpdateProduct = false }) => {
   const history = useHistory()
   const [products, setProducts] = useState([])
+  const [isMounted, setIsMounted] = useState(false)
   const [store, setStore] = useState()
   const mutation = useMutation(WooServices.uploadProducts)
   const { user } = useContext(AuthenticationContext)
+
+  useEffect(() => {
+    setIsMounted(true)
+
+    return () => {
+      setIsMounted(false)
+    }
+  }, [])
+
+  const onSelectProducts = (products) => {
+    if (isMounted) {
+      setProducts(products)
+    }
+  }
 
   useEffect(() => {
     if (mutation.isError) {
@@ -94,7 +109,7 @@ const UploadProduct = ({ isUpdateProduct = false }) => {
       <div className={`flex flex-col w-full mt-20 ${mutation.isLoading ? 'opacity-20 pointer-events-none' : ''}`}>
         <IntroducePage name="product" title={isUpdateProduct ? 'Update existed products' : 'Create new products'} />
         <div className="self-center w-4/5">
-          <FileUploadInput setProducts={setProducts} />
+          <FileUploadInput setProducts={onSelectProducts} />
           {products && products.length > 0 && (
             <StoreInput
               label="Targeted store"
