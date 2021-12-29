@@ -72,8 +72,8 @@ const ProductInput = ({ product, onChangeProducts, store }) => {
       </div>
       <div className="flex flex-col justify-center mb-4">
         <p className="mb-4 text-3xl font-medium uppercase">{product.sku}</p>
-        <div className="flex justify-between w-full my-4 ">
-          <div className="w-47.5%">
+        <div className="grid w-full grid-cols-2 gap-4 my-4">
+          <div>
             <label className="font-medium capitalize">Template</label>
             <Select
               value={selectedTemplate}
@@ -88,7 +88,7 @@ const ProductInput = ({ product, onChangeProducts, store }) => {
             {product.errors && product.errors.template && <p className="input-error">{product.errors.template}</p>}
           </div>
 
-          <div className="w-47.5%">
+          <div>
             <CategoriesInput
               store={store}
               style="w-full"
