@@ -23,11 +23,11 @@ const LoginInputForm = () => {
     // prettier-ignore
     (async () => {
       if (mutation.isSuccess) {
+        window.location.replace(PRODUCT_ROUTES.UPLOAD_PRODUCT)
         const token = mutation.data
         login({ access_token: token.access, refresh_token: token.refresh })
         const me = await AuthServices.getMe()
         setUser(me)
-        window.location.replace(PRODUCT_ROUTES.UPLOAD_PRODUCT)
       }
     })()
   }, [mutation.status])
