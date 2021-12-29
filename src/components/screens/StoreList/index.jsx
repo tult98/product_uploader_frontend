@@ -112,7 +112,7 @@ const StoreList = () => {
                     </div>
                   ))
                 ) : (
-                  <div className="flex flex-row items-center justify-center text-3xl text-red-500 h-400px bg-white">
+                  <div className="flex flex-row items-center justify-center text-3xl text-red-500 bg-white h-400px">
                     No record found.
                   </div>
                 )}
