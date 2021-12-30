@@ -16,6 +16,7 @@ const UploadProduct = ({ isUpdateProduct = false }) => {
   const [products, setProducts] = useState([])
   const [isMounted, setIsMounted] = useState(false)
   const [store, setStore] = useState()
+  const [availableTags, setAvailableTags] = useState([])
   const mutation = useMutation(WooServices.uploadProducts)
   const { user } = useContext(AuthenticationContext)
 
@@ -127,6 +128,8 @@ const UploadProduct = ({ isUpdateProduct = false }) => {
                 onChangeProducts={onChangeProducts}
                 isUpdate={isUpdateProduct}
                 store={store}
+                availableTags={availableTags}
+                setAvailableTags={setAvailableTags}
               />
             ))}
           {products && products.length > 0 && (

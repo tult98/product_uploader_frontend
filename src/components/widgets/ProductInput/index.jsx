@@ -9,10 +9,12 @@ import ImageItem from 'components/widgets/ProductInput/ImageItem'
 import TemplateServices from 'services/TemplateServices'
 import { debounce, DEFAULT_DELAY } from 'utils/commonUtils'
 import { AlertError } from 'utils/AlertUtils'
+import TagsInput from 'components/elements/Input/TagsInput'
 
-const ProductInput = ({ product, onChangeProducts, store }) => {
+const ProductInput = ({ product, onChangeProducts, store, availableTags, setAvailableTags }) => {
   const [selectedTemplate, setSelectedTemplate] = useState()
   const [templateSearchPattern, setTemplateSearchPattern] = useState('')
+  const [tags, setTags] = useState([])
   const { isLoading, isError, isSuccess, data } = useQuery(
     ['templates', { currentPage: 1, searchPattern: templateSearchPattern }],
     TemplateServices.queryTemplates,
@@ -31,6 +33,10 @@ const ProductInput = ({ product, onChangeProducts, store }) => {
 
   const onSelectCategories = (selectedCategories) => {
     onChangeProducts({ ...product, categories: selectedCategories })
+  }
+
+  const onSelectTags = (selectedTags) => {
+    setTags(selectedTags)
   }
 
   const onChangeProductName = (event) => {
@@ -97,6 +103,19 @@ const ProductInput = ({ product, onChangeProducts, store }) => {
               onSelect={onSelectCategories}
             />
           </div>
+        </div>
+        <div>
+          <TagsInput
+            store={store}
+            style="w-full mb-4"
+            labelStyle="font-medium capitalize"
+            label="Tags"
+            tags={tags}
+            setTags={setTags}
+            availableTags={availableTags}
+            setAvailableTags={setAvailableTags}
+            onSelect={onSelectTags}
+          />
         </div>
         <div className="w-full">
           <div className="flex">

@@ -32,6 +32,14 @@ export default class WooServices {
     })
   }
 
+  static async queryTags({ queryKey }) {
+    const [_, { searchPattern, store }] = queryKey /* eslint-disable-line */
+    const { url, authorizeValue } = getAuthorizeValue(store)
+    return await BaseService.get(`/products/tags?search=${searchPattern}&${authorizeValue}`, null, {
+      baseURL: url,
+    })
+  }
+
   // static async batchCreateAttributes(attributes) {
   //   let globalAttributes, error
   //   const data = {
