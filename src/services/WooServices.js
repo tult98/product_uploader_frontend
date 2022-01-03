@@ -40,21 +40,19 @@ export default class WooServices {
     })
   }
 
-  // static async batchCreateAttributes(attributes) {
-  //   let globalAttributes, error
-  //   const data = {
-  //     create: attributes,
-  //   }
-  //   try {
-  //     const result = await BaseService.post(`/products/attributes/batch?${authorizeValue}`, data, {
-  //       baseURL: WOO_BASE_URL,
-  //     })
-  //     globalAttributes = result.create
-  //   } catch (e) {
-  //     error = e
-  //   }
-  //   return { globalAttributes, error }
-  // }
+  static async createTagsInBulk(tagsData, store) {
+    const { url, authorizeValue } = getAuthorizeValue(store)
+    try {
+      const results = await Promise.all(
+        tagsData.map(async (tagData) => {
+          return await BaseService.post(`/products/tags?${authorizeValue}`, tagData, { baseURL: url })
+        }),
+      )
+      return results
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   static async getProductBySku(sku, authorizeValue, url) {
     return BaseService.get(`/products?sku=${sku}&${authorizeValue}`, null, { baseURL: url })
@@ -94,6 +92,9 @@ export default class WooServices {
               }
             })
           : null,
+        tags: data.tags.map((tagId) => {
+          return { id: tagId }
+        }),
       },
       images,
     )
@@ -229,7 +230,33 @@ export default class WooServices {
     }
   }
 
-  static async uploadProducts({ data, isUpdate, store, wpAccount }) {
+  static async uploadProducts({ data, isUpdate, store, wpAccount, productTags }) {
+    const results = await WooServices.createTagsInBulk(
+      productTags.map((tag) => {
+        return { name: tag.label }
+      }),
+      store,
+    )
+
+    const tagsByName = {}
+    if (results) {
+      results.forEach((tag) => {
+        tagsByName[tag.name] = tag
+      })
+    }
+
+    data.forEach((product) => {
+      product.tags = product.tags
+        .map((tag) => {
+          if (tag.isNewTag) {
+            return tagsByName[tag.label].id
+          } else {
+            return tag.value
+          }
+        })
+        .filter((tagId) => tagId !== null && tagId !== undefined)
+    })
+
     const logs = []
     for (const productData of data) {
       let result

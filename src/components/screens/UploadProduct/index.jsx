@@ -6,10 +6,10 @@ import FileUploadInput from 'components/elements/Input/FileUploadInput'
 import ProductInput from 'components/widgets/ProductInput'
 import LoadingIndicator from 'components/elements/LoadingIndicator'
 import WooServices from 'services/WooServices'
-import { REQUIRED_FIELD_ERROR } from 'utils/errorsUtils'
 import { PRODUCT_ROUTES } from 'routes'
 import StoreInput from 'components/elements/Input/StoreInput'
 import AuthenticationContext from 'context/AuthenticationContext'
+import { REQUIRED_FIELD_ERROR } from 'utils/errorsUtils'
 
 const UploadProduct = ({ isUpdateProduct = false }) => {
   const history = useHistory()
@@ -52,11 +52,24 @@ const UploadProduct = ({ isUpdateProduct = false }) => {
       alert('You dont have any store associate with your account.')
     } else {
       if (onValidateTemplate()) {
+        const tagsByName = {}
+        availableTags.map((tag) => {
+          tagsByName[tag.label] = tag
+        })
+        const productTagsByName = {}
+        products.forEach((product) => {
+          product.tags.forEach((tag) => {
+            if (!productTagsByName[tag.label] && tag.isNewTag) {
+              productTagsByName[tag.label] = tag
+            }
+          })
+        })
         mutation.mutate({
           data: products,
           isUpdate: isUpdateProduct,
           store,
           wpAccount: { username: user.wp_username, password: user.wp_password },
+          productTags: Object.values(productTagsByName),
         })
       }
     }
