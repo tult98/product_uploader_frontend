@@ -249,7 +249,7 @@ export default class WooServices {
       product.tags = product.tags
         .map((tag) => {
           if (tag.isNewTag) {
-            return tagsByName[tag.label].id
+            return tagsByName[tag.label]?.id
           } else {
             return tag.value
           }

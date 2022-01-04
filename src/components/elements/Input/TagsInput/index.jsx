@@ -41,7 +41,7 @@ const TagsInput = ({
 
   const onInputChange = (newInputValue) => {
     debounce(() => {
-      setInputValue(newInputValue)
+      setInputValue(newInputValue.replaceAll('#', ''))
     }, DEFAULT_DELAY)()
   }
 
