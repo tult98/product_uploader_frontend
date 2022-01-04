@@ -32,20 +32,7 @@ const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
       setIsDefault(false)
       setErrors({ ...errors, isDefault: null })
     } else {
-      if (
-        !attributes[modalState.attributeIndex].options ||
-        attributes[modalState.attributeIndex].options.length === 0
-      ) {
-        setIsDefault(true)
-      } else {
-        attributes[modalState.attributeIndex].options.map((option) => {
-          option.isDefault === true &&
-            setErrors({ ...errors, isDefault: { message: 'You already set default option' } })
-        })
-      }
-      if (!errors || !errors.isDefault) {
-        setIsDefault(true)
-      }
+      setIsDefault(true)
     }
   }
 
@@ -87,6 +74,11 @@ const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
       }
       if (!modalState.isEdit) {
         attribute.options = attribute?.options || []
+        if (isDefault) {
+          attribute?.options.forEach((option) => {
+            option.isDefault = false
+          })
+        }
         dispatch({
           type: actionType,
           payload: {
@@ -106,6 +98,9 @@ const CreateAttributeOptionModal = ({ attributes, actionType, dispatch }) => {
         modalState.availableOptions[modalState.availableOptionIndex] = newOption
         modalState.setAvailableOptions([...modalState.availableOptions])
         // update options inside attribute
+        if (newOption.isDefault) {
+          attribute.options.forEach((option) => (option.isDefault = false))
+        }
         attribute.options[modalState.attributeOptionIndex] = newOption
         dispatch({
           type: actionType,
