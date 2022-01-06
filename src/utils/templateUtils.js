@@ -59,6 +59,7 @@ export const formatTemplateData = (data) => {
         sale_price: variation.salePrice,
         regular_price: variation.regularPrice,
         position: index + 1,
+        stock_status: variation.stock_status,
         attributes: variation.attributes.map((attribute) => {
           return {
             name: attribute.name,
@@ -100,6 +101,7 @@ export const formatToFormData = (data) => {
         isDefault: variation.is_default,
         salePrice: variation.sale_price,
         regularPrice: variation.regular_price,
+        stock_status: variation.stock_status,
         attributes: variation.attributes.map((attribute) => {
           return {
             name: attribute.name.name,

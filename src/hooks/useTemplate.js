@@ -14,6 +14,7 @@ const initialState = {
       salePrice: null,
       regularPrice: null,
       attributes: [],
+      stock_status: 'instock',
     },
   ],
 }
