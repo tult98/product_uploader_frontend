@@ -15,16 +15,7 @@ export const getNavigationItems = (isAdmin) => {
     return [
       {
         name: 'template',
-        child: [
-          {
-            name: 'all',
-            route: TEMPLATE_ROUTES.LIST_TEMPLATE,
-          },
-          {
-            name: 'new template',
-            route: TEMPLATE_ROUTES.CREATE_TEMPLATE,
-          },
-        ],
+        route: TEMPLATE_ROUTES.LIST_TEMPLATE,
       },
       {
         name: 'product',
@@ -41,29 +32,11 @@ export const getNavigationItems = (isAdmin) => {
       },
       {
         name: 'store',
-        child: [
-          {
-            name: 'all store',
-            route: STORE_ROUTES.LIST_STORE,
-          },
-          {
-            name: 'new store',
-            route: STORE_ROUTES.CREATE_STORE,
-          },
-        ],
+        route: STORE_ROUTES.LIST_STORE,
       },
       {
         name: 'users',
-        child: [
-          {
-            name: 'All users',
-            route: USER_ROUTES.LIST_USERS,
-          },
-          {
-            name: 'new users',
-            route: USER_ROUTES.CREATE_USER,
-          },
-        ],
+        route: USER_ROUTES.LIST_USERS,
       },
     ]
   }

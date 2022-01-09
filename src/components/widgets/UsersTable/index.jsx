@@ -10,6 +10,7 @@ import SearchBar from '../SearchBar'
 import Paginator from '../Paginator'
 import DeleteUserModal from 'modals/DeleteUserModal'
 import NotificationContext from 'context/NotificationContext'
+import CreateButton from 'components/elements/CreateButton'
 
 const UsersTable = () => {
   const [searchPattern, setSearchPattern] = useState('')
@@ -54,6 +55,10 @@ const UsersTable = () => {
     history.push(`${USER_ROUTES.LIST_USERS}/${userId}`)
   }
 
+  const onCreateUser = () => {
+    history.push(USER_ROUTES.CREATE_USER)
+  }
+
   return (
     <div className="w-full">
       {isLoading && <LoadingIndicator style="w-12 h-12 center-content" />}
@@ -62,6 +67,7 @@ const UsersTable = () => {
       {isSuccess && (
         <>
           <SearchBar searchPattern={searchPattern} setSearchPattern={setSearchPattern} />
+          <CreateButton onClick={onCreateUser} />
           <div className="bg-lightGray">
             <div className="flex flex-row text-xl font-medium text-gray-600 uppercase">
               <div className="w-1/12 px-6 py-6">Index</div>

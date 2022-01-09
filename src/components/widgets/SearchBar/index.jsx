@@ -14,7 +14,7 @@ const SearchBar = ({ searchPattern, setSearchPattern }) => {
 
   return (
     <div className="flex justify-end w-full">
-      <div className="relative flex items-center mb-20">
+      <div className="relative flex items-center mb-8">
         <input
           type="text"
           value={searchValue}

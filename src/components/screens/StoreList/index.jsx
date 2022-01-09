@@ -11,6 +11,7 @@ import NotificationContext from 'context/NotificationContext'
 import StoreService from 'services/StoreService'
 import { truncateLongText } from 'utils/commonUtils'
 import { STORE_ROUTES } from 'routes'
+import CreateButton from 'components/elements/CreateButton'
 
 const getAssignedUsers = (users) => {
   const assignedUsers = users.reduce((assignedUser, user, index) => {
@@ -62,6 +63,10 @@ const StoreList = () => {
     history.push(`${STORE_ROUTES.LIST_STORE}/${storeId}`)
   }
 
+  const onCreate = () => {
+    history.push(STORE_ROUTES.CREATE_STORE)
+  }
+
   return (
     <>
       <div className={`flex flex-col items-center w-full mt-20 ${modalState.isModalOpen ? 'opacity-20' : ''}`}>
@@ -71,6 +76,7 @@ const StoreList = () => {
         {isSuccess ? (
           <>
             <SearchBar searchPattern={searchPattern} setSearchPattern={setSearchPattern} />
+            <CreateButton onClick={onCreate} />
             <div className="w-full table-fixed shadow-grayShadow">
               <div className="bg-lightGray">
                 <div className="flex flex-row text-xl font-medium text-gray-600 uppercase">

@@ -10,6 +10,7 @@ import IntroducePage from 'components/widgets/IntroducePage'
 // import { truncateLongText } from 'utils/commonUtils'
 import ModalContext from 'context/ModalContext'
 import { TEMPLATE_ROUTES } from 'routes'
+import CreateButton from 'components/elements/CreateButton'
 
 const RECORD_PER_PAGE = 20
 
@@ -38,6 +39,10 @@ const TemplateList = () => {
     history.push(`${TEMPLATE_ROUTES.LIST_TEMPLATE}${templateId}`)
   }
 
+  const onCreate = () => {
+    history.push(TEMPLATE_ROUTES.CREATE_TEMPLATE)
+  }
+
   return (
     <div className="flex flex-col w-full pb-10 mt-20">
       <IntroducePage
@@ -51,6 +56,7 @@ const TemplateList = () => {
         {isSuccess && (
           <>
             <SearchBar searchPattern={searchPattern} setSearchPattern={setSearchPattern} />
+            <CreateButton onClick={onCreate} />
             <div className="w-full text-xl font-medium text-gray-600 uppercase bg-lightGray">
               <div className="flex flex-row w-full">
                 <div className="w-1/12 px-6 py-6">Index</div>
