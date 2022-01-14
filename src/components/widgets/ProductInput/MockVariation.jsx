@@ -32,6 +32,7 @@ const MockVariation = ({ sku, groupedVariations, product, onChangeProducts }) =>
         return {
           ...templateVariation,
           image_name: `${product.sku}-${selectedImage.name.split('.')[0]}`,
+          image_name_origin: selectedImage.name,
         }
       }
       return templateVariation

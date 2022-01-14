@@ -58,11 +58,13 @@ const UploadProduct = ({ isUpdateProduct = false }) => {
         })
         const productTagsByName = {}
         products.forEach((product) => {
-          product.tags.forEach((tag) => {
-            if (!productTagsByName[tag.label] && tag.isNewTag) {
-              productTagsByName[tag.label] = tag
-            }
-          })
+          if (product.tags) {
+            product.tags.forEach((tag) => {
+              if (!productTagsByName[tag.label] && tag.isNewTag) {
+                productTagsByName[tag.label] = tag
+              }
+            })
+          }
         })
         mutation.mutate({
           data: products,

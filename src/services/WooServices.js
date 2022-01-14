@@ -246,19 +246,33 @@ export default class WooServices {
     }
 
     data.forEach((product) => {
-      product.tags = product.tags
-        .map((tag) => {
-          if (tag.isNewTag) {
-            return tagsByName[tag.label]?.id
-          } else {
-            return tag.value
-          }
-        })
-        .filter((tagId) => tagId !== null && tagId !== undefined)
+      if (product.tags) {
+        product.tags = product.tags
+          .map((tag) => {
+            if (tag.isNewTag) {
+              return tagsByName[tag.label]?.id
+            } else {
+              return tag.value
+            }
+          })
+          .filter((tagId) => tagId !== null && tagId !== undefined)
+      }
     })
 
     const logs = []
     for (const productData of data) {
+      const productImageName = productData.template.variations.find(
+        (variation) => variation.is_default,
+      ).image_name_origin
+      const filesByName = {}
+      productData.files.forEach((file) => {
+        filesByName[file.name] = file
+      })
+      productData.files = [
+        filesByName[productImageName],
+        ...productData.files.filter((file) => productImageName !== file.name),
+      ]
+
       let result
       if (isUpdate) {
         result = await WooServices.updateProduct({ data: productData, store, wpAccount })
