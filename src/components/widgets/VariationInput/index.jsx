@@ -23,7 +23,7 @@ const VariationInput = ({
   const [errors, setErrors] = useState({})
   const [salePrice, setSalePrice] = useState(variation?.salePrice)
   const [regularPrice, setRegularPrice] = useState(variation?.regularPrice)
-  const [isInStock, setIsInStock] = useState(variation.stock_status === 'instock')
+  const [isInStock, setIsInStock] = useState(!variation?.stock_status ? true : variation.stock_status === 'instock')
 
   const { modalState, setModalState } = useContext(ModalContext)
 
@@ -189,12 +189,12 @@ const VariationInput = ({
         </div>
 
         {renderAttributes(variation.attributes.length)}
-      </div>
-      <div className="flex flex-row items-center mt-3 w-80">
-        <input type="checkbox" id="in_stock" checked={isInStock} onChange={onToggleIsInStock} />
-        <label htmlFor="in_stock" className="ml-2 whitespace-nowrap">
-          In Stock?
-        </label>
+        <div className="flex flex-row items-center mt-8">
+          <input type="checkbox" id="in_stock" checked={isInStock} onChange={onToggleIsInStock} />
+          <label htmlFor="in_stock" className="ml-2 whitespace-nowrap">
+            In Stock?
+          </label>
+        </div>
       </div>
     </div>
   )
