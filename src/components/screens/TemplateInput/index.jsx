@@ -32,7 +32,11 @@ const TemplateInput = ({ state, dispatch, isEdit = false }) => {
           queryClient.invalidateQueries()
         },
       })
-    : useMutation(TemplateServices.createTemplate)
+    : useMutation(TemplateServices.createTemplate, {
+        onSuccess: () => {
+          queryClient.invalidateQueries()
+        },
+      })
 
   useEffect(() => {
     if (mutation.isSuccess) {
