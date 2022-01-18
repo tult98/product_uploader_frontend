@@ -22,7 +22,6 @@ const TagsInput = ({
   isDisabled,
   store,
   tags,
-  // setTags,
   availableTags,
   setAvailableTags,
 }) => {
@@ -46,8 +45,7 @@ const TagsInput = ({
   }
 
   const onCreateTag = (newTag) => {
-    const tag = { label: newTag, isNewTag: true }
-    // setTags([...tags, tag])
+    const tag = { label: newTag, isNewTag: true, value: availableTags.length + 1 }
     onSelect([...tags, tag])
     setAvailableTags([...availableTags, tag])
   }

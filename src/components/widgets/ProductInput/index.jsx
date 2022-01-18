@@ -14,7 +14,6 @@ import TagsInput from 'components/elements/Input/TagsInput'
 const ProductInput = ({ product, onChangeProducts, store, availableTags, setAvailableTags }) => {
   const [selectedTemplate, setSelectedTemplate] = useState()
   const [templateSearchPattern, setTemplateSearchPattern] = useState('')
-  // const [tags, setTags] = useState([])
   const { isLoading, isError, isSuccess, data } = useQuery(
     ['templates', { currentPage: 1, searchPattern: templateSearchPattern }],
     TemplateServices.queryTemplates,
@@ -36,7 +35,6 @@ const ProductInput = ({ product, onChangeProducts, store, availableTags, setAvai
   }
 
   const onSelectTags = (selectedTags) => {
-    // setTags(selectedTags)
     onChangeProducts({ ...product, tags: selectedTags })
   }
 
